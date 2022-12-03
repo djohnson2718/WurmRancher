@@ -1,0 +1,22 @@
+Tutorial:
+If you want to get started right away, try the tutorial. Under the main menu, click New Game and in the Select a Mission menu, select Tutorial. If you want to get the details, read on.
+
+Backstory:
+A new opportunity has opened up for brave and enterprising farmers on the recently discovered planet of Krytoc III. A species of giant snake-like creatures, called “wurms”, can fetch a wonderful price. Wild ones are impossible to tame, but if they are raised in captivity they can be quite useful. You have access to genetically engineered creatures called “feeders” which will make excellent food for your wurms and accelerate their growth, as well as special grass seed to feed them with. Krytoc III is a dangerous place, with lots of other creatures and plants, but armed with your StarBorne5000 laser gun and some powerful weed killer, you aren’t afraid!
+
+Mouse Controls:
+You can only directly control the rancher. Left click in the play area to tell him where to move. Right click to use the currently selected tool. Notice that you must right click within the white range circle for the tool to work. You don’t have to be stationary to use tools.
+
+Tools:
+There are three tools in Wurm Rancher: the Gun, the Seed, and the Spray. You can select these clicking the radio buttons near the bottom left of the screen. However, it is recommended that you use the hotkeys: Q, W, E or Left, Down, Right arrow, respectively.  Please note that the hotkeys Q, W, E are not available in Full Screen mode (if you can’t get all the game area to display at once, try using full screen mode, accessible from the main menu).
+
+Seeds and the Food Chain:
+The Seed tool plants seeds. In a short time, the seeds will grow up to be grass. You need to plant a lot of grass. Your feeders will eat the grass, and the number on them will increase (up to a max of 10). Your wurm will eat the feeders, and grow one new segment for every 4 worth of numbers he eats. Please note that the wurm and feeders will only go for food that is close to them when they stop to choose a new destination. If there is no food close to them, they will go to a random place.
+
+The Gun and Wild Creatures:
+The gun has two purposes. First, you can shoot your wurm in the head to stun him for a short time so he doesn’t eat the feeders before they are fat and ready. Second, you can use your gun to eliminate wild creatures that are interfering will your operation by eating your grass, your feeders, or your wurms. Most will take a single shot to kill, but the giant monster takes three shots, one in each eye. You can’t hurt your own good creatures with the gun.
+
+Weeds and Spray:
+There are two kinds of weeds to worry about. The first kind just gets in the way of your good grass. They will randomly pop up, and once they are there, weeds will spread to adjacent squares. The giant monster has also been known to spread weeds. The second kind are the poisonous weeds. They will attract the feeders as well as the good grass does, but will make the feeders’ numbers go down instead of up (they won’t go below zero). Both these types of weeds can be eliminated by the Spray tool. (Remember, right click within the range circle to use tools.) Please note that the weed killer will kill your own grass and seeds as well.
+
+Well, that is about it. Go out there and raise some wurms!

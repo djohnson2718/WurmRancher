@@ -1,0 +1,5 @@
+c:\users\drew\documents\visual studio 2010\Projects\WurmRancher\WurmRancherSite.Web\bin\WurmRancherSite.Web.dll
+c:\users\drew\documents\visual studio 2010\Projects\WurmRancher\WurmRancherSite.Web\bin\WurmRancherSite.Web.pdb
+c:\users\drew\documents\visual studio 2010\Projects\WurmRancher\WurmRancherSite.Web\obj\Debug\ResolveAssemblyReference.cache
+c:\users\drew\documents\visual studio 2010\Projects\WurmRancher\WurmRancherSite.Web\obj\Debug\WurmRancherSite.Web.dll
+c:\users\drew\documents\visual studio 2010\Projects\WurmRancher\WurmRancherSite.Web\obj\Debug\WurmRancherSite.Web.pdb

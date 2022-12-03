@@ -1,0 +1,19 @@
+Wurm Rancher, v1.0
+concept and programming by Drew Johnson
+created using Microsoft Silverlight 5
+
+I would love to hear any comments or suggestions!  Please email me at werd2.718@gmail.com.
+
+I did the artwork for the creatures and plants, but I don’t have the patience or skill to make them look good.  If you would like to collaborate by doing some artwork, please email me!
+
+Thanks to Marcel Vijfwinkel of cgtextures.com for making available the awesome pictures used in the background.
+
+Thanks to Deceased Superior Technician for making available the great music you hear in Wurm Rancher at www.nosoapradio.us.
+
+Thanks to Jeff Wilcox for posting his style template so the pop-up windows look sweet instead of stupid!
+
+Thanks to the following contributors to freesound.org, the source for the sound effects in Wurm Rancher:
+
+grunz, tec studios, Koops, THE_bizniss, NoiseCollector, gelo_papas, Sergenious, anechoix, Michel88, menegass, looppool
+
+Thanks to my wife, who let me have time to work on a fun project and who makes my life happy in many ways!

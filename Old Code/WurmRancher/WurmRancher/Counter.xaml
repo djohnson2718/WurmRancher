@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="WurmRancher.Counter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Height="60" Width="120" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+
+    <Border BorderBrush="#FFA6152B" BorderThickness="2" Height="60"  Name="border1" Background="#FFC7EFC7">
+    <Grid x:Name="LayoutRoot" Background="{x:Null}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+
+
+            <sdk:Label  Name="ValueLabel" FontSize="25" VerticalAlignment="Top" Content="0" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="ExtraBold" />
+            <sdk:Label  Name="TitleLabel"   Content="Title" FontSize="15" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+    </Grid>
+    </Border>
+</UserControl>

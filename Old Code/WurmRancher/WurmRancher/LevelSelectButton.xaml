@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="WurmRancher.LevelSelectButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="80" d:DesignWidth="320" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" >
+    <Border Name="theBorder"  BorderBrush="Silver" BorderThickness="2,2,2,2" Background="#FFC1FFC1">
+    <Grid x:Name="LayoutRoot">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <sdk:Label Name="LevelName"  Content="Level Name" HorizontalContentAlignment="Left" FontWeight="ExtraBold" FontSize="18" Grid.Row="0" />
+        <TextBlock Grid.Row="1" Name="LevelDescriptionTextBox" Text="This is a decription of the level represented by this box.  I will put a lot of text here to see if it can do multiline." FontSize="10" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
+            <CheckBox Content="" Grid.Column="1" Grid.Row="0" Name="CompletionCheckBox" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+            <Button Content="Scores..." Grid.Column="1" Grid.Row="1"  Margin="0,10,0,10" Name="ScoresButton"  />
+        </Grid>
+    </Border>
+</UserControl>
