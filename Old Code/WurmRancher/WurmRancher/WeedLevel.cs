@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class WeedLevel : TimedLevel
     {
@@ -43,6 +43,14 @@ namespace WurmRancher
             get
             {
                 return string.Format("Grow your wurm to length {0} and get the weed ratio down to {1:#.000}.", length_to_win, ratio_to_win);
+            }
+        }
+
+        public override string HighScoreName
+        {
+            get
+            {
+                return "WeedLevel";
             }
         }
 

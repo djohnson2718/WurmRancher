@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Xna.Framework.Audio;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public abstract class LaserDestructablePiece : MovesToDestinationControl
     {

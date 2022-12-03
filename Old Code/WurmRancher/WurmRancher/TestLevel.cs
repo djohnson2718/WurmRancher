@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     //Warning, may not work!!!!!
     public class TestLevel :Level

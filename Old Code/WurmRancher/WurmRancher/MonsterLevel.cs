@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class MonsterLevel : TimedLevel
     {
@@ -36,6 +36,14 @@ namespace WurmRancher
             get
             {
                 return string.Format("Grow your wurm to length {0}.", length_to_win);
+            }
+        }
+
+        public override string HighScoreName
+        {
+            get
+            {
+                return "MonsterLevel";
             }
         }
 

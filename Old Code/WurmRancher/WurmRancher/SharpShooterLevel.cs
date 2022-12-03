@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class SharpShooterLevel: TimedLevel //checked
     {
@@ -35,7 +35,14 @@ namespace WurmRancher
         {
             get
             {
-                return string.Format("Grow your wurm to length {0}, don't both miss {1} shots and go below {2}% accuracy.", length_to_win,allowed_misses,allowed_accuracy);
+                return string.Format("Grow wurm to {0}, don't both miss more than {1} shots and go below {2}% accuracy.", length_to_win,allowed_misses,allowed_accuracy);
+            }
+        }
+        public override string HighScoreName
+        {
+            get
+            {
+                return "SharpShooterLevel";
             }
         }
 

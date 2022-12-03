@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public partial class LevelSelectButton : UserControl
     {
@@ -24,8 +24,16 @@ namespace WurmRancher
             this.LevelName.Content = level.Name;
             UpdateLevelStatus();
             level.StatusChanged += new EventHandler(level_Ended);
+
+            if (!level.HasHighScore)
+            {
+                this.ScoresButton.Content = "--";
+                this.ScoresButton.IsEnabled = false;
+            }
             
         }
+
+        public event EventHandler ScoresButtonClicked;
 
         void level_Ended(object sender, EventArgs e)
         {
@@ -36,19 +44,19 @@ namespace WurmRancher
         {
             switch (level.CompletionStatus)
             {
-                case WurmRancher.Level.CompletionStatusEnum.Attempted:
+                case WurmRacher.Level.CompletionStatusEnum.Attempted:
                     this.theBorder.Background = new SolidColorBrush(Color.FromArgb(255,255,193,193));
                     this.CompletionCheckBox.IsChecked = false;
                     //this.HighScore.Content = "";
                     //this.HighScoreTitleLabel.Visibility = Visibility.Collapsed;
                     break;
-                case WurmRancher.Level.CompletionStatusEnum.Completed:
+                case WurmRacher.Level.CompletionStatusEnum.Completed:
                     this.theBorder.Background = new SolidColorBrush(Color.FromArgb(255, 193, 255, 193));
                     this.CompletionCheckBox.IsChecked = true;
                     //this.HighScore.Content = level.HighScore;
                     //this.HighScoreTitleLabel.Visibility = Visibility.Visible;
                     break;
-                case WurmRancher.Level.CompletionStatusEnum.Unattempted:
+                case WurmRacher.Level.CompletionStatusEnum.Unattempted:
                     this.theBorder.Background = new SolidColorBrush(Color.FromArgb(255, 212, 212, 212));
                     this.CompletionCheckBox.IsChecked = false;
                     //this.HighScore.Content = "";
@@ -64,6 +72,12 @@ namespace WurmRancher
             {
                 return level;
             }
+        }
+
+        private void ScoresButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ScoresButtonClicked != null)
+                ScoresButtonClicked(this, new EventArgs());
         }
     }
 }

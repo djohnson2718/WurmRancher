@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class GoodGrass :  EdiblePlant
     {

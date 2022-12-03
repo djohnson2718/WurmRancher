@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public partial class LevelSelecter : ChildWindow
     {
@@ -30,14 +30,43 @@ namespace WurmRancher
                 this.ScrollGrid.Children.Add(lb);
                 Grid.SetRow(lb, i);
                 lb.MouseLeftButtonUp += new MouseButtonEventHandler(lb_MouseLeftButtonUp);
+                lb.ScoresButtonClicked += new EventHandler(lb_ScoresButtonClicked);
+
                 i++;
             }
 
             this.Closed += new EventHandler(MessageChildWindow_Closed);
         }
 
+        void lb_ScoresButtonClicked(object sender, EventArgs e)
+        {
+            LevelSelectButton lb = (LevelSelectButton)sender;
+            HighScoreGrid.Children.Clear();
+            
+            // create the high score control
+
+            _3XH.IHighScoreCtrl highScoreCtrl = _3XH.API.Instance.createHighScoreCtrl();
+
+            // init the high score control with the application key and secret
+
+            highScoreCtrl.init(Level.ApplicationKey, Level.ApplicationSecret);
+
+            // add the high score control as a child of the panel
+
+            highScoreCtrl.show(HighScoreGrid);
+
+            // set the event handler that will be called when the user closes the high score control
+
+            highScoreCtrl.setOnCloseHandler((sender2, e2) => { highScoreCtrl.hide(); });
+
+            // call get high score list
+
+            highScoreCtrl.getHighScoreList(lb.Level.HighScoreName);
+        }
+       
         void MessageChildWindow_Closed(object sender, EventArgs e)
         {
+            this.HighScoreGrid.Children.Clear();
             Application.Current.RootVisual.SetValue(Control.IsEnabledProperty, true);
         }
 
@@ -52,6 +81,7 @@ namespace WurmRancher
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            
             this.DialogResult = false;
         }
 

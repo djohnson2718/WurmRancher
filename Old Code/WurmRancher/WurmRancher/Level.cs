@@ -11,15 +11,15 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.IO.IsolatedStorage;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public abstract class Level
     {        
         bool gameover = false;
         protected static IsolatedStorageSettings levelData = IsolatedStorageSettings.ApplicationSettings;
 
-        protected const string ApplicationKey = "868a65a194464d31b4ca21f8977bd01a";
-        protected const string ApplicationSecret = "wrs";
+        public const string ApplicationKey = "868a65a194464d31b4ca21f8977bd01a";
+        public const string ApplicationSecret = "wrs";
 
         public enum CompletionStatusEnum
         {
@@ -83,9 +83,17 @@ namespace WurmRancher
         }
         //public virtual void ResetHighScore() { }
 
-        protected virtual string HighScoreName
+        public virtual string HighScoreName
         {
             get { return "none"; }
+        }
+        public virtual bool HasHighScore
+        {
+            get { return true; }
+        }
+        public virtual bool MakeFeedersAtWill
+        {
+            get { return false; }
         }
 
         Theme theme;

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WurmRancher {
+namespace WurmRacher {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WurmRancher {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WurmRancher.WRResources", typeof(WRResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WurmRacher.WRResources", typeof(WRResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

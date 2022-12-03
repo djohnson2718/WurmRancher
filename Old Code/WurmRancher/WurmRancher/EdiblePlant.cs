@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using Microsoft.Xna.Framework.Audio;
 
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public abstract class EdiblePlant : Plant
     {

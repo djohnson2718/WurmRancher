@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class ProtectTheGrassLevel : Level
     {
@@ -44,6 +44,14 @@ namespace WurmRancher
             get
             {
                 return true;
+            }
+        }
+
+        public override string HighScoreName
+        {
+            get
+            {
+                return "ProtectTheGrassLevel";
             }
         }
         const int num_eaters = 60;
@@ -90,37 +98,33 @@ namespace WurmRancher
             if (eaters_shot == num_eaters)
                 Victory(e.theControl);
         }
-
-
-        int high_score = -1;
-        //public override string HighScore
-        //{
-        //    get
-        //    {
-        //        if (high_score == -1)
-        //            return "--";
-        //        return string.Format("{0}",high_score);
-        //    }
-        //}
+                
 
         protected void Victory(GameControl theControl, string message = null)
         {
             if (message == null)
-                message = "You saved the grass!";
-            
-            base.Victory(theControl, message);
+                message = string.Format("You saved {0} patches of grass!", theControl.NumberOfGoodGrass);
+
+            // create the high score control
+
+            _3XH.IHighScoreCtrl highScoreCtrl = _3XH.API.Instance.createHighScoreCtrl();
+
+            // init the high score control with the application key and secret
+
+            highScoreCtrl.init(ApplicationKey, ApplicationSecret);
+
+            // set the event handler that will be called when the user closes the high score control
+
+            highScoreCtrl.setOnCloseHandler((sender, e) => { highScoreCtrl.hide(); });
+
+            // call submit score
+
+            highScoreCtrl.submitScore(theControl.NumberOfGoodGrass, HighScoreName);
+
+
+            base.Victory(theControl, message, highScoreCtrl);
         }
-
-        //protected override void LoadHighScore()
-        //{            
-        //    if (levelData.Contains(this.ID + "_hs"))
-        //        high_score = (int)levelData[this.ID + "_hs"];            
-        //}
-
-        //public override void ResetHighScore()
-        //{
-        //    high_score = -1;
-        //}
+             
         
 
 

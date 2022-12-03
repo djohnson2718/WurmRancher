@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class DoubleWurmLevel: TimedLevel
     {
@@ -35,6 +35,13 @@ namespace WurmRancher
             get
             {
                 return string.Format("Grow your wurms to at least {0} each and at least {1} total.", min_length_to_win, combined_length_to_win);
+            }
+        }
+        public override string HighScoreName
+        {
+            get
+            {
+                return "DoubleWurmLevel";
             }
         }
 

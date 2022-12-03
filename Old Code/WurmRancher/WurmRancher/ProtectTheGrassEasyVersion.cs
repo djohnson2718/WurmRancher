@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class ProtectTheGrassEasyVersion : Level
     {
@@ -39,7 +39,7 @@ namespace WurmRancher
             }
         }
 
-        protected override string HighScoreName
+        public override string HighScoreName
         {
             get
             {

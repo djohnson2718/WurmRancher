@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class BigMonsterLevel: TimedLevel
     {
@@ -39,6 +39,14 @@ namespace WurmRancher
             }
         }
 
+        public override string HighScoreName
+        {
+            get
+            {
+                return "BigMonsterLevel";
+            }
+        }
+
         const int length_to_win = 12;
         Wurm theWurm;
 
@@ -60,13 +68,13 @@ namespace WurmRancher
             base.Update(theControl);
             if (!GameOver)
             {
-                if (IntervalTimeIsUp(6))
+                if (IntervalTimeIsUp(7))
                     theControl.AddCreature(new GrassEater(theControl));
                 if (IntervalTimeIsUp(3))
                     theControl.AddCreature(new Feeder(theControl));
-                if (IntervalTimeIsUp(15))
+                if (IntervalTimeIsUp(18))
                     theControl.AddCreature(new BigMonster(theControl));
-                if (IntervalTimeIsUp(7))
+                if (IntervalTimeIsUp(8))
                     theControl.GrowRandomWeed();
             }
         }

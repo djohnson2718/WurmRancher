@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public static class Levels
     {
@@ -19,7 +19,7 @@ namespace WurmRancher
         static Levels()
         {
             //LevelsList.Add(new StupidLevel(Theme.Mud));
-            LevelsList.Add(new ProtectTheGrassEasyVersion(Theme.RedPebbles));
+            //LevelsList.Add(new ProtectTheGrassEasyVersion(Theme.RedPebbles));
             LevelsList.Add(new TutorialLevel(Theme.Sand));
             LevelsList.Add(new FirstGrassEaterLevel(Theme.RedPebbles));
             LevelsList.Add(new MonsterLevel(Theme.Pebbles));
@@ -31,6 +31,7 @@ namespace WurmRancher
             LevelsList.Add(new SharpShooterLevel(Theme.Pebbles));
             LevelsList.Add(new DoubleWurmLevel(Theme.Snow));
             LevelsList.Add(new FeederLevel(Theme.Cracked));
+            LevelsList.Add(new BigWurmContest(Theme.Mud));
 
         }
     }

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class TutorialLevel : Level
     {
@@ -28,6 +28,13 @@ namespace WurmRancher
             get
             {
                 return string.Format("Follow the pop-up instructions. Grow your wurm to length {0}.", length_to_win);
+            }
+        }
+        public override bool HasHighScore
+        {
+            get
+            {
+                return false;
             }
         }
        

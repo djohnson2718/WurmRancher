@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A28F7745-1CBB-4E2F-B5E2-94E0856AFF84}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WurmRacher</RootNamespace>
+    <AssemblyName>WurmRacher</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>WurmRacher.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>WurmRacher.App</SilverlightAppEntry>
+    <TestPageFileName>WurmRacherTestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject>
+    </LinkedServerProject>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="3XH">
+      <HintPath>..\..\3XHDevKit\3XH.dll</HintPath>
+    </Reference>
+    <Reference Include="CPCSL">
+      <HintPath>..\..\3XHDevKit\CPCSL.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.Input, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AreaEffectCircle.cs" />
+    <Compile Include="BigMonster.cs" />
+    <Compile Include="BigMonsterEye.cs" />
+    <Compile Include="BigMonsterLevel.cs" />
+    <Compile Include="BigWurmContest.cs" />
+    <Compile Include="Counter.xaml.cs">
+      <DependentUpon>Counter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreatureEventArgs.cs" />
+    <Compile Include="DefeatMenu.xaml.cs">
+      <DependentUpon>DefeatMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DoubleWurmLevel.cs" />
+    <Compile Include="EdiblePlant.cs" />
+    <Compile Include="Feeder.cs" />
+    <Compile Include="FeederLevel.cs" />
+    <Compile Include="FirstGrassEaterLevel.cs" />
+    <Compile Include="GameControl.cs" />
+    <Compile Include="GameElement.cs" />
+    <Compile Include="GameEventArgs.cs" />
+    <Compile Include="GoodGrass.cs" />
+    <Compile Include="GrassEater.cs" />
+    <Compile Include="InstructionsWindow.xaml.cs">
+      <DependentUpon>InstructionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IntroDemo.cs" />
+    <Compile Include="LaserBeam.cs" />
+    <Compile Include="LaserDestructablePiece.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Levels.cs" />
+    <Compile Include="LevelSelectButton.xaml.cs">
+      <DependentUpon>LevelSelectButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LevelSelecter.xaml.cs">
+      <DependentUpon>LevelSelecter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MessageChildWindow.xaml.cs">
+      <DependentUpon>MessageChildWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Monster.cs" />
+    <Compile Include="MonsterLevel.cs" />
+    <Compile Include="MovesToDestinationControl.cs" />
+    <Compile Include="ImagePiece.cs" />
+    <Compile Include="Parasite.cs" />
+    <Compile Include="ParasiteLevel.cs" />
+    <Compile Include="PoisonWeed.cs" />
+    <Compile Include="PoisonWeedLevel.cs" />
+    <Compile Include="Prey.cs" />
+    <Compile Include="ProtectTheGrassEasyVersion.cs" />
+    <Compile Include="ProtectTheGrassLevel.cs" />
+    <Compile Include="SharpShooterLevel.cs" />
+    <Compile Include="Timing.cs" />
+    <Compile Include="OnTheFieldPiece.cs" />
+    <Compile Include="Plant.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rancher.cs" />
+    <Compile Include="RangeCircle.cs" />
+    <Compile Include="StupidLevel.cs" />
+    <Compile Include="TestLevel.cs" />
+    <Compile Include="Theme.cs" />
+    <Compile Include="TimedLevel.cs" />
+    <Compile Include="TutorialLevel.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="VictoryMenu.xaml.cs">
+      <DependentUpon>VictoryMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Weed.cs" />
+    <Compile Include="WeedLevel.cs" />
+    <Compile Include="WRResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WRResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WR_ZValues.cs" />
+    <Compile Include="Wurm.cs" />
+    <Compile Include="WurmCounter.cs" />
+    <Compile Include="WurmPieces.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WRResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WRResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Instructions.txt" />
+    <None Include="Resources\Credits.txt" />
+    <None Include="Resources\76965__michel88__painb.wav" />
+    <None Include="Resources\13131__looppool__spraycan.wav" />
+    <None Include="Resources\SandPebbles0060_19_S.wav" />
+    <None Include="Resources\SoilCracked0086_7_S.wav" />
+    <None Include="Resources\72624__anechoix__squish3.wav" />
+    <None Include="Resources\SandPebbles0058_9_S_red_new.wav" />
+    <None Include="Resources\wurm_head.wav" />
+    <None Include="Resources\wurm_body.wav" />
+    <Page Include="VictoryMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <None Include="Resources\weedsprayed.wav" />
+    <None Include="Resources\weed.wav" />
+    <None Include="Resources\seeded.wav" />
+    <None Include="Resources\39459__the-bizniss__laser.wav" />
+    <None Include="Resources\99721__menegass__seedm2.wav" />
+    <None Include="Resources\76973__michel88__piggrunt1.wav" />
+    <None Include="Resources\76972__michel88__pains.wav" />
+    <None Include="Resources\104697__grunz__grunz-ow.wav" />
+    <None Include="Resources\4504__noisecollector__dragon1.wav" />
+    <Page Include="LevelSelecter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LevelSelectButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MessageChildWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Counter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DefeatMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InstructionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Content Include="Music\DST-InCircles.mp3" />
+    <Content Include="Music\DST-RockX.mp3" />
+    <None Include="Resources\55829__sergenious__electric.wav" />
+    <None Include="Resources\125647__tec-studios__insects-noise-010.wav" />
+    <None Include="Resources\125648__tec-studios__insects-noise-011.wav" />
+    <None Include="Resources\125646__tec-studios__insects-noise-009.wav" />
+    <None Include="Resources\big_monster.wav" />
+    <None Include="Resources\20279__koops__apple-crunch-16%281%29.wav" />
+    <Content Include="Music\DST-BlazeOn.mp3" />
+    <None Include="Resources\feeder.wav" />
+    <None Include="Resources\good_grass_new.wav" />
+    <None Include="Resources\good_grass_new_sprayed.wav" />
+    <None Include="Resources\monster.wav" />
+    <None Include="Resources\Plastic0027_1_S_Intro.wav" />
+    <None Include="Resources\parasite.wav" />
+    <None Include="Resources\poison_weed.wav" />
+    <None Include="Resources\poison_weed_sprayed.wav" />
+    <None Include="Resources\monster_eye.wav" />
+    <None Include="Resources\monster_eye_shot.wav" />
+    <None Include="Resources\grass_eater.wav" />
+    <None Include="Resources\rancher.wav" />
+    <None Include="Resources\SoilBeach0088_1_S.wav" />
+    <None Include="Resources\SoilMud0059_2_S.wav" />
+    <None Include="Resources\Snow0099_5_S.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

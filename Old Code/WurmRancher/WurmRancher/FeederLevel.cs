@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class FeederLevel : TimedLevel
     {
@@ -37,6 +37,13 @@ namespace WurmRancher
             get
             {
                 return string.Format("Get {0} feeders to size {1}.", maxed_feeders_to_win, Feeder.max_size);
+            }
+        }
+        public override string HighScoreName
+        {
+            get
+            {
+                return "FeederLevel";
             }
         }
 

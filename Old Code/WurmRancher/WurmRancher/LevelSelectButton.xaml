@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WurmRancher.LevelSelectButton"
+﻿<UserControl x:Class="WurmRacher.LevelSelectButton"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,7 +18,7 @@
         <sdk:Label Name="LevelName"  Content="Level Name" HorizontalContentAlignment="Left" FontWeight="ExtraBold" FontSize="18" Grid.Row="0" />
         <TextBlock Grid.Row="1" Name="LevelDescriptionTextBox" Text="This is a decription of the level represented by this box.  I will put a lot of text here to see if it can do multiline." FontSize="10" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
             <CheckBox Content="" Grid.Column="1" Grid.Row="0" Name="CompletionCheckBox" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
-            <Button Content="Scores..." Grid.Column="1" Grid.Row="1"  Margin="0,10,0,10" Name="ScoresButton"  />
+            <Button Content="Scores..." Grid.Column="1" Grid.Row="1"  Margin="0,10,0,10" Name="ScoresButton" Click="ScoresButton_Click" />
         </Grid>
     </Border>
 </UserControl>

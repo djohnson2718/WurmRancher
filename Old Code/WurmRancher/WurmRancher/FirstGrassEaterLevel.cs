@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class FirstGrassEaterLevel : TimedLevel
     {
@@ -27,7 +27,7 @@ namespace WurmRancher
         {
             get
             {
-                return string.Format("The blue creatures want to steal your grass!  Blast them with your gun!  Grow your wurm to length {0} to win.", length_to_win);
+                return string.Format("The blue creatures want to steal your grass!  Blast them with your gun!  Grow your wurm to length {0} before the timer runs out to win!", length_to_win);
             }
         }
 
@@ -36,6 +36,13 @@ namespace WurmRancher
             get
             {
                 return string.Format("Grow your wurm to length {0}.", length_to_win);
+            }
+        }
+        public override string HighScoreName
+        {
+            get
+            {
+                return "GrassEaterLevel";
             }
         }
 

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class TimedLevel : Level
     {
@@ -23,8 +23,8 @@ namespace WurmRancher
             rel_time_allowed = rel_time_allowed_;
             
         }
-       
 
+        bool high_score_submitted = false;
         public override void InitializeLevel(GameControl theControl)
         {
             base.InitializeLevel(theControl);
@@ -32,6 +32,7 @@ namespace WurmRancher
             timer = new Counter("Time Left");
             timer.Value = string.Format("{0:0.0}", Timing.FramesToRealTime(frames_left));
             theControl.AddCounter(timer);
+            high_score_submitted = false;
         }
 
         public override void Update(GameControl theControl)
@@ -53,20 +54,24 @@ namespace WurmRancher
                 message = "You completed the objectives in time and beat the level!";
 
             // create the high score control
-
+            
             _3XH.IHighScoreCtrl highScoreCtrl = _3XH.API.Instance.createHighScoreCtrl();
 
             // init the high score control with the application key and secret
 
-            highScoreCtrl.init(ApplicationKey, ApplicationSecret);            
+            highScoreCtrl.init(ApplicationKey, ApplicationSecret);
 
             // set the event handler that will be called when the user closes the high score control
 
             highScoreCtrl.setOnCloseHandler((sender, e) => { highScoreCtrl.hide(); });
 
-            // call submit score
+             if (!high_score_submitted)
+                {
+                    high_score_submitted = true;
+                // call submit score
 
-            highScoreCtrl.submitScore(score, HighScoreName);
+                     highScoreCtrl.submitScore(score, HighScoreName);
+                 }
             
 
             base.Victory(theControl, message, highScoreCtrl);

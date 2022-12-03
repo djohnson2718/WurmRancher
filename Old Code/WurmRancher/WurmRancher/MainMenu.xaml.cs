@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.IO;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public partial class Menu : ChildWindow
     {

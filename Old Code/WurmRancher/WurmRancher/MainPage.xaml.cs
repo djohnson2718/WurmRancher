@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Audio;
 using System.IO.IsolatedStorage;
 
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public partial class MainPage : UserControl, GameControl
     {
@@ -677,6 +677,10 @@ namespace WurmRancher
                     MainMenu.Show();
                     game_running = false;
                     break;
+                case Key.Tab:
+                    if (current_level.MakeFeedersAtWill)
+                        AddCreature(new Feeder(this));
+                    break;
             }
 
         }
@@ -708,10 +712,9 @@ namespace WurmRancher
             GameOverLabel.Visibility = Visibility.Visible;
             theVictoryWindow.Result = VictoryMenu.VictoryMenuResult.None;
             theVictoryWindow.Message = message;
+            theVictoryWindow.HighScoreGrid.Children.Clear();
             if (highScoreCtr != null)
-                highScoreCtr.show(theVictoryWindow.HighScorePanelCanvas);
-            else
-                theVictoryWindow.HighScorePanelCanvas.Children.Clear();
+                highScoreCtr.show(theVictoryWindow.HighScoreGrid);               
             theVictoryWindow.Show();
         }
 

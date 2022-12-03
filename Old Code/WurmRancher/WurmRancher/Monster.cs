@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using Microsoft.Xna.Framework.Audio;
 
-namespace WurmRancher
+namespace WurmRacher
 {
     public class Monster : LaserDestructablePiece
     {
