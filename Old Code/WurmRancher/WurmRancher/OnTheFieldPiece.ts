@@ -1,3 +1,5 @@
+import { GameControl } from "./gameControl.js";
+
 export class OnTheFieldPiece {
 
   //CenterPoint: Point;
@@ -19,10 +21,18 @@ export class OnTheFieldPiece {
   }
 
   get CenterX() :number {
-    return self.x + this.Width/2;
+    return this.x + this.Width/2;
   }
 
-  get Centery() : number{
-    return self.y + this.Height/2;
+  set CenterX(value) {
+    this.x = value - this.Width/2;
+  }
+
+  get CenterY() : number{
+    return this.y + this.Height/2;
+  }
+
+  set CenterY(value) {
+    this.y = value - this.Height/2;
   }
 }
