@@ -7,12 +7,12 @@ const height = 30;
 const width = 30;
 
 const rancherImage = new Image(height, width); 
+rancherImage.src =  "./Resources/rancher.png";
 
 export class Rancher extends MovesToDestinationControl {
     
     constructor(){
         super(height, width, timing.RelativeSpeedToPixelsPerFrame(timing.relRancherSpeed),timing.RelativeRotateToRadiansPerFrame(timing.relRancherRotate));
-        rancherImage.src =  "./Resources/rancher.png";
         this.PieceImage = rancherImage;
         this.x = 100;
         this.y = 100;

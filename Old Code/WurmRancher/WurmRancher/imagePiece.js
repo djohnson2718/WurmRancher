@@ -1,10 +1,12 @@
+import { context } from "./gameControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 export class ImagePiece extends OnTheFieldPiece {
-    constructor(theControl_, height, width) {
-        super(theControl_, height, width);
+    constructor(height, width) {
+        super(height, width);
     }
     Update() {
-        this.theControl.context.drawImage(this.PieceImage, this.x, this.x, this.Width, this.Height);
+        console.log("about to draw something.");
+        context.drawImage(this.PieceImage, this.x, this.x, this.Width, this.Height);
         console.log("just tried to draw something.");
     }
 }

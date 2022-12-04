@@ -20,9 +20,9 @@ var game_running :boolean;
 var elapsed_time : number;
 var laser_cool_down_counter : number;
 
-export var GameElements : Array<GameElement>;
-export var DeadStuff : Array<GameElement>;
-var NewStuff : Array<GameElement>;
+export var GameElements : Set<GameElement>;
+export var DeadStuff : Set<GameElement>;
+var NewStuff : Set<GameElement>;
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -38,11 +38,13 @@ function startGame(){
 
     theRancher = new Rancher();
 
-    GameElements = new Array<GameElement>();
-    DeadStuff = new Array<GameElement>();
-    NewStuff = new Array<GameElement>();
+    GameElements = new Set<GameElement>();
+    DeadStuff = new Set<GameElement>();
+    NewStuff = new Set<GameElement>();
     
-    GameElements.push(theRancher);
+    GameElements.add(theRancher);
+
+    theRancher.Update();
 
     game_running = true;
 
@@ -55,31 +57,32 @@ function InitializeGameElements() :void{
 }
 
 function GameLoopMethod():void{
-    console.log("entered loop" + String(this.game_running));
-    if (this.game_running)
+    //console.log("entered loop" + String(game_running));
+    if (game_running)
     {
-        console.log("in the game running");
+        //console.log("in the game running");
         this.elapsed_time++;
         if (this.laser_cool_down_counter > 0)
             this.laser_cool_down_counter--;
 
         //current_level.Update(this);
 
-        this.GameElements.forEach(function(element){
+        for (const element of GameElements){
+            //console.log("calling update" + String(element));
             element.Update();
-        })
+        }
 
-        this.DeadStuff.forEach(function (element){
-            this.GameElements.Remove(element);
-        });
+        for (const element of DeadStuff){
+            GameElements.add(element);
+        }
 
-        this.DeadStuff =[];
+        DeadStuff.clear();
 
-        this.NewStuff.forEach(function(element){
-            this.GameElements.push(element);
-        });
+        for (const element of NewStuff){
+            GameElements.delete(element);
+        }
 
-        this.NewStuff = [];
+        NewStuff.clear();
     }
 }
 

@@ -1,8 +1,7 @@
 export class OnTheFieldPiece {
-    constructor(control, height, width) {
+    constructor(height, width) {
         this.Height = height;
         this.Width = width;
-        this.theControl = control;
     }
     Remove() {
         //todo 

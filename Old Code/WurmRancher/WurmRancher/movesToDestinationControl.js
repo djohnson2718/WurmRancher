@@ -1,7 +1,7 @@
 import { ImagePiece } from "./imagePiece.js";
 export class MovesToDestinationControl extends ImagePiece {
-    constructor(theControl_, height, width, pixels_per_frame_, radians_per_frame_) {
-        super(theControl_, height, width);
+    constructor(height, width, pixels_per_frame_, radians_per_frame_) {
+        super(height, width);
         //init rotate
         this.pixels_per_frame = pixels_per_frame_;
         this.radians_per_frame = radians_per_frame_;
@@ -59,6 +59,7 @@ export class MovesToDestinationControl extends ImagePiece {
             this.CenterY -= this.pixels_per_frame * Math.sin(this.angle);
         }
         //this.rotate.Angle = this.angle * 180/Math.PI;
+        super.Update();
     }
     SetDestination(x, y) {
         this.destination_x = x;
