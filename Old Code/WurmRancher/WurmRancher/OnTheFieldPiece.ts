@@ -1,4 +1,3 @@
-import { GameControl } from "./gameControl.js";
 
 export class OnTheFieldPiece {
 
@@ -8,12 +7,11 @@ export class OnTheFieldPiece {
   x : number;
   y : number;
 
-  theControl : GameControl;
 
-  constructor(control : GameControl, height: number, width :number ){
+
+  constructor(height: number, width :number ){
     this.Height = height;
     this.Width = width;
-    this.theControl = control;
   }
 
   Remove():void{
