@@ -5,9 +5,9 @@ export class ImagePiece extends OnTheFieldPiece {
         super(height, width);
     }
     Update() {
-        console.log("about to draw something.");
-        context.drawImage(this.PieceImage, this.x, this.x, this.Width, this.Height);
-        console.log("just tried to draw something.");
+        //console.log("about to draw something.");
+        context.drawImage(this.PieceImage, this.x, this.y, this.Width, this.Height);
+        //console.log("just tried to draw something.");
     }
 }
 //# sourceMappingURL=imagePiece.js.map

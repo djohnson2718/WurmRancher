@@ -32,6 +32,7 @@ function startGame() {
     GameElements.add(theRancher);
     theRancher.Update();
     game_running = true;
+    window.addEventListener('mousedown', MouseDown);
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
 }
@@ -39,6 +40,7 @@ function InitializeGameElements() {
 }
 function GameLoopMethod() {
     //console.log("entered loop" + String(game_running));
+    context.clearRect(0, 0, playingFieldWidth, playingFieldHeight);
     if (game_running) {
         //console.log("in the game running");
         this.elapsed_time++;
@@ -57,6 +59,12 @@ function GameLoopMethod() {
             GameElements.delete(element);
         }
         NewStuff.clear();
+    }
+}
+function MouseDown(e) {
+    if (e.button == 0) { //left
+        console.log("mouse clicked" + String(e.x) + " " + String(e.y));
+        theRancher.SetDestination(e.x, e.y);
     }
 }
 //# sourceMappingURL=gameControl.js.map
