@@ -17,8 +17,8 @@ export class ImagePiece extends OnTheFieldPiece implements GameElement {
         context.save();
         context.translate(this.CenterX,this.CenterY);
         context.rotate(this.angle);
-        context.drawImage(this.PieceImage,-this.Height/2, this.Width/2, this.Width, this.Height);
+        context.drawImage(this.PieceImage,-this.Height/2, -this.Width/2, this.Width, this.Height);
         context.restore();
-        //console.log("just tried to draw something.");
+        //console.log("drew at", this.CenterX, this.CenterY);
     }
 }

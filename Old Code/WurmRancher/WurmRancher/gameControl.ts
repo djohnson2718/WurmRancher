@@ -1,12 +1,14 @@
 import { GameElement } from "./gameElement.js";
+import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
+import { Wurm } from "./wurm.js";
 
 
 
 var theRancher: Rancher;
-const playingFieldWidth = 300;
-const playingFieldHeight = 500;
+const playingFieldWidth = 839;
+const playingFieldHeight = 689;
 var soundEffectsOn: boolean;
 var numberOfGoodGrass: number;
 var rancherAccuracy: number;
@@ -36,20 +38,24 @@ function startGame(){
     context = canvas.getContext("2d");
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
-    theRancher = new Rancher();
+    
+
+
 
     GameElements = new Set<GameElement>();
     DeadStuff = new Set<GameElement>();
     NewStuff = new Set<GameElement>();
-    
-    GameElements.add(theRancher);
 
-    theRancher.Update();
+    theRancher = new Rancher();
+    
+    AddCreature(theRancher,100,100);
+
+    new Wurm(13,200,200);
 
     game_running = true;
 
 
-    window.addEventListener('mousedown', MouseDown);
+    canvas.addEventListener('mousedown', MouseDown);
 
     setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
@@ -62,7 +68,7 @@ function InitializeGameElements() :void{
 function GameLoopMethod():void{
     //console.log("entered loop" + String(game_running));
     context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
-    
+
     if (game_running)
     {
         //console.log("in the game running");
@@ -78,13 +84,13 @@ function GameLoopMethod():void{
         }
 
         for (const element of DeadStuff){
-            GameElements.add(element);
+            GameElements.delete(element);
         }
 
         DeadStuff.clear();
 
         for (const element of NewStuff){
-            GameElements.delete(element);
+            GameElements.add(element);
         }
 
         NewStuff.clear();
@@ -93,9 +99,22 @@ function GameLoopMethod():void{
 
 function MouseDown(e :MouseEvent){
     if (e.button == 0){ //left
-        console.log("mouse clicked" + String(e.x) + " " + String(e.y));
-        theRancher.SetDestination(e.x,e.y);
+        console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
+        theRancher.SetDestination(e.offsetX,e.offsetY);
     }
 }
 
+export function RandomXonField(){
+    return Math.floor(Math.random()*playingFieldWidth);
+}
 
+export function RandomYonField(){
+    return Math.floor(Math.random()*playingFieldHeight);
+}
+
+
+export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, startY : number):void{
+    NewStuff.add(e);
+    e.CenterX = startX;
+    e.CenterY = startY;
+} 

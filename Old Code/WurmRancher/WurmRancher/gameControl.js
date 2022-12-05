@@ -1,8 +1,9 @@
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
+import { Wurm } from "./wurm.js";
 var theRancher;
-const playingFieldWidth = 300;
-const playingFieldHeight = 500;
+const playingFieldWidth = 839;
+const playingFieldHeight = 689;
 var soundEffectsOn;
 var numberOfGoodGrass;
 var rancherAccuracy;
@@ -25,14 +26,14 @@ function startGame() {
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     document.body.insertBefore(canvas, document.body.childNodes[0]);
-    theRancher = new Rancher();
     GameElements = new Set();
     DeadStuff = new Set();
     NewStuff = new Set();
-    GameElements.add(theRancher);
-    theRancher.Update();
+    theRancher = new Rancher();
+    AddCreature(theRancher, 100, 100);
+    new Wurm(13, 200, 200);
     game_running = true;
-    window.addEventListener('mousedown', MouseDown);
+    canvas.addEventListener('mousedown', MouseDown);
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
 }
@@ -52,19 +53,30 @@ function GameLoopMethod() {
             element.Update();
         }
         for (const element of DeadStuff) {
-            GameElements.add(element);
+            GameElements.delete(element);
         }
         DeadStuff.clear();
         for (const element of NewStuff) {
-            GameElements.delete(element);
+            GameElements.add(element);
         }
         NewStuff.clear();
     }
 }
 function MouseDown(e) {
     if (e.button == 0) { //left
-        console.log("mouse clicked" + String(e.x) + " " + String(e.y));
-        theRancher.SetDestination(e.x, e.y);
+        console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
+        theRancher.SetDestination(e.offsetX, e.offsetY);
     }
+}
+export function RandomXonField() {
+    return Math.floor(Math.random() * playingFieldWidth);
+}
+export function RandomYonField() {
+    return Math.floor(Math.random() * playingFieldHeight);
+}
+export function AddCreature(e, startX, startY) {
+    NewStuff.add(e);
+    e.CenterX = startX;
+    e.CenterY = startY;
 }
 //# sourceMappingURL=gameControl.js.map

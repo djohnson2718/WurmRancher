@@ -19,6 +19,7 @@ export class MovesToDestinationControl extends ImagePiece {
         this.radians_per_frame = radians_per_frame_;
         this.turn_diameter = pixels_per_frame_ * 2 / radians_per_frame_;
         this.angle = 0;
+        this.resting = true;
     }
 
     set FacingAngleDegrees(value){
@@ -40,11 +41,11 @@ export class MovesToDestinationControl extends ImagePiece {
     }
 
     Update():void{
-        
+        console.log( "dest", this.destination_x, this.destination_y, "cent", this.CenterX,this.CenterY);
         if (!this.resting) {
 
             let distance = Math.sqrt(Math.pow(this.CenterY - this.destination_y, 2) + Math.pow(this.CenterX - this.destination_x, 2));
-            console.log(distance);
+            console.log("dist", distance);
             if (distance < this.pixels_per_frame)
             {
                 this.resting = true;
