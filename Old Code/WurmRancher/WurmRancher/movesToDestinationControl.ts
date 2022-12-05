@@ -7,13 +7,13 @@ export class MovesToDestinationControl extends ImagePiece {
     destination_x :number;
     destination_y : number;
     //rotate : RotateTransform;
-    angle : number;
+    //angle : number;
     radians_per_frame :number;
     turn_diameter :number;
     angle_aquired : boolean;
 
-    constructor(height : number, width :number, pixels_per_frame_:number, radians_per_frame_ :number){
-        super(height, width);
+    constructor(height : number, width :number, pixels_per_frame_:number, radians_per_frame_ :number, angle:number = 0){
+        super(height, width, angle);
         //init rotate
         this.pixels_per_frame = pixels_per_frame_;
         this.radians_per_frame = radians_per_frame_;
