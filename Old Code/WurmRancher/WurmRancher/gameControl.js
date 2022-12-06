@@ -4,6 +4,9 @@ import { Wurm } from "./wurm.js";
 var theRancher;
 const playingFieldWidth = 839;
 const playingFieldHeight = 689;
+const seedRange = 150;
+const seedRadius = 50;
+var Plants;
 var soundEffectsOn;
 var numberOfGoodGrass;
 var rancherAccuracy;
@@ -67,6 +70,40 @@ function MouseDown(e) {
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
         theRancher.SetDestination(e.offsetX, e.offsetY);
     }
+    else if (e.button == 2) //right
+     {
+        e.preventDefault();
+        //if seed selected
+        if (DistanceClickToPiece(e, theRancher) > seedRange)
+            return;
+        //if (SoundEffectsOn)
+        //    seeds_sown.Play();
+        for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
+            if (Plants[I[0]][I[1]] == null) {
+                Plants[I[0]][I[1]] = new GoodGrass(this, I[0], I[1]);
+                GameElements.add(Plants[I[0], I[1]]);
+            }
+        }
+    }
+}
+function DistanceClickToPiece(e, p) {
+    return Math.sqrt((e.offsetX - p.CenterX) ^ 2 + (e.offsetY - p.CenterY) ^ 2);
+}
+function Distance(p1, p2) {
+    return Math.sqrt((p1[0] - p2[0]) ^ 2 + (p1[1] - p2[1]) ^ 2);
+}
+function* PlantSpotsInRadius(x, y, radius) {
+    let half_rect_width = Math.floor(radius / plant_size) + 1;
+    let cplix = ClosestPlantIndexX(x, y);
+    let cpliy = ClosestPlantIndexY(x, y);
+    let fromx = Math.max(cplix - half_rect_width, 0);
+    let tox = Math.min(cplix + half_rect_width, plant_cols - 1);
+    let fromy = Math.max(cpliy - half_rect_width, 0);
+    let toy = Math.min(cpliy + half_rect_width, plant_rows - 1);
+    for (let i = fromx; i <= tox; i++)
+        for (let j = fromy; j <= toy; j++)
+            if (Distance(PlantCenterPointFromIndex(i, j), [x, y]) < radius)
+                yield [i, j];
 }
 export function RandomXonField() {
     return Math.floor(Math.random() * playingFieldWidth);
