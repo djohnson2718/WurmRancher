@@ -1,5 +1,7 @@
 import { GameElement } from "./gameElement.js";
+import { GoodGrass } from "./goodGrass.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
+import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
 import { Wurm } from "./wurm.js";
@@ -13,6 +15,8 @@ const seedRange = 150;
 const seedRadius = 50;
 
 var Plants : Array<Array<Plant>>;
+const plant_rows = Math.floor(playingFieldHeight/plant_size);
+const plant_cols = Math.floor(playingFieldWidth/plant_size);
 
 
 
@@ -120,8 +124,8 @@ function MouseDown(e :MouseEvent){
         {
             if (Plants[I[0]][I[1]] == null)
             {
-                Plants[I[0]][I[1]] = new GoodGrass(this,I[0],I[1]);
-                GameElements.add(Plants[I[0],I[1]]);
+                Plants[I[0]][I[1]] = new GoodGrass(I[0],I[1]);
+                GameElements.add(Plants[I[0]][I[1]]);
             }
         }
 
@@ -166,3 +170,17 @@ export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, st
     e.CenterX = startX;
     e.CenterY = startY;
 } 
+
+export function RemovePlant(p:Plant){
+    Plants[p.indexX,p.indexY] = null;
+    RemovePiece(p);
+}
+
+export function RemovePiece(p:GameElement){
+    DeadStuff.add(p);
+    //more clean up???
+}
+
+export function ReportGrassGrow(g: GoodGrass){
+    //tell the level, maybe???
+}

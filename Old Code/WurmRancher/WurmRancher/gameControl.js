@@ -1,3 +1,5 @@
+import { GoodGrass } from "./goodGrass.js";
+import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
 import { Wurm } from "./wurm.js";
@@ -7,6 +9,8 @@ const playingFieldHeight = 689;
 const seedRange = 150;
 const seedRadius = 50;
 var Plants;
+const plant_rows = Math.floor(playingFieldHeight / plant_size);
+const plant_cols = Math.floor(playingFieldWidth / plant_size);
 var soundEffectsOn;
 var numberOfGoodGrass;
 var rancherAccuracy;
@@ -80,8 +84,8 @@ function MouseDown(e) {
         //    seeds_sown.Play();
         for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
             if (Plants[I[0]][I[1]] == null) {
-                Plants[I[0]][I[1]] = new GoodGrass(this, I[0], I[1]);
-                GameElements.add(Plants[I[0], I[1]]);
+                Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
+                GameElements.add(Plants[I[0]][I[1]]);
             }
         }
     }
@@ -115,5 +119,16 @@ export function AddCreature(e, startX, startY) {
     NewStuff.add(e);
     e.CenterX = startX;
     e.CenterY = startY;
+}
+export function RemovePlant(p) {
+    Plants[p.indexX, p.indexY] = null;
+    RemovePiece(p);
+}
+export function RemovePiece(p) {
+    DeadStuff.add(p);
+    //more clean up???
+}
+export function ReportGrassGrow(g) {
+    //tell the level, maybe???
 }
 //# sourceMappingURL=gameControl.js.map
