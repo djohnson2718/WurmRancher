@@ -13,6 +13,8 @@ const playingFieldWidth = 839;
 const playingFieldHeight = 689;
 const seedRange = 150;
 const seedRadius = 50;
+const sprayRange = 180;
+const sprayRadius = 70;
 
 var Plants : Array<Array<Plant>>;
 const plant_rows = Math.floor(playingFieldHeight/plant_size);
@@ -183,4 +185,44 @@ export function RemovePiece(p:GameElement){
 
 export function ReportGrassGrow(g: GoodGrass){
     //tell the level, maybe???
+}
+
+enum ToolType{
+    Spray = "Spray",
+    Seed = "Seed",
+    Laser = "Laser"
+}
+
+var currentTool : ToolType;
+
+function MouseMove(e){
+    if (!game_running) // || current_level.NoUserControl)
+        return;
+
+    switch (currentTool){
+        case ToolType.Seed:
+            if (DistanceClickToPiece(e, theRancher) < seedRange)
+            {
+                SeedAoEC.Visibility = Visibility.Visible;
+                SeedAoEC.CenterPoint = e.GetPosition(theCanvas);
+            }
+            else
+            {
+                SeedAoEC.Visibility = Visibility.Collapsed;
+            }
+        break;
+        case ToolType.Spray:
+            if (DistanceClickToPiece(e, theRancher) < sprayRange)
+            {
+                SprayAoEC.Visibility = Visibility.Visible;
+                SprayAoEC.CenterPoint = e.GetPosition(theCanvas);
+            }
+            else
+            {
+                SprayAoEC.Visibility = Visibility.Collapsed;
+            }
+        break;
+    }
+
+        
 }
