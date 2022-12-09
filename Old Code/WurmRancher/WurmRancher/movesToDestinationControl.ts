@@ -41,11 +41,11 @@ export class MovesToDestinationControl extends ImagePiece {
     }
 
     Update():void{
-        console.log( "dest", this.destination_x, this.destination_y, "cent", this.CenterX,this.CenterY);
+        //console.log( "dest", this.destination_x, this.destination_y, "cent", this.CenterX,this.CenterY);
         if (!this.resting) {
 
             let distance = Math.sqrt(Math.pow(this.CenterY - this.destination_y, 2) + Math.pow(this.CenterX - this.destination_x, 2));
-            console.log("dist", distance);
+            //console.log("dist", distance);
             if (distance < this.pixels_per_frame)
             {
                 this.resting = true;

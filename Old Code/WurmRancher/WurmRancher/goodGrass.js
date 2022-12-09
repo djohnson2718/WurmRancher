@@ -5,9 +5,9 @@ import { GrassGrowTime } from "./timing.js";
 const fullGrownPic = new Image(plant_size, plant_size);
 const sprayedPic = new Image(plant_size, plant_size);
 const seedPic = new Image(plant_size, plant_size);
-fullGrownPic.src = "/Resources/good_grass_new.png";
-sprayedPic.src = "/Resources/good_grass_sprayed_new.png";
-seedPic.src = "/Resources/seeded.png";
+fullGrownPic.src = "./Resources/good_grass_new.png";
+sprayedPic.src = "./Resources/good_grass_new_sprayed.png";
+seedPic.src = "./Resources/seeded.png";
 export class GoodGrass extends EdiblePlant {
     constructor(indexX, indexY, starts_mature = false) {
         super(indexX, indexY);

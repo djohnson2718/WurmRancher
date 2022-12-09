@@ -1,3 +1,4 @@
+import { AreaEffectCircle } from "./areaEffectCircle.js";
 import { GoodGrass } from "./goodGrass.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
@@ -10,6 +11,10 @@ const seedRange = 150;
 const seedRadius = 50;
 const sprayRange = 180;
 const sprayRadius = 70;
+var mouseX;
+var mouseY;
+const SeedAoEC = new AreaEffectCircle(seedRadius);
+const SprayAoEC = new AreaEffectCircle(sprayRadius);
 var Plants;
 const plant_rows = Math.floor(playingFieldHeight / plant_size);
 const plant_cols = Math.floor(playingFieldWidth / plant_size);
@@ -40,9 +45,14 @@ function startGame() {
     NewStuff = new Set();
     theRancher = new Rancher();
     AddCreature(theRancher, 100, 100);
+    //GameElements.add(SeedAoEC);
+    //GameElements.add(SprayAoEC);
     new Wurm(13, 200, 200);
     game_running = true;
+    currentTool = ToolType.Seed;
     canvas.addEventListener('mousedown', MouseDown);
+    canvas.addEventListener('mousemove', MouseMove);
+    canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
 }
@@ -61,6 +71,15 @@ function GameLoopMethod() {
             //console.log("calling update" + String(element));
             element.Update();
         }
+        if (currentTool == ToolType.Seed) {
+            //console.log([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY],Distance([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY]) );
+            if (Distance([mouseX, mouseY], [theRancher.CenterX, theRancher.CenterY]) < seedRange) {
+                //console.log("drawing")
+                context.beginPath();
+                context.arc(mouseX, mouseY, seedRadius, 0, 2 * Math.PI);
+                context.stroke();
+            }
+        }
         for (const element of DeadStuff) {
             GameElements.delete(element);
         }
@@ -72,13 +91,13 @@ function GameLoopMethod() {
     }
 }
 function MouseDown(e) {
+    e.preventDefault();
     if (e.button == 0) { //left
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
         theRancher.SetDestination(e.offsetX, e.offsetY);
     }
     else if (e.button == 2) //right
      {
-        e.preventDefault();
         //if seed selected
         if (DistanceClickToPiece(e, theRancher) > seedRange)
             return;
@@ -86,6 +105,7 @@ function MouseDown(e) {
         //    seeds_sown.Play();
         for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
             if (Plants[I[0]][I[1]] == null) {
+                console.log("planting a plant at", I[0], I[1]);
                 Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
                 GameElements.add(Plants[I[0]][I[1]]);
             }
@@ -93,10 +113,10 @@ function MouseDown(e) {
     }
 }
 function DistanceClickToPiece(e, p) {
-    return Math.sqrt((e.offsetX - p.CenterX) ^ 2 + (e.offsetY - p.CenterY) ^ 2);
+    return Math.sqrt(Math.pow((e.offsetX - p.CenterX), 2) + Math.pow((e.offsetY - p.CenterY), 2));
 }
 function Distance(p1, p2) {
-    return Math.sqrt((p1[0] - p2[0]) ^ 2 + (p1[1] - p2[1]) ^ 2);
+    return Math.sqrt(Math.pow((p1[0] - p2[0]), 2) + Math.pow((p1[1] - p2[1]), 2));
 }
 function* PlantSpotsInRadius(x, y, radius) {
     let half_rect_width = Math.floor(radius / plant_size) + 1;
@@ -141,27 +161,43 @@ var ToolType;
 })(ToolType || (ToolType = {}));
 var currentTool;
 function MouseMove(e) {
+    mouseX = e.offsetX;
+    mouseY = e.offsetY;
+}
+/* function MouseMove(e){
+    console.log("mouse moved", e.offsetX, e.offsetY);
     if (!game_running) // || current_level.NoUserControl)
         return;
-    switch (currentTool) {
+
+    switch (currentTool){
         case ToolType.Seed:
-            if (DistanceClickToPiece(e, theRancher) < seedRange) {
-                SeedAoEC.Visibility = Visibility.Visible;
-                SeedAoEC.CenterPoint = e.GetPosition(theCanvas);
+            console.log("in seed switch");
+            if (DistanceClickToPiece(e, theRancher) < seedRange)
+            {
+                console.log("seting visible");
+                SeedAoEC.visible = true;
+                SeedAoEC.CenterX = e.offsetX;
+                SeedAoEC.CenterY = e.offsetY;
             }
-            else {
-                SeedAoEC.Visibility = Visibility.Collapsed;
+            else
+            {
+                console.log("seting invisible");
+                SeedAoEC.visible = false;
             }
-            break;
+        break;
         case ToolType.Spray:
-            if (DistanceClickToPiece(e, theRancher) < sprayRange) {
-                SprayAoEC.Visibility = Visibility.Visible;
-                SprayAoEC.CenterPoint = e.GetPosition(theCanvas);
+            if (DistanceClickToPiece(e, theRancher) < sprayRange)
+            {
+                SprayAoEC.visible = true;
+                SprayAoEC.CenterX = e.offsetX;
+                SprayAoEC.CenterY = e.offsetY
             }
-            else {
-                SprayAoEC.Visibility = Visibility.Collapsed;
+            else
+            {
+                SprayAoEC.visible = false;
             }
-            break;
+        break;
     }
-}
+ */
+//}
 //# sourceMappingURL=gameControl.js.map

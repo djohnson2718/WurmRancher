@@ -1,4 +1,5 @@
 import { RemovePlant } from "./gameControl.js";
+import { Plant } from "./plant.js";
 import { EatGrassTime } from "./timing.js";
 export class EdiblePlant extends Plant {
     Eat() {
