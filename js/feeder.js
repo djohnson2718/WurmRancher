@@ -1,4 +1,4 @@
-import { MovesToDestinationControl } from "./movesToDestinationControl";
+import { MovesToDestinationControl } from "../movesToDestinationControl";
 export class Feeder extends MovesToDestinationControl //implements Prey
  {
     Dibs() {

@@ -1,6 +1,6 @@
-import { GameElement } from "./gameElement.js";
-import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
-import { context } from "./gameControl.js";
+import { GameElement } from "../gameElement.js";
+import { OnTheFieldPiece } from "../OnTheFieldPiece.js";
+import { context } from "../gameControl.js";
 
 export class AreaEffectCircle extends OnTheFieldPiece implements GameElement{
     radius : number;

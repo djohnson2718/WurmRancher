@@ -1,4 +1,4 @@
-import { RemovePlant } from "./gameControl.js";
+import { RemovePlant } from "./gameControl";
 import { ImagePiece } from "./imagePiece.js";
 import { SprayEffectivenessTime } from "./timing.js";
 export const plant_size = 30;
