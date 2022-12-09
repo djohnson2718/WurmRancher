@@ -1,4 +1,4 @@
-import { RemovePlant } from "./gameControl";
+import { RemovePlant } from "./gameControl.js";
 import { ImagePiece } from "./imagePiece.js";
 import { SprayEffectivenessTime } from "./timing.js";
 export const plant_size = 30;
@@ -9,9 +9,10 @@ export class Plant extends ImagePiece {
         this.indexX = indexX;
         this.indexY = indexY;
         this.CenterX = indexX * plant_size;
-        this.CenterY = indexX * plant_size;
+        this.CenterY = indexY * plant_size;
     }
     Update() {
+        //console.log("updating plant");
         if (this.sprayed)
             this.time_since_spray++;
         if (this.time_since_spray >= SprayEffectivenessTime)

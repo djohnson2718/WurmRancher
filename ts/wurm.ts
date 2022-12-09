@@ -1,4 +1,4 @@
-import { relWurmHeadRotate } from "./timing.js";
+//import { relWurmHeadRotate } from "./timing.js";
 import {AddCreature} from "./gameControl.js";
 import {BackAttachable, WurmBodyPiece, WurmHead} from "./wurmPieces.js";
 

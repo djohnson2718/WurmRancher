@@ -6,7 +6,7 @@ export class ImagePiece extends OnTheFieldPiece {
         this.angle = angle;
     }
     Update() {
-        //console.log("about to draw something.");
+        //console.log("about to draw something.", this.PieceImage.src);
         context.save();
         context.translate(this.CenterX, this.CenterY);
         context.rotate(this.angle);

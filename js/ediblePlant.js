@@ -22,8 +22,8 @@ export class EdiblePlant extends Plant {
     Update() {
         if (this.dibs > 0) {
             this.dibs--;
-            super.Update();
         }
+        super.Update();
     }
 }
 //# sourceMappingURL=ediblePlant.js.map

@@ -1,4 +1,4 @@
-import { MovesToDestinationControl } from "../movesToDestinationControl";
+import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 
 export class Feeder extends MovesToDestinationControl //implements Prey
 {

@@ -1,3 +1,4 @@
+//import { relWurmHeadRotate } from "./timing.js";
 import { AddCreature } from "./gameControl.js";
 import { WurmBodyPiece, WurmHead } from "./wurmPieces.js";
 const food_per_segment = 4;

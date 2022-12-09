@@ -1,4 +1,3 @@
-import { AreaEffectCircle } from "./areaEffectCircle.js";
 import { GoodGrass } from "./goodGrass.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
@@ -13,11 +12,16 @@ const sprayRange = 180;
 const sprayRadius = 70;
 var mouseX;
 var mouseY;
-const SeedAoEC = new AreaEffectCircle(seedRadius);
-const SprayAoEC = new AreaEffectCircle(sprayRadius);
-var Plants;
-const plant_rows = Math.floor(playingFieldHeight / plant_size);
-const plant_cols = Math.floor(playingFieldWidth / plant_size);
+//const SeedAoEC = new AreaEffectCircle(seedRadius);
+//const SprayAoEC = new AreaEffectCircle(sprayRadius);
+var Plants = new Array();
+const plant_rows = Math.floor(playingFieldWidth / plant_size); //probs these are names wrong, but its ok
+const plant_cols = Math.floor(playingFieldHeight / plant_size);
+//console.log(plant_rows);
+for (var row = 0; row < plant_rows; row++) {
+    Plants[row] = new Array();
+    //console.log("here is plants", Plants);
+}
 var soundEffectsOn;
 var numberOfGoodGrass;
 var rancherAccuracy;
@@ -61,6 +65,7 @@ function InitializeGameElements() {
 function GameLoopMethod() {
     //console.log("entered loop" + String(game_running));
     context.clearRect(0, 0, playingFieldWidth, playingFieldHeight);
+    //console.log(GameElements);
     if (game_running) {
         //console.log("in the game running");
         this.elapsed_time++;
@@ -104,10 +109,14 @@ function MouseDown(e) {
         //if (SoundEffectsOn)
         //    seeds_sown.Play();
         for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
-            if (Plants[I[0]][I[1]] == null) {
+            //console.log(I);
+            //console.log(Plants[I[0]][I[1]]);
+            //console.log(Plants);
+            //console.log(Plants[I[0]]);
+            if (typeof (Plants[I[0]][I[1]]) == "undefined") {
                 console.log("planting a plant at", I[0], I[1]);
                 Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
-                GameElements.add(Plants[I[0]][I[1]]);
+                NewStuff.add(Plants[I[0]][I[1]]);
             }
         }
     }

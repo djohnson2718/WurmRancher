@@ -17,9 +17,9 @@ const height = 30;
 const width = 30;
 const radius = 15;
 const headImage = new Image();
-headImage.src = "./Resources/wurm_head.png";
+headImage.src = "../Resources/wurm_head.png";
 const bodyImage = new Image();
-bodyImage.src = "./Resources/wurm_body.png";
+bodyImage.src = "../Resources/wurm_body.png";
 const sight_range = 500;
 
 export class WurmHead extends MovesToDestinationControl implements BackAttachable {

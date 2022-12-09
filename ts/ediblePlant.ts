@@ -35,7 +35,8 @@ export abstract class EdiblePlant extends Plant {
     Update() :void{
         if (this.dibs>0){
             this.dibs--;
-        super.Update();
         }
+        super.Update();
+        
     }
 }
