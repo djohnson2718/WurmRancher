@@ -8,8 +8,8 @@ export class Plant extends ImagePiece {
         this.sprayed = false;
         this.indexX = indexX;
         this.indexY = indexY;
-        this.CenterX = indexX * plant_size;
-        this.CenterY = indexY * plant_size;
+        this.x = indexX * plant_size;
+        this.y = indexY * plant_size;
     }
     Update() {
         //console.log("updating plant");

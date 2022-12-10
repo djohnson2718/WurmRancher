@@ -1,4 +1,6 @@
 //import { AreaEffectCircle } from "../js/areaEffectCircle.js";
+import { EdiblePlant } from "./ediblePlant.js";
+import { Feeder } from "./feeder.js";
 import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
@@ -24,12 +26,12 @@ var mouseY : number;
 //const SprayAoEC = new AreaEffectCircle(sprayRadius);
 
 var Plants : Array<Array<Plant>> = new Array<Array<Plant>>();
-const plant_rows = Math.floor(playingFieldWidth/plant_size); //probs these are names wrong, but its ok
-const plant_cols = Math.floor(playingFieldHeight/plant_size);
+const plant_rows = Math.floor(playingFieldHeight/plant_size)+1; //probs these are names wrong, but its ok
+const plant_cols = Math.floor(playingFieldWidth/plant_size)+1;
 
 //console.log(plant_rows);
-for (var row = 0;  row < plant_rows; row ++){
-    Plants[row] = new Array<Plant>();
+for (var col = 0;  col < plant_cols; col ++){
+    Plants[col] = new Array<Plant>();
     //console.log("here is plants", Plants);
 }
 
@@ -72,6 +74,7 @@ function startGame(){
     
     
     AddCreature(theRancher,100,100);
+    AddCreature(new Feeder(),200,200);
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
 
@@ -184,6 +187,10 @@ function Distance(p1: Array<number>, p2:Array<number>):number{
     return Math.sqrt( (p1[0]-p2[0])**2 + (p1[1] - p2[1])**2);
 }
 
+export function DistanceObjects(o1 : OnTheFieldPiece, o2 : OnTheFieldPiece){
+    return Math.sqrt( (o1.CenterX-o2.CenterX)^2 + (o1.CenterY - o2.CenterY)^2);
+}
+
 function* PlantSpotsInRadius(x:number, y:number, radius :number) {
     let half_rect_width = Math.floor(radius/plant_size) + 1;
     let cplix = ClosestPlantIndexX(x,y);
@@ -240,6 +247,30 @@ var currentTool : ToolType;
 function MouseMove(e){
     mouseX = e.offsetX;
     mouseY = e.offsetY;
+}
+
+export function GetClosestEdiblePlant(to : OnTheFieldPiece): EdiblePlant{
+    let closest_plant : EdiblePlant = null;
+    let best_dist_so_far = 999999999;
+
+    //may have optimization potential here
+    for (let i = 0; i < plant_cols; i++)
+        for (let j = 0; j < plant_rows; j++)
+            if (Plants[i][j] instanceof EdiblePlant)
+            {
+                let g = (Plants[i][j] as EdiblePlant);
+                if (g.available)
+                {
+                    let dist = DistanceObjects(to, g);
+                    if (dist < best_dist_so_far)
+                    {
+                        best_dist_so_far = dist;
+                        closest_plant = g;
+                    }
+                }
+                    
+            }
+    return closest_plant;
 }
 
 

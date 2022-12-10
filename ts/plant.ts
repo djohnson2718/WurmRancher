@@ -16,8 +16,8 @@ export abstract class Plant extends ImagePiece {
         super(plant_size,plant_size,0);
         this.indexX=indexX;
         this.indexY=indexY;
-        this.CenterX = indexX*plant_size;
-        this.CenterY = indexY*plant_size;
+        this.x = indexX*plant_size;
+        this.y = indexY*plant_size;
     }
 
     Update() :void{

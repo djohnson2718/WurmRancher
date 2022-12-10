@@ -1,3 +1,6 @@
+//import { AreaEffectCircle } from "../js/areaEffectCircle.js";
+import { EdiblePlant } from "./ediblePlant.js";
+import { Feeder } from "./feeder.js";
 import { GoodGrass } from "./goodGrass.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
@@ -15,11 +18,11 @@ var mouseY;
 //const SeedAoEC = new AreaEffectCircle(seedRadius);
 //const SprayAoEC = new AreaEffectCircle(sprayRadius);
 var Plants = new Array();
-const plant_rows = Math.floor(playingFieldWidth / plant_size); //probs these are names wrong, but its ok
-const plant_cols = Math.floor(playingFieldHeight / plant_size);
+const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
+const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
 //console.log(plant_rows);
-for (var row = 0; row < plant_rows; row++) {
-    Plants[row] = new Array();
+for (var col = 0; col < plant_cols; col++) {
+    Plants[col] = new Array();
     //console.log("here is plants", Plants);
 }
 var soundEffectsOn;
@@ -49,6 +52,7 @@ function startGame() {
     NewStuff = new Set();
     theRancher = new Rancher();
     AddCreature(theRancher, 100, 100);
+    AddCreature(new Feeder(), 200, 200);
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
     new Wurm(13, 200, 200);
@@ -127,6 +131,9 @@ function DistanceClickToPiece(e, p) {
 function Distance(p1, p2) {
     return Math.sqrt(Math.pow((p1[0] - p2[0]), 2) + Math.pow((p1[1] - p2[1]), 2));
 }
+export function DistanceObjects(o1, o2) {
+    return Math.sqrt((o1.CenterX - o2.CenterX) ^ 2 + (o1.CenterY - o2.CenterY) ^ 2);
+}
 function* PlantSpotsInRadius(x, y, radius) {
     let half_rect_width = Math.floor(radius / plant_size) + 1;
     let cplix = ClosestPlantIndexX(x, y);
@@ -172,6 +179,24 @@ var currentTool;
 function MouseMove(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
+}
+export function GetClosestEdiblePlant(to) {
+    let closest_plant = null;
+    let best_dist_so_far = 999999999;
+    //may have optimization potential here
+    for (let i = 0; i < plant_cols; i++)
+        for (let j = 0; j < plant_rows; j++)
+            if (Plants[i][j] instanceof EdiblePlant) {
+                let g = Plants[i][j];
+                if (g.available) {
+                    let dist = DistanceObjects(to, g);
+                    if (dist < best_dist_so_far) {
+                        best_dist_so_far = dist;
+                        closest_plant = g;
+                    }
+                }
+            }
+    return closest_plant;
 }
 /* function MouseMove(e){
     console.log("mouse moved", e.offsetX, e.offsetY);
