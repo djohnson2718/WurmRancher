@@ -3,16 +3,17 @@ import { Plant } from "./plant.js";
 import { EatGrassTime } from "./timing.js";
 
 export abstract class EdiblePlant extends Plant {
-    available: boolean;
-    eaten: boolean;
+
+    //eaten: boolean;
     eat_value : number;
 
-    bites_taken : number;
+    bites_taken : number=0;
 
-    dibs : number;
+    dibs : number=0;
 
     Eat():number{
         this.bites_taken++;
+        console.log("eating", this.bites_taken);
         if (this.bites_taken >= EatGrassTime)
             RemovePlant(this);
         this.dibs = 5;
@@ -43,4 +44,6 @@ export abstract class EdiblePlant extends Plant {
     Dibs(d:number) :void{
         this.dibs = d;
     }
+
+    abstract get Available() : boolean;
 }

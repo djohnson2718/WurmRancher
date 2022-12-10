@@ -46,12 +46,19 @@ function startGame() {
     canvas.height = playingFieldHeight;
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
+    context.font = "14px sans";
     document.body.insertBefore(canvas, document.body.childNodes[0]);
     GameElements = new Set();
     DeadStuff = new Set();
     NewStuff = new Set();
     theRancher = new Rancher();
     AddCreature(theRancher, 100, 100);
+    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new Feeder(), 200, 200);
     AddCreature(new Feeder(), 200, 200);
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
@@ -118,7 +125,7 @@ function MouseDown(e) {
             //console.log(Plants);
             //console.log(Plants[I[0]]);
             if (typeof (Plants[I[0]][I[1]]) == "undefined") {
-                console.log("planting a plant at", I[0], I[1]);
+                //console.log("planting a plant at", I[0],I[1])
                 Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
                 NewStuff.add(Plants[I[0]][I[1]]);
             }
@@ -132,7 +139,7 @@ function Distance(p1, p2) {
     return Math.sqrt(Math.pow((p1[0] - p2[0]), 2) + Math.pow((p1[1] - p2[1]), 2));
 }
 export function DistanceObjects(o1, o2) {
-    return Math.sqrt((o1.CenterX - o2.CenterX) ^ 2 + (o1.CenterY - o2.CenterY) ^ 2);
+    return Math.sqrt(Math.pow((o1.CenterX - o2.CenterX), 2) + Math.pow((o1.CenterY - o2.CenterY), 2));
 }
 function* PlantSpotsInRadius(x, y, radius) {
     let half_rect_width = Math.floor(radius / plant_size) + 1;
@@ -159,7 +166,7 @@ export function AddCreature(e, startX, startY) {
     e.CenterY = startY;
 }
 export function RemovePlant(p) {
-    Plants[p.indexX, p.indexY] = null;
+    Plants[p.indexX][p.indexY] = null;
     RemovePiece(p);
 }
 export function RemovePiece(p) {
@@ -185,10 +192,12 @@ export function GetClosestEdiblePlant(to) {
     let best_dist_so_far = 999999999;
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
-        for (let j = 0; j < plant_rows; j++)
+        for (let j = 0; j < plant_rows; j++) {
+            console.log(Plants[i][j]);
             if (Plants[i][j] instanceof EdiblePlant) {
+                console.log("found edible");
                 let g = Plants[i][j];
-                if (g.available) {
+                if (g.Available) {
                     let dist = DistanceObjects(to, g);
                     if (dist < best_dist_so_far) {
                         best_dist_so_far = dist;
@@ -196,42 +205,27 @@ export function GetClosestEdiblePlant(to) {
                     }
                 }
             }
+        }
+    console.log(closest_plant, best_dist_so_far);
     return closest_plant;
 }
-/* function MouseMove(e){
-    console.log("mouse moved", e.offsetX, e.offsetY);
-    if (!game_running) // || current_level.NoUserControl)
-        return;
-
-    switch (currentTool){
-        case ToolType.Seed:
-            console.log("in seed switch");
-            if (DistanceClickToPiece(e, theRancher) < seedRange)
-            {
-                console.log("seting visible");
-                SeedAoEC.visible = true;
-                SeedAoEC.CenterX = e.offsetX;
-                SeedAoEC.CenterY = e.offsetY;
+export function GetClosestFeeder(to, care_about_dibs) {
+    let best_dist_so_far = 9999999;
+    let closest = null;
+    let f = null;
+    let cur_dist;
+    for (const e of GameElements) {
+        if (e instanceof Feeder) {
+            f = e;
+            if (f.Available(care_about_dibs)) {
+                cur_dist = DistanceObjects(f, to);
+                if (cur_dist < best_dist_so_far) {
+                    closest = f;
+                    best_dist_so_far = cur_dist;
+                }
             }
-            else
-            {
-                console.log("seting invisible");
-                SeedAoEC.visible = false;
-            }
-        break;
-        case ToolType.Spray:
-            if (DistanceClickToPiece(e, theRancher) < sprayRange)
-            {
-                SprayAoEC.visible = true;
-                SprayAoEC.CenterX = e.offsetX;
-                SprayAoEC.CenterY = e.offsetY
-            }
-            else
-            {
-                SprayAoEC.visible = false;
-            }
-        break;
+        }
     }
- */
-//}
+    return closest;
+}
 //# sourceMappingURL=gameControl.js.map

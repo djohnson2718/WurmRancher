@@ -1,21 +1,23 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
-import { DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField } from "./gameControl.js";
+import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField } from "./gameControl.js";
 
 const height =30;
 const width = 30;
 const max_vision = 200;
-const max_size = 10;
+const max_fattened = 10;
 
 const feederPic = new Image(height,width);
 feederPic.src = "../Resources/feeder.png";
 
+
+
 export class Feeder extends MovesToDestinationControl //implements Prey
 {
-    eaten: boolean;
-    size: number;
-    feederSize: number;
+    eaten: boolean = false;
+    fattened: number = 0;
+    //feederSize: number;
     dibs: number;
 
     target_plant : EdiblePlant;
@@ -38,15 +40,15 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                 let eats = this.target_plant.Eat();
                 if (eats != 0)
                 {
-                    this.size += eats;
+                    this.fattened += eats;
                     //if (EatsGrass != null)
                     //    EatsGrass(this, new GameEventArgs(theControl));
                     
                 }
-                if (this.size > max_size)
-                    this.size = max_size;
-                if (this.size < 0)
-                    this.size = 0;
+                if (this.fattened > max_fattened)
+                    this.fattened = max_fattened;
+                if (this.fattened < 0)
+                    this.fattened = 0;
 
                 if (this.target_plant.Eaten)
                     this.target_plant = null;
@@ -67,6 +69,13 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                     this.SetDestination(RandomXonField(),RandomYonField());
             }
 
+        
+        context.fillText(String(this.fattened), this.CenterX -width/2, this.CenterY + width/3);
+
+    }
+
+    Available(care_about_dibs):boolean{
+        return (!care_about_dibs || this.dibs == 0);
     }
 
 }

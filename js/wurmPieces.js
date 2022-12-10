@@ -1,7 +1,7 @@
 import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed } from "./timing.js";
-import { RandomXonField, RandomYonField } from "./gameControl.js";
+import { GetClosestFeeder, RandomXonField, RandomYonField } from "./gameControl.js";
 const height = 30;
 const width = 30;
 const radius = 15;
@@ -54,7 +54,7 @@ export class WurmHead extends MovesToDestinationControl {
             }
         }
         if (this.resting) {
-            //this.feeder_target = GetClosestPrey<Feeder>(this, true);
+            this.feeder_target = GetClosestFeeder(this, true);
             if (this.feeder_target != null && Math.sqrt((this.CenterX - this.feeder_target.CenterX) ^ 2 + (this.CenterY - this.feeder_target.CenterY) ^ 2) > sight_range)
                 this.feeder_target = null;
             if (this.feeder_target == null) {

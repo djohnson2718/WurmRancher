@@ -2,8 +2,14 @@ import { RemovePlant } from "./gameControl.js";
 import { Plant } from "./plant.js";
 import { EatGrassTime } from "./timing.js";
 export class EdiblePlant extends Plant {
+    constructor() {
+        super(...arguments);
+        this.bites_taken = 0;
+        this.dibs = 0;
+    }
     Eat() {
         this.bites_taken++;
+        console.log("eating", this.bites_taken);
         if (this.bites_taken >= EatGrassTime)
             RemovePlant(this);
         this.dibs = 5;
