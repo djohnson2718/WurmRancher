@@ -39,4 +39,8 @@ export abstract class EdiblePlant extends Plant {
         super.Update();
         
     }
+
+    Dibs(d:number) :void{
+        this.dibs = d;
+    }
 }
