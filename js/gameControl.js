@@ -1,7 +1,6 @@
-//import { AreaEffectCircle } from "../js/areaEffectCircle.js";
-import { EdiblePlant } from "./ediblePlant.js";
 import { Feeder } from "./feeder.js";
 import { GoodGrass } from "./goodGrass.js";
+import { GrassEater } from "./grassEater.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
@@ -18,10 +17,10 @@ var mouseY;
 var Plants = new Array();
 const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
 const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
-//console.log(plant_rows);
 for (var col = 0; col < plant_cols; col++) {
     Plants[col] = new Array();
-    //console.log("here is plants", Plants);
+    for (var row = 0; row < plant_rows; row++)
+        Plants[col][row] = null;
 }
 var soundEffectsOn;
 var numberOfGoodGrass;
@@ -55,9 +54,8 @@ function startGame() {
     AddCreature(new Feeder(), 200, 200);
     AddCreature(new Feeder(), 200, 200);
     AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
+    AddCreature(new GrassEater(), 300, 300);
+    AddCreature(new GrassEater(), 400, 400);
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
     new Wurm(13, 200, 200);
@@ -108,6 +106,7 @@ function MouseDown(e) {
     e.preventDefault();
     if (e.button == 0) { //left
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
+        console.log(GameElements);
         theRancher.SetDestination(e.offsetX, e.offsetY);
     }
     else if (e.button == 2) //right
@@ -122,7 +121,7 @@ function MouseDown(e) {
             //console.log(Plants[I[0]][I[1]]);
             //console.log(Plants);
             //console.log(Plants[I[0]]);
-            if (typeof (Plants[I[0]][I[1]]) == "undefined") {
+            if (Plants[I[0]][I[1]] == null) {
                 //console.log("planting a plant at", I[0],I[1])
                 Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
                 NewStuff.add(Plants[I[0]][I[1]]);
@@ -185,14 +184,14 @@ function MouseMove(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
 }
-export function GetClosestEdiblePlant(to) {
+export function GetClosestPlant(to, plantTypes) {
     let closest_plant = null;
     let best_dist_so_far = 999999999;
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++) {
             //console.log(Plants[i][j]);
-            if (Plants[i][j] instanceof EdiblePlant) {
+            if (Plants[i][i] != null && Plants[i][j].Name in plantTypes) {
                 //console.log("found edible");
                 let g = Plants[i][j];
                 if (g.Available) {
@@ -204,7 +203,7 @@ export function GetClosestEdiblePlant(to) {
                 }
             }
         }
-    console.log(closest_plant, best_dist_so_far);
+    //console.log(closest_plant, best_dist_so_far);
     return closest_plant;
 }
 export function GetClosestPrey(to, care_about_dibs, preyName) {
@@ -212,24 +211,24 @@ export function GetClosestPrey(to, care_about_dibs, preyName) {
     let closest = null;
     let f = null;
     let cur_dist;
-    console.log("looking for prey");
+    //console.log("looking for prey");
     for (const e of GameElements) {
-        console.log(e, e.Name, e.Name == preyName);
+        //console.log(e, e.Name,e.Name==preyName);
         if (e.Name == preyName) {
             f = e;
-            console.log("available", f.Available(care_about_dibs));
+            //console.log("available", f.Available(care_about_dibs));
             if (f.Available(care_about_dibs)) {
-                console.log("available!");
+                //console.log("available!")
                 cur_dist = DistanceObjects(f, to);
                 if (cur_dist < best_dist_so_far) {
-                    console.log("new best");
+                    //console.log("new best");
                     closest = f;
                     best_dist_so_far = cur_dist;
                 }
             }
         }
     }
-    console.log("found", closest);
+    //console.log("found",closest);
     return closest;
 }
 //# sourceMappingURL=gameControl.js.map

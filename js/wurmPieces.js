@@ -13,7 +13,7 @@ const sight_range = 500;
 export class WurmHead extends MovesToDestinationControl {
     constructor(wurmObject) {
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
-        this.Layer = 4;
+        this.Layer = 3;
         this.feeder_target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;

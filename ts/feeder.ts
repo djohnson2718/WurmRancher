@@ -1,7 +1,7 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
-import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
+import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 
 const height =30;
 const width = 30;
@@ -57,7 +57,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
 
             if (this.target_plant == null && this.resting) // find a new destination!
             {
-                this.target_plant = GetClosestEdiblePlant(this);
+                this.target_plant = GetClosestPlant(this, ["GoodGrass","PoisonWeed"]);
                 if (this.target_plant != null && DistanceObjects(this.target_plant, this) > max_vision)
                     this.target_plant = null;
 
