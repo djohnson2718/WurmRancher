@@ -11,5 +11,6 @@ export class Rancher extends MovesToDestinationControl {
         this.x = 100;
         this.y = 100;
     }
+    get Name() { return "Rancher"; }
 }
 //# sourceMappingURL=rancher.js.map

@@ -1,7 +1,7 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
-import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField } from "./gameControl.js";
+import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 
 const height =30;
 const width = 30;
@@ -18,7 +18,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     eaten: boolean = false;
     fattened: number = 0;
     //feederSize: number;
-    dibs: number;
+    dibs: number=0;
 
     target_plant : EdiblePlant;
 
@@ -77,5 +77,16 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     Available(care_about_dibs):boolean{
         return (!care_about_dibs || this.dibs == 0);
     }
+
+    Eat() : number{
+        if (this.eaten)
+            return 0;
+
+        this.eaten = true;
+        RemovePiece(this);
+        return this.fattened;
+    }
+
+    get Name(){return "Feeder";}
 
 }

@@ -1,7 +1,7 @@
 
 import { ImagePiece } from "./imagePiece.js";
 
-export class MovesToDestinationControl extends ImagePiece {
+export abstract class MovesToDestinationControl extends ImagePiece {
     pixels_per_frame : number;
     resting : boolean;
     destination_x :number;

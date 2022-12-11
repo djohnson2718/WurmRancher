@@ -39,5 +39,6 @@ export class GoodGrass extends EdiblePlant {
         }
         super.Update();
     }
+    get Name() { return "Good Grass"; }
 }
 //# sourceMappingURL=goodGrass.js.map

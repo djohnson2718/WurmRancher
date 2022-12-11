@@ -50,4 +50,6 @@ export class GoodGrass extends EdiblePlant {
             }
             super.Update();   
     }
+
+    get Name(){return "Good Grass";}
 }

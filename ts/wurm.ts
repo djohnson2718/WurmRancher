@@ -13,7 +13,7 @@ export class Wurm {
 
     constructor(length:number, startX:number, startY:number){
         this.length=length;
-        this.head = new WurmHead();
+        this.head = new WurmHead(this);
         AddCreature(this.head, startX, startY);
 
         let w2 = new WurmBodyPiece(this.head,this.head);
@@ -33,5 +33,26 @@ export class Wurm {
     get Length() :number{
         return this.length;
     }
+
+    head_Eats(head : WurmHead) :void
+        {
+            if (!head.feeder_target.eaten)
+            {
+                this.food_eaten_since_growth += head.feeder_target.Eat();
+                //if (Eats != null)
+                //    Eats(this, new GameEventArgs(theControl));
+            }
+            while (this.food_eaten_since_growth >= food_per_segment)
+            {
+                this.food_eaten_since_growth -= food_per_segment;
+                let wp = new WurmBodyPiece(this.tail, head);
+                //wp.EatenByParasite +=new EventHandler<EventArgs>(PieceEatenByParasite);
+                AddCreature(wp, this.tail.backAttachX, this.tail.backAttachY);
+                this.tail = wp;
+                this.length++;
+                //if (LengthChange != null)
+                //    LengthChange(this, new GameEventArgs(theControl));
+            }
+        }
     
-};
+}

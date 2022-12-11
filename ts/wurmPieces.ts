@@ -2,7 +2,8 @@ import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed } from "./timing.js";
 import { Feeder } from "./feeder.js";
-import { GetClosestFeeder, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
+import { Wurm } from "./wurm.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -23,10 +24,12 @@ bodyImage.src = "../Resources/wurm_body.png";
 const sight_range = 500;
 
 export class WurmHead extends MovesToDestinationControl implements BackAttachable {
-
-    constructor(){
+    
+    wurmObject : Wurm;
+    constructor(wurmObject :Wurm){
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
         this.PieceImage = headImage;
+        this.wurmObject = wurmObject;
         //click event handler
     }
 
@@ -76,10 +79,11 @@ export class WurmHead extends MovesToDestinationControl implements BackAttachabl
             }
             else
             {
-                this.SetDestination(this.feeder_target.x, this.feeder_target.y);
+                this.SetDestination(this.feeder_target.CenterX, this.feeder_target.CenterY);
                 this.SetTargetAngle();
-                if (Math.sqrt( (this.CenterX-this.feeder_target.CenterX)^2 + (this.CenterY-this.feeder_target.CenterY)^2) <= radius)
+                if (DistanceObjects(this,this.feeder_target) <= radius)
                 {
+                    this.wurmObject.head_Eats(this);
                     //Eats(this, new EatEventData(this.feeder_target));
                     //if (theControl.SoundEffectsOn)
                     //    EatSound.Play();
@@ -90,8 +94,8 @@ export class WurmHead extends MovesToDestinationControl implements BackAttachabl
         } 
         
         if (this.resting){
-            this.feeder_target = GetClosestFeeder(this, true);
-            if (this.feeder_target != null && Math.sqrt( (this.CenterX-this.feeder_target.CenterX)^2 + (this.CenterY-this.feeder_target.CenterY)^2) > sight_range)
+            this.feeder_target = GetClosestPrey(this, true, "Feeder") as Feeder;
+            if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
                 this.feeder_target = null;
             
             if (this.feeder_target == null)
@@ -102,6 +106,8 @@ export class WurmHead extends MovesToDestinationControl implements BackAttachabl
             
         super.Update();
     }
+
+    get Name(){return "Wurm Head";}
 }
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
@@ -184,6 +190,8 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
         {
             this.total_bites_suffered+=2;    //we will decrement them on update as well.            
         }
+
+        get Name(){return "Wurm Body";}
     }
 
 //export interface EatEventData extends EventArgs {

@@ -19,4 +19,6 @@ export class Rancher extends MovesToDestinationControl {
         
     }
 
+    get Name(){return "Rancher";}
+
 }

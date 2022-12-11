@@ -9,7 +9,7 @@ export class EdiblePlant extends Plant {
     }
     Eat() {
         this.bites_taken++;
-        console.log("eating", this.bites_taken);
+        //console.log("eating", this.bites_taken);
         if (this.bites_taken >= EatGrassTime)
             RemovePlant(this);
         this.dibs = 5;

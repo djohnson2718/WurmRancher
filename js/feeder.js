@@ -1,6 +1,6 @@
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
-import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField } from "./gameControl.js";
+import { context, DistanceObjects, GetClosestEdiblePlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 const height = 30;
 const width = 30;
 const max_vision = 200;
@@ -13,6 +13,8 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         super(height, width, RelativeSpeedToPixelsPerFrame(relFeederSpeed), RelativeRotateToRadiansPerFrame(relFeederRotate));
         this.eaten = false;
         this.fattened = 0;
+        //feederSize: number;
+        this.dibs = 0;
         this.PieceImage = feederPic;
         this.target_plant = null;
     }
@@ -54,5 +56,13 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     Available(care_about_dibs) {
         return (!care_about_dibs || this.dibs == 0);
     }
+    Eat() {
+        if (this.eaten)
+            return 0;
+        this.eaten = true;
+        RemovePiece(this);
+        return this.fattened;
+    }
+    get Name() { return "Feeder"; }
 }
 //# sourceMappingURL=feeder.js.map

@@ -3,8 +3,10 @@ import { EdiblePlant } from "./ediblePlant.js";
 import { Feeder } from "./feeder.js";
 import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
+import { ImagePiece } from "./imagePiece.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
+import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
 import { Wurm } from "./wurm.js";
@@ -263,10 +265,10 @@ export function GetClosestEdiblePlant(to : OnTheFieldPiece): EdiblePlant{
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++){
-            console.log(Plants[i][j]);
+            //console.log(Plants[i][j]);
             if (Plants[i][j] instanceof EdiblePlant)
             {
-                console.log("found edible");
+                //console.log("found edible");
                 let g = (Plants[i][j] as EdiblePlant);
                 if (g.Available)
                 {
@@ -283,26 +285,35 @@ export function GetClosestEdiblePlant(to : OnTheFieldPiece): EdiblePlant{
     return closest_plant;
 }
 
-export function GetClosestFeeder(to: OnTheFieldPiece, care_about_dibs:boolean) : Feeder{
+
+export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, preyName : String) : Prey{
     let best_dist_so_far = 9999999;
-    let closest : Feeder = null;
-    let f : Feeder  = null;
+    let closest : Prey = null;
+    let f : Prey  = null;
     let cur_dist : number;
+    console.log("looking for prey");
     for (const e of GameElements)
     {
-        if (e instanceof Feeder)
+        console.log(e, e.Name,e.Name==preyName);
+        if (e.Name == preyName)
         {
-            f = (e as Feeder);
+            f = (e as unknown) as Prey;
+            console.log("available", f.Available(care_about_dibs));
             if (f.Available(care_about_dibs))
             {
+                console.log("available!")
                 cur_dist = DistanceObjects(f, to);
                 if (cur_dist < best_dist_so_far)
                 {
+                    console.log("new best");
                     closest = f;
                     best_dist_so_far = cur_dist;
                 }
             }
         }
     }
+    console.log("found",closest);
     return closest;
 }
+
+ 

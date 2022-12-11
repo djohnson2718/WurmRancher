@@ -193,9 +193,9 @@ export function GetClosestEdiblePlant(to) {
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++) {
-            console.log(Plants[i][j]);
+            //console.log(Plants[i][j]);
             if (Plants[i][j] instanceof EdiblePlant) {
-                console.log("found edible");
+                //console.log("found edible");
                 let g = Plants[i][j];
                 if (g.Available) {
                     let dist = DistanceObjects(to, g);
@@ -209,23 +209,29 @@ export function GetClosestEdiblePlant(to) {
     console.log(closest_plant, best_dist_so_far);
     return closest_plant;
 }
-export function GetClosestFeeder(to, care_about_dibs) {
+export function GetClosestPrey(to, care_about_dibs, preyName) {
     let best_dist_so_far = 9999999;
     let closest = null;
     let f = null;
     let cur_dist;
+    console.log("looking for prey");
     for (const e of GameElements) {
-        if (e instanceof Feeder) {
+        console.log(e, e.Name, e.Name == preyName);
+        if (e.Name == preyName) {
             f = e;
+            console.log("available", f.Available(care_about_dibs));
             if (f.Available(care_about_dibs)) {
+                console.log("available!");
                 cur_dist = DistanceObjects(f, to);
                 if (cur_dist < best_dist_so_far) {
+                    console.log("new best");
                     closest = f;
                     best_dist_so_far = cur_dist;
                 }
             }
         }
     }
+    console.log("found", closest);
     return closest;
 }
 //# sourceMappingURL=gameControl.js.map

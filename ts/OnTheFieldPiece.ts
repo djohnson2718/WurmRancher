@@ -1,5 +1,5 @@
 
-export class OnTheFieldPiece {
+export abstract class OnTheFieldPiece {
 
   //CenterPoint: Point;
   Height : number;
@@ -33,4 +33,6 @@ export class OnTheFieldPiece {
   set CenterY(value) {
     this.y = value - this.Height/2;
   }
+
+  
 }

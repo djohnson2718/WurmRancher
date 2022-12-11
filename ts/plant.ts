@@ -36,6 +36,8 @@ export abstract class Plant extends ImagePiece {
 
     abstract SprayedPic: HTMLImageElement;
 
+    abstract Name: string;
+
 }
 
 export function ClosestPlantIndexX(x,y) : number{
