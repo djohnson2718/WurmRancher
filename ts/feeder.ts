@@ -19,6 +19,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     fattened: number = 0;
     //feederSize: number;
     dibs: number=0;
+    Layer = 6;
 
     target_plant : EdiblePlant;
 

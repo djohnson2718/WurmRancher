@@ -13,6 +13,7 @@ const sight_range = 500;
 export class WurmHead extends MovesToDestinationControl {
     constructor(wurmObject) {
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
+        this.Layer = 4;
         this.feeder_target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
@@ -70,6 +71,7 @@ export class WurmHead extends MovesToDestinationControl {
 export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);
+        this.Layer = 4;
         this.radians_per_frame = RelativeRotateToRadiansPerFrame(relWurmBodyRotate); //be careful here!!!!
         //public event EventHandler<EventArgs> EatenByParasite;
         this.fade_time_elapsed = 0;

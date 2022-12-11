@@ -26,6 +26,7 @@ const sight_range = 500;
 export class WurmHead extends MovesToDestinationControl implements BackAttachable {
     
     wurmObject : Wurm;
+    Layer =4;
     constructor(wurmObject :Wurm){
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
         this.PieceImage = headImage;
@@ -112,7 +113,7 @@ export class WurmHead extends MovesToDestinationControl implements BackAttachabl
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
     {
-
+        Layer = 4;
         Leader :BackAttachable;
         head :WurmHead;
 

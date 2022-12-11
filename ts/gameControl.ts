@@ -24,8 +24,6 @@ const sprayRadius = 70;
 var mouseX : number;
 var mouseY : number;
 
-//const SeedAoEC = new AreaEffectCircle(seedRadius);
-//const SprayAoEC = new AreaEffectCircle(sprayRadius);
 
 var Plants : Array<Array<Plant>> = new Array<Array<Plant>>();
 const plant_rows = Math.floor(playingFieldHeight/plant_size)+1; //probs these are names wrong, but its ok
@@ -51,7 +49,7 @@ var game_running :boolean;
 var elapsed_time : number;
 var laser_cool_down_counter : number;
 
-export var GameElements : Set<GameElement>;
+export var GameElements : Array<GameElement>;
 export var DeadStuff : Set<GameElement>;
 var NewStuff : Set<GameElement>;
 
@@ -68,7 +66,7 @@ function startGame(){
     context.font = "14px sans";
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
-    GameElements = new Set<GameElement>();
+    GameElements = new Array<GameElement>();
     DeadStuff = new Set<GameElement>();
     NewStuff = new Set<GameElement>();
 
@@ -141,16 +139,16 @@ function GameLoopMethod():void{
             }
         }
 
-        for (const element of DeadStuff){
-            GameElements.delete(element);
-        }
+        GameElements = GameElements.filter( function(e){return !DeadStuff.has(e);})
 
         DeadStuff.clear();
 
         for (const element of NewStuff){
-            GameElements.add(element);
+            GameElements.push(element);
         }
-
+        
+        if (NewStuff.size > 0)
+            GameElements.sort( function(a,b){return b.Layer-a.Layer;});
         NewStuff.clear();
     }
 }

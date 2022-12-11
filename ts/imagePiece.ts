@@ -6,6 +6,7 @@ import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 export abstract class ImagePiece extends OnTheFieldPiece implements GameElement {
     PieceImage : HTMLImageElement;
     angle : number;
+    abstract Layer:number;
 
     constructor(height : number, width : number, angle :number){
         super(height, width);

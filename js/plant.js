@@ -6,6 +6,7 @@ export class Plant extends ImagePiece {
     constructor(indexX, indexY) {
         super(plant_size, plant_size, 0);
         this.sprayed = false;
+        this.Layer = 10;
         this.indexX = indexX;
         this.indexY = indexY;
         this.x = indexX * plant_size;

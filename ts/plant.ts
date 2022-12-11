@@ -11,6 +11,7 @@ export abstract class Plant extends ImagePiece {
     indexY: number;
     sprayed: boolean = false;
     time_since_spray : number;
+    Layer = 10;
 
     constructor(indexX:number, indexY:number){
         super(plant_size,plant_size,0);

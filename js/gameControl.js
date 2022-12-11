@@ -15,8 +15,6 @@ const sprayRange = 180;
 const sprayRadius = 70;
 var mouseX;
 var mouseY;
-//const SeedAoEC = new AreaEffectCircle(seedRadius);
-//const SprayAoEC = new AreaEffectCircle(sprayRadius);
 var Plants = new Array();
 const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
 const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
@@ -48,7 +46,7 @@ function startGame() {
     context = canvas.getContext("2d");
     context.font = "14px sans";
     document.body.insertBefore(canvas, document.body.childNodes[0]);
-    GameElements = new Set();
+    GameElements = new Array();
     DeadStuff = new Set();
     NewStuff = new Set();
     theRancher = new Rancher();
@@ -96,13 +94,13 @@ function GameLoopMethod() {
                 context.stroke();
             }
         }
-        for (const element of DeadStuff) {
-            GameElements.delete(element);
-        }
+        GameElements = GameElements.filter(function (e) { return !DeadStuff.has(e); });
         DeadStuff.clear();
         for (const element of NewStuff) {
-            GameElements.add(element);
+            GameElements.push(element);
         }
+        if (NewStuff.size > 0)
+            GameElements.sort(function (a, b) { return b.Layer - a.Layer; });
         NewStuff.clear();
     }
 }

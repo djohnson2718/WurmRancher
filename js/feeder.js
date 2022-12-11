@@ -15,6 +15,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         this.fattened = 0;
         //feederSize: number;
         this.dibs = 0;
+        this.Layer = 6;
         this.PieceImage = feederPic;
         this.target_plant = null;
     }
