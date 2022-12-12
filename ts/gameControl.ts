@@ -42,6 +42,7 @@ var numberOfGoodGrass: number;
 var rancherAccuracy: number;
 var shotsHit: number;
 var shotsFired: number;
+var infoPar : HTMLParagraphElement;
 
 //currentLevel: Level;
 var weedRatio: number;
@@ -66,6 +67,8 @@ function startGame(){
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
+    infoPar = document.getElementsByTagName("Info")[0] as HTMLParagraphElement;
+
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
     GameElements = new Array<GameElement>();
@@ -87,7 +90,7 @@ function startGame(){
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
 
-    new Wurm(13,200,200);
+    //new Wurm(13,200,200);
 
     game_running = true;
 
@@ -157,12 +160,12 @@ function GameLoopMethod():void{
 
 function MouseDown(e :MouseEvent){
     e.preventDefault();
-    if (e.button == 0){ //left
+    if (e.button == 2){ //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
         console.log(GameElements);
         theRancher.SetDestination(e.offsetX,e.offsetY);
     }
-    else if (e.button == 2)//right
+    else if (e.button == 0)//left
     {
         
 
@@ -266,10 +269,11 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++){
-            //console.log(Plants[i][j]);
-            if (Plants[i][i] != null && Plants[i][j].Name in plantTypes)
+            if (!(Plants[i][j] === null))
+                console.log(Plants[i][j], Plants[i][j].Name, plantTypes, plantTypes.includes(Plants[i][j].Name));
+            if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name))
             {
-                //console.log("found edible");
+                console.log("found edible");
                 let g = (Plants[i][j] as EdiblePlant);
                 if (g.Available)
                 {
@@ -316,5 +320,18 @@ export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, pre
     //console.log("found",closest);
     return closest;
 }
+
+export function ShowVictory(message : String) : void{
+    infoPar.textContent = "Victory: " + message;
+}
+
+export function ShowDefeat(message :String) :void{
+    infoPar.textContent = "Defeat: " + message;
+}
+
+export function ShowMessage(message : String) :void{
+    infoPar.textContent = "Message: " + message;
+}
+
 
  

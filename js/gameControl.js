@@ -4,7 +4,6 @@ import { GrassEater } from "./grassEater.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import * as timing from "./timing.js";
-import { Wurm } from "./wurm.js";
 var theRancher;
 const playingFieldWidth = 839;
 const playingFieldHeight = 689;
@@ -27,6 +26,7 @@ var numberOfGoodGrass;
 var rancherAccuracy;
 var shotsHit;
 var shotsFired;
+var infoPar;
 //currentLevel: Level;
 var weedRatio;
 var game_running;
@@ -44,6 +44,7 @@ function startGame() {
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
+    infoPar = document.getElementsByTagName("Info")[0];
     document.body.insertBefore(canvas, document.body.childNodes[0]);
     GameElements = new Array();
     DeadStuff = new Set();
@@ -58,7 +59,7 @@ function startGame() {
     AddCreature(new GrassEater(), 400, 400);
     //GameElements.add(SeedAoEC);
     //GameElements.add(SprayAoEC);
-    new Wurm(13, 200, 200);
+    //new Wurm(13,200,200);
     game_running = true;
     currentTool = ToolType.Seed;
     canvas.addEventListener('mousedown', MouseDown);
@@ -104,12 +105,12 @@ function GameLoopMethod() {
 }
 function MouseDown(e) {
     e.preventDefault();
-    if (e.button == 0) { //left
+    if (e.button == 2) { //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
         console.log(GameElements);
         theRancher.SetDestination(e.offsetX, e.offsetY);
     }
-    else if (e.button == 2) //right
+    else if (e.button == 0) //left
      {
         //if seed selected
         if (DistanceClickToPiece(e, theRancher) > seedRange)
@@ -190,9 +191,10 @@ export function GetClosestPlant(to, plantTypes) {
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++) {
-            //console.log(Plants[i][j]);
-            if (Plants[i][i] != null && Plants[i][j].Name in plantTypes) {
-                //console.log("found edible");
+            if (!(Plants[i][j] === null))
+                console.log(Plants[i][j], Plants[i][j].Name, plantTypes, plantTypes.includes(Plants[i][j].Name));
+            if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name)) {
+                console.log("found edible");
                 let g = Plants[i][j];
                 if (g.Available) {
                     let dist = DistanceObjects(to, g);
@@ -230,5 +232,14 @@ export function GetClosestPrey(to, care_about_dibs, preyName) {
     }
     //console.log("found",closest);
     return closest;
+}
+export function ShowVictory(message) {
+    infoPar.textContent = "Victory: " + message;
+}
+export function ShowDefeat(message) {
+    infoPar.textContent = "Defeat: " + message;
+}
+export function ShowMessage(message) {
+    infoPar.textContent = "Message: " + message;
 }
 //# sourceMappingURL=gameControl.js.map
