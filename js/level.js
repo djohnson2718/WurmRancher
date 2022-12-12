@@ -64,18 +64,18 @@ export class Level {
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
     }
-    IntervalTimeIsUp(rel_interval, real_offset) {
-        let interval = RelativeTimeToFrames(rel_interval);
-        let offset = RelativeTimeToFrames(real_offset);
-        return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
-    }
-    OneTimeTriggerIsUp(rel_time) {
-        return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
-    }
     //theControl should call this if the level is stopped prematurely.
     Quit() {
         //if (!this.gameover && StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
     }
+}
+export function IntervalTimeIsUp(rel_interval, real_offset = 0) {
+    let interval = RelativeTimeToFrames(rel_interval);
+    let offset = RelativeTimeToFrames(real_offset);
+    return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
+}
+export function OneTimeTriggerIsUp(rel_time) {
+    return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
 }
 //# sourceMappingURL=level.js.map

@@ -2,6 +2,7 @@ import { Level } from "./level.js";
 import { AddCounter } from "./gameControl.js";
 import { FramesToRealTime, RelativeTimeToFrames } from "./timing.js";
 import { Counter } from "./counter.js";
+import { Theme } from "./theme.js";
 
 export class TimedLevel extends Level{
     rel_time_allowed : number;
@@ -9,6 +10,11 @@ export class TimedLevel extends Level{
     high_score : number;
 
     timer: Counter;
+
+    constructor(theme:Theme, rel_time_allowed) {
+        super(theme);
+        this.rel_time_allowed = rel_time_allowed;
+    }
 
     InitializeLevel():void{
         super.InitializeLevel();

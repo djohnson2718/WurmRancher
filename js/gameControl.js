@@ -1,9 +1,10 @@
-import { Feeder } from "./feeder.js";
+import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { GoodGrass } from "./goodGrass.js";
-import { GrassEater } from "./grassEater.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
+import { Theme } from "./theme.js";
 import * as timing from "./timing.js";
+import { Weed } from "./weed.js";
 var theRancher;
 const playingFieldWidth = 839;
 const playingFieldHeight = 689;
@@ -16,18 +17,13 @@ var mouseY;
 var Plants = new Array();
 const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
 const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
-for (var col = 0; col < plant_cols; col++) {
-    Plants[col] = new Array();
-    for (var row = 0; row < plant_rows; row++)
-        Plants[col][row] = null;
-}
 var soundEffectsOn;
 var numberOfGoodGrass;
 var rancherAccuracy;
 var shotsHit;
 var shotsFired;
 var infoPar;
-//currentLevel: Level;
+export var CurrentLevel;
 var weedRatio;
 var game_running;
 var elapsed_time;
@@ -46,29 +42,15 @@ function startGame() {
     context.font = "14px sans";
     infoPar = document.getElementsByTagName("Info")[0];
     document.body.insertBefore(canvas, document.body.childNodes[0]);
-    GameElements = new Array();
-    DeadStuff = new Set();
-    NewStuff = new Set();
     theRancher = new Rancher();
-    AddCreature(theRancher, 100, 100);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new Feeder(), 200, 200);
-    AddCreature(new GrassEater(), 300, 300);
-    AddCreature(new GrassEater(), 400, 400);
-    //GameElements.add(SeedAoEC);
-    //GameElements.add(SprayAoEC);
-    //new Wurm(13,200,200);
-    game_running = true;
     currentTool = ToolType.Seed;
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
-}
-function InitializeGameElements() {
+    LoadLevel(new FirstGrassEaterLevel(new Theme()));
+    currentTool = ToolType.Seed;
 }
 function GameLoopMethod() {
     //console.log("entered loop" + String(game_running));
@@ -163,6 +145,26 @@ export function AddCreature(e, startX, startY) {
     e.CenterX = startX;
     e.CenterY = startY;
 }
+export function AddCreatureOnEdge(e) {
+    let p = RandomPointOnEdge();
+    AddCreature(e, p[0], p[1]);
+}
+function RandomPointOnEdge() {
+    if (Math.random() > playingFieldHeight / (playingFieldHeight + playingFieldWidth)) {
+        //do it on the side
+        if (Math.random() > .5)
+            return [0, Math.random() * playingFieldHeight];
+        else
+            return [playingFieldWidth, Math.random() * playingFieldHeight];
+    }
+    else {
+        //on the top/bottom
+        if (Math.random() > .5)
+            return [Math.random() * playingFieldWidth, 0];
+        else
+            return [Math.random() * playingFieldWidth, playingFieldHeight];
+    }
+}
 export function RemovePlant(p) {
     Plants[p.indexX][p.indexY] = null;
     RemovePiece(p);
@@ -241,5 +243,74 @@ export function ShowDefeat(message) {
 }
 export function ShowMessage(message) {
     infoPar.textContent = "Message: " + message;
+}
+export function AddCounter(c) {
+    document.body.insertBefore(c.textbox, document.body.childNodes[0]);
+}
+export function GrowWeed(i, j) {
+    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+        return;
+    if (Plants[i][j] === null) {
+        Plants[i][j] = new Weed(i, j);
+        NewStuff.add(Plants[i][j]);
+    }
+}
+export function GrowPoisonWeed(i, j) {
+    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+        return;
+    if (Plants[i][j] === null) {
+        //Plants[i][j] = new PoisonWeed(this, i, j);
+        NewStuff.add(Plants[i][j]);
+    }
+}
+export function GrowRandomWeed() {
+    GrowWeed(Math.floor(Math.random() * plant_cols), Math.floor(Math.random() * plant_rows));
+}
+export function GrowRandomPoisonWeed() {
+    GrowPoisonWeed(Math.floor(Math.random() * plant_cols), Math.floor(Math.random() * plant_rows));
+}
+function LoadLevel(level) {
+    //this.GameOverLabel.Visibility = Visibility.Collapsed;
+    if (CurrentLevel != null)
+        CurrentLevel.Quit();
+    CurrentLevel = level;
+    InitializeGameElements();
+    level.InitializeLevel();
+    //MainBackGroundMusicME.Stop();
+    //MainBackGroundMusicME.Source = level.Theme.Music;
+    //theCanvas.Background = level.Theme.Background;
+    //this.GrassGrow = null;
+    //this.QuickObjectives.Text = level.QuickObjectives;
+    game_running = true;
+}
+//function ClearAll() : void
+//{
+//    GameElements = new Array<GameElement>();
+//   currentTool = ToolType.Laser;
+//   elapsed_time = 0;
+//   laser_cool_down_counter = 0;
+//CounterGrid.Children.Clear();
+//}
+function InitializeGameElements() {
+    GameElements = new Array();
+    DeadStuff = new Set();
+    NewStuff = new Set();
+    elapsed_time = 0;
+    for (var col = 0; col < plant_cols; col++) {
+        Plants[col] = new Array();
+        for (var row = 0; row < plant_rows; row++)
+            Plants[col][row] = null;
+    }
+    if (CurrentLevel.NoUserControl) {
+        theRancher = null;
+    }
+    else {
+        theRancher = new Rancher();
+        AddCreature(theRancher, playingFieldWidth / 2, playingFieldHeight / 2);
+        laser_cool_down_counter = 0;
+        //reset tool?
+        shotsFired = 0;
+        shotsHit = 0;
+    }
 }
 //# sourceMappingURL=gameControl.js.map

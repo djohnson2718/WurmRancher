@@ -55,7 +55,7 @@ export function RelativeTimeToFrames(rel_time) {
 export function RealTimeToFrames(real_time) {
     return (real_time * frames_per_sec); // used to covert to int?
 }
-function FramesToRealTime(frames) {
+export function FramesToRealTime(frames) {
     return frames / frames_per_sec;
 }
 //# sourceMappingURL=timing.js.map

@@ -71,7 +71,7 @@ export function RealTimeToFrames(real_time :number)
 }
 
 
-function FramesToRealTime(frames :number)
+export function FramesToRealTime(frames :number)
 {
     return frames / frames_per_sec;
 }

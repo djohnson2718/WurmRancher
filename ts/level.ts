@@ -79,15 +79,7 @@ export class Level{
         //    StatusChanged(this, new EventArgs());
     }
 
-    IntervalTimeIsUp( rel_interval : number, real_offset : number) : boolean{
-        let interval = RelativeTimeToFrames(rel_interval);
-        let offset = RelativeTimeToFrames(real_offset);
-        return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
-    }
-
-    OneTimeTriggerIsUp(rel_time:number){
-        return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
-    }
+    
 
     //theControl should call this if the level is stopped prematurely.
     Quit() : void
@@ -96,4 +88,14 @@ export class Level{
         //    StatusChanged(this, new EventArgs());
     }
 
+}
+
+export function IntervalTimeIsUp( rel_interval : number, real_offset : number=0) : boolean{
+    let interval = RelativeTimeToFrames(rel_interval);
+    let offset = RelativeTimeToFrames(real_offset);
+    return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
+}
+
+export function OneTimeTriggerIsUp(rel_time:number){
+    return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
 }

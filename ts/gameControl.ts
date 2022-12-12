@@ -1,15 +1,21 @@
 //import { AreaEffectCircle } from "../js/areaEffectCircle.js";
+import { Counter } from "./counter.js";
 import { EdiblePlant } from "./ediblePlant.js";
 import { Feeder } from "./feeder.js";
+import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
 import { GrassEater } from "./grassEater.js";
 import { ImagePiece } from "./imagePiece.js";
+import { Level } from "./level.js";
+import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
+import { Theme } from "./theme.js";
 import * as timing from "./timing.js";
+import { Weed } from "./weed.js";
 import { Wurm } from "./wurm.js";
 
 
@@ -31,11 +37,7 @@ const plant_rows = Math.floor(playingFieldHeight/plant_size)+1; //probs these ar
 const plant_cols = Math.floor(playingFieldWidth/plant_size)+1;
 
 
-for (var col = 0;  col < plant_cols; col ++){
-    Plants[col] = new Array<Plant>();
-    for (var row = 0; row < plant_rows; row ++)
-        Plants[col][row] = null;
-}
+
 
 var soundEffectsOn: boolean;
 var numberOfGoodGrass: number;
@@ -44,7 +46,7 @@ var shotsHit: number;
 var shotsFired: number;
 var infoPar : HTMLParagraphElement;
 
-//currentLevel: Level;
+export var CurrentLevel: Level;
 var weedRatio: number;
 
 var game_running :boolean;
@@ -71,28 +73,9 @@ function startGame(){
 
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
-    GameElements = new Array<GameElement>();
-    DeadStuff = new Set<GameElement>();
-    NewStuff = new Set<GameElement>();
+
 
     theRancher = new Rancher();
-
-    
-    
-    AddCreature(theRancher,100,100);
-    AddCreature(new Feeder(),200,200);
-    AddCreature(new Feeder(),200,200);
-    AddCreature(new Feeder(),200,200);
-    AddCreature(new Feeder(),200,200);
-    
-    AddCreature(new GrassEater(), 300,300);
-    AddCreature(new GrassEater(), 400,400);
-    //GameElements.add(SeedAoEC);
-    //GameElements.add(SprayAoEC);
-
-    //new Wurm(13,200,200);
-
-    game_running = true;
 
     currentTool = ToolType.Seed;
 
@@ -104,10 +87,9 @@ function startGame(){
     setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
 
-    
-}
+    LoadLevel(new FirstGrassEaterLevel(new Theme()));
 
-function InitializeGameElements() :void{
+    currentTool = ToolType.Seed;
     
 }
 
@@ -235,6 +217,28 @@ export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, st
     e.CenterY = startY;
 } 
 
+export function AddCreatureOnEdge(e:MovesToDestinationControl){
+    let p = RandomPointOnEdge();
+    AddCreature(e,p[0],p[1]);
+}
+
+function  RandomPointOnEdge() :Array<number>{
+    if (Math.random() > playingFieldHeight /(playingFieldHeight+ playingFieldWidth)){
+        //do it on the side
+        if (Math.random() > .5)
+            return [0, Math.random()*playingFieldHeight];
+        else
+            return [playingFieldWidth, Math.random()*playingFieldHeight];
+    }
+    else{
+        //on the top/bottom
+        if (Math.random() > .5)
+            return [Math.random()*playingFieldWidth, 0];
+        else
+            return [Math.random()*playingFieldWidth, playingFieldHeight];
+    }
+}
+
 export function RemovePlant(p:Plant){
     Plants[p.indexX][p.indexY] = null;
     RemovePiece(p);
@@ -333,5 +337,99 @@ export function ShowMessage(message : String) :void{
     infoPar.textContent = "Message: " + message;
 }
 
+export function AddCounter(c:Counter):void{
+    document.body.insertBefore(c.textbox, document.body.childNodes[0]);
+}
 
- 
+export function GrowWeed(i :number, j :number) :void
+{
+    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+        return;
+    if (Plants[i][j] === null)
+    {
+        Plants[i][j] = new Weed(i, j);
+        NewStuff.add(Plants[i][j]);
+    }
+}
+
+export function GrowPoisonWeed(i :number, j:number) :void
+{
+    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+        return;
+    if (Plants[i][j] === null)
+    {
+        //Plants[i][j] = new PoisonWeed(this, i, j);
+        NewStuff.add(Plants[i][j]);
+    }
+}
+
+export function GrowRandomWeed() :void
+{
+    GrowWeed(Math.floor(Math.random()*plant_cols), Math.floor(Math.random()*plant_rows));
+}
+
+export function GrowRandomPoisonWeed() :void
+{
+    GrowPoisonWeed(Math.floor(Math.random()*plant_cols), Math.floor(Math.random()*plant_rows));
+}
+
+function LoadLevel(level :Level){
+    //this.GameOverLabel.Visibility = Visibility.Collapsed;
+    if (CurrentLevel != null)
+        CurrentLevel.Quit();
+
+    CurrentLevel = level;
+    InitializeGameElements();
+    level.InitializeLevel();
+
+    //MainBackGroundMusicME.Stop();
+    //MainBackGroundMusicME.Source = level.Theme.Music;
+    //theCanvas.Background = level.Theme.Background;
+    
+    //this.GrassGrow = null;
+
+    //this.QuickObjectives.Text = level.QuickObjectives;
+    game_running = true;
+}
+
+//function ClearAll() : void
+//{
+//    GameElements = new Array<GameElement>();
+ //   currentTool = ToolType.Laser;
+ //   elapsed_time = 0;
+ //   laser_cool_down_counter = 0;
+    //CounterGrid.Children.Clear();
+//}
+
+function InitializeGameElements() : void{
+    GameElements = new Array<GameElement>();
+    DeadStuff = new Set<GameElement>();
+    NewStuff = new Set<GameElement>();
+
+    elapsed_time = 0;
+
+
+    for (var col = 0;  col < plant_cols; col ++){
+        Plants[col] = new Array<Plant>();
+        for (var row = 0; row < plant_rows; row ++)
+            Plants[col][row] = null;
+    }
+
+    if (CurrentLevel.NoUserControl)
+    {
+        theRancher = null;
+    }
+    else
+    {
+        theRancher = new Rancher();
+        AddCreature(theRancher, playingFieldWidth / 2, playingFieldHeight / 2);
+
+        laser_cool_down_counter = 0;
+        //reset tool?
+        shotsFired = 0;
+        shotsHit = 0;
+    }
+}
+
+
+

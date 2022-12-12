@@ -3,6 +3,10 @@ import { AddCounter } from "./gameControl.js";
 import { FramesToRealTime, RelativeTimeToFrames } from "./timing.js";
 import { Counter } from "./counter.js";
 export class TimedLevel extends Level {
+    constructor(theme, rel_time_allowed) {
+        super(theme);
+        this.rel_time_allowed = rel_time_allowed;
+    }
     InitializeLevel() {
         super.InitializeLevel();
         this.frames_left = RelativeTimeToFrames(this.rel_time_allowed);
