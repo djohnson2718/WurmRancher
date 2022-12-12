@@ -62,12 +62,12 @@ export function RelativeRotateToRadiansPerFrame(rel_rot : number) :number
 
 export function RelativeTimeToFrames(rel_time : number)
 {
-    return (rel_time*frames_per_sec * speed_multiplier); // used to covert to int?
+    return Math.floor(rel_time*frames_per_sec * speed_multiplier); // used to covert to int?
 }
 
 export function RealTimeToFrames(real_time :number)
 {
-    return (real_time * frames_per_sec); // used to covert to int?
+    return Math.floor(real_time * frames_per_sec); // used to covert to int?
 }
 
 

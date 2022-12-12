@@ -1,7 +1,6 @@
 import { Feeder } from "./feeder.js";
 import { AddCreatureOnEdge, GrowRandomWeed } from "./gameControl.js";
 import { GrassEater } from "./grassEater.js";
-import { IntervalTimeIsUp } from "./level.js";
 import { Theme } from "./theme.js";
 import { TimedLevel } from "./timedLevel.js";
 import { Wurm } from "./wurm.js";
@@ -28,11 +27,11 @@ export class FirstGrassEaterLevel extends TimedLevel {
 
     Update(): void {
         super.Update();
-        if (IntervalTimeIsUp(4))
+        if (this.IntervalTimeIsUp(4))
             AddCreatureOnEdge(new GrassEater());
-        if (IntervalTimeIsUp(3))
+        if (this.IntervalTimeIsUp(3))
             AddCreatureOnEdge(new Feeder());
-        if (IntervalTimeIsUp(8))
+        if (this.IntervalTimeIsUp(8))
             GrowRandomWeed();
     }
 }

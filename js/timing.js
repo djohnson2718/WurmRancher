@@ -50,10 +50,10 @@ export function RelativeRotateToRadiansPerFrame(rel_rot) {
     return rel_rot / frames_per_sec / 180 * Math.PI * speed_multiplier;
 }
 export function RelativeTimeToFrames(rel_time) {
-    return (rel_time * frames_per_sec * speed_multiplier); // used to covert to int?
+    return Math.floor(rel_time * frames_per_sec * speed_multiplier); // used to covert to int?
 }
 export function RealTimeToFrames(real_time) {
-    return (real_time * frames_per_sec); // used to covert to int?
+    return Math.floor(real_time * frames_per_sec); // used to covert to int?
 }
 export function FramesToRealTime(frames) {
     return frames / frames_per_sec;

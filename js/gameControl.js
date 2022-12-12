@@ -61,7 +61,7 @@ function GameLoopMethod() {
         this.elapsed_time++;
         if (this.laser_cool_down_counter > 0)
             this.laser_cool_down_counter--;
-        //current_level.Update(this);
+        CurrentLevel.Update();
         for (const element of GameElements) {
             //console.log("calling update" + String(element));
             element.Update();
