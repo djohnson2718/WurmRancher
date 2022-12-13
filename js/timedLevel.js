@@ -19,8 +19,10 @@ export class TimedLevel extends Level {
         if (!this.gameover) {
             this.frames_left--;
             this.timer.Value = String(this.frames_left);
-            if (this.frames_left <= 0)
+            if (this.frames_left <= 0) {
                 this.Defeat();
+                this.gameover = true;
+            }
         }
     }
     Victory(message = null) {

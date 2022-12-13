@@ -10,7 +10,7 @@ export abstract class Plant extends ImagePiece {
     indexX: number;
     indexY: number;
     sprayed: boolean = false;
-    time_since_spray : number;
+    time_since_spray = 0;
     Layer = 10;
 
     constructor(indexX:number, indexY:number){
@@ -31,6 +31,7 @@ export abstract class Plant extends ImagePiece {
     }
 
     Spray() :void{
+        console.log("plant sprayed", this);
         this.sprayed = true;
         this.PieceImage = this.SprayedPic;
     }

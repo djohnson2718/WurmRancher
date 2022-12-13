@@ -94,6 +94,7 @@ namespace WurmRacher
             if (stun_counter > 0)
             {
                 stun_counter--;
+                ImagePiece.prototype.Update.call(this);
                 return;
             }
             if (feeder_target != null)

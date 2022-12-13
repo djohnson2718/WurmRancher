@@ -21,6 +21,11 @@ export class GrassEater extends LaserDestructablePiece{
     target_plant : GoodGrass = null;
 
     Update() : void{
+        if (this.hit){
+            super.Update();
+            return;
+        }
+        
         if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit))
             {
                 this.target_plant.Eat();

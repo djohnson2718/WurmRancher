@@ -6,6 +6,7 @@ export class Plant extends ImagePiece {
     constructor(indexX, indexY) {
         super(plant_size, plant_size, 0);
         this.sprayed = false;
+        this.time_since_spray = 0;
         this.Layer = 10;
         this.indexX = indexX;
         this.indexY = indexY;
@@ -21,6 +22,7 @@ export class Plant extends ImagePiece {
         super.Update();
     }
     Spray() {
+        console.log("plant sprayed", this);
         this.sprayed = true;
         this.PieceImage = this.SprayedPic;
     }

@@ -25,6 +25,7 @@ namespace WurmRacher
         }
 
         bool high_score_submitted = false;
+        
         public override void InitializeLevel(GameControl theControl)
         {
             base.InitializeLevel(theControl);

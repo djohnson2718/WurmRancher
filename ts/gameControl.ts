@@ -7,6 +7,8 @@ import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
 import { GrassEater } from "./grassEater.js";
 import { ImagePiece } from "./imagePiece.js";
+import { LaserBeam } from "./laserBeam.js";
+import { LaserHitable } from "./laserHitable.js";
 import { Level } from "./level.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
@@ -27,6 +29,7 @@ const seedRange = 150;
 const seedRadius = 50;
 const sprayRange = 180;
 const sprayRadius = 70;
+const laserRange = 160;
 
 var mouseX : number;
 var mouseY : number;
@@ -45,6 +48,9 @@ var rancherAccuracy: number;
 var shotsHit: number;
 var shotsFired: number;
 var infoPar : HTMLParagraphElement;
+var seedPar : HTMLParagraphElement;
+var sprayPar : HTMLParagraphElement;
+var laserPar : HTMLParagraphElement;
 
 export var CurrentLevel: Level;
 var weedRatio: number;
@@ -57,6 +63,9 @@ var laser_cool_down_counter : number;
 export var GameElements : Array<GameElement>;
 export var DeadStuff : Set<GameElement>;
 var NewStuff : Set<GameElement>;
+var NewLaserHitables : Set<LaserHitable>;
+var LaserHitables : Array<LaserHitable>;
+var DeadLaserHitables : Set<LaserHitable>;
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -69,27 +78,30 @@ function startGame(){
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
-    infoPar = document.getElementsByTagName("Info")[0] as HTMLParagraphElement;
+    infoPar = document.getElementById("Info") as HTMLParagraphElement;
+    seedPar = document.getElementById("seed") as HTMLParagraphElement;
+    sprayPar = document.getElementById("spray") as HTMLParagraphElement;
+    laserPar = document.getElementById("laser") as HTMLParagraphElement;
 
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
 
-
     theRancher = new Rancher();
 
-    currentTool = ToolType.Seed;
+    SetToolSeed();
 
 
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e){e.preventDefault();})
+    window.addEventListener('keydown', KeyPress);
+    
 
     setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
 
     LoadLevel(new FirstGrassEaterLevel(new Theme()));
 
-    currentTool = ToolType.Seed;
     
 }
 
@@ -117,28 +129,56 @@ function GameLoopMethod():void{
 
         
 
-        if (currentTool == ToolType.Seed)
-        {
-            //console.log([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY],Distance([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY]) );
+        switch(currentTool){
+        case (ToolType.Seed):
             if (Distance([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY]) < seedRange){
                 //console.log("drawing")
                 context.beginPath();
                 context.arc(mouseX,mouseY,seedRadius,0,2*Math.PI);
                 context.stroke();
             }
+
+            context.beginPath();
+            context.arc(theRancher.CenterX, theRancher.CenterY,seedRange,0, 2*Math.PI);
+            context.stroke();
+        break;
+        case ToolType.Laser:
+            context.beginPath();
+            context.arc(theRancher.CenterX, theRancher.CenterY,laserRange,0, 2*Math.PI);
+            context.stroke();
+        break;
+        case ToolType.Spray:
+            if (Distance([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY]) < sprayRange){
+                //console.log("drawing")
+                context.beginPath();
+                context.arc(mouseX,mouseY,sprayRadius,0,2*Math.PI);
+                context.stroke();
+            }
+            context.beginPath();
+            context.arc(theRancher.CenterX, theRancher.CenterY,sprayRange,0, 2*Math.PI);
+            context.stroke();
+
         }
 
-        GameElements = GameElements.filter( function(e){return !DeadStuff.has(e);})
 
+
+        GameElements =   GameElements.filter( function(e){return !DeadStuff.has(e);});
         DeadStuff.clear();
+
+        LaserHitables = LaserHitables.filter( function(e){return !DeadLaserHitables.has(e);});
+        DeadLaserHitables.clear();
 
         for (const element of NewStuff){
             GameElements.push(element);
         }
-        
+
         if (NewStuff.size > 0)
             GameElements.sort( function(a,b){return b.Layer-a.Layer;});
         NewStuff.clear();
+
+        for(const element of NewLaserHitables)
+            LaserHitables.push(element);
+        NewLaserHitables.clear();
     }
 }
 
@@ -146,35 +186,101 @@ function MouseDown(e :MouseEvent){
     e.preventDefault();
     if (e.button == 2){ //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
-        console.log(GameElements);
+        //console.log(GameElements);
         theRancher.SetDestination(e.offsetX,e.offsetY);
     }
     else if (e.button == 0)//left
     {
         
 
-        //if seed selected
-        if (DistanceClickToPiece(e, theRancher) > seedRange)
-            return;
-        //if (SoundEffectsOn)
-        //    seeds_sown.Play();
+        switch (currentTool){
+            case ToolType.Seed:
+                if (DistanceClickToPiece(e, theRancher) > seedRange)
+                    return;
+                //if (SoundEffectsOn)
+                //    seeds_sown.Play();
 
-        for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius) )               
-        {
-            //console.log(I);
-            //console.log(Plants[I[0]][I[1]]);
-            //console.log(Plants);
-            //console.log(Plants[I[0]]);
-            if (Plants[I[0]][I[1]] == null)
-            {
-                //console.log("planting a plant at", I[0],I[1])
-                Plants[I[0]][I[1]] = new GoodGrass(I[0],I[1]);
-                NewStuff.add(Plants[I[0]][I[1]]);
-            }
+                for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius) )               
+                {
+                    if (Plants[I[0]][I[1]] == null)
+                    {
+                        //console.log("planting a plant at", I[0],I[1])
+                        Plants[I[0]][I[1]] = new GoodGrass(I[0],I[1]);
+                        NewStuff.add(Plants[I[0]][I[1]]);
+                    }
+                }
+            break;
+            case ToolType.Laser:
+                if (DistanceClickToPiece(e, theRancher) > laserRange)
+                    return;
+                
+                NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX,e.offsetY));
+                
+                for (let ldp of LaserHitables){
+                    console.log("check laser hits")
+                    ldp.CheckLaserHit(e.offsetX,e.offsetY);
+                }
+            break;
+            case ToolType.Spray:
+                if (DistanceClickToPiece(e, theRancher) > sprayRange)
+                    return;
+
+                //play sound
+                console.log("starting spray");
+                for (const I of PlantSpotsInRadius(e.offsetX,e.offsetY, sprayRadius)){
+                    if (Plants[I[0]][I[1]] != null){
+                        console.log("spraying plant at", I);
+                        Plants[I[0]][I[1]].Spray();
+                    }
+                }
+            break;
+
         }
 
     }
 }
+
+function KeyPress(e:KeyboardEvent){
+    console.log(e.key);
+    switch (e.key){
+        case "z":
+            SetToolLaser();
+        break;
+        case "x":
+            SetToolSpray();
+        break;
+        case "c":
+            SetToolSeed();
+        break;
+    }
+}
+
+function SetToolLaser(){
+    currentTool = ToolType.Laser;
+    laserPar.setAttribute("style", "background-color:powderblue;");
+    seedPar.setAttribute("style", "background-color:white;");
+    sprayPar.setAttribute("style", "background-color:white;");
+}
+
+function SetToolSeed(){
+    //console.log("seeting seed");
+    //console.log(seedPar);
+    //console.log(currentTool);
+    currentTool = ToolType.Seed;
+    seedPar.setAttribute("style", "background-color:powderblue;");
+    laserPar.setAttribute("style", "background-color:white;");
+    sprayPar.setAttribute("style", "background-color:white;");
+}
+
+function SetToolSpray(){
+    //console.log("seeting spray");
+    currentTool = ToolType.Spray;
+    sprayPar.setAttribute("style", "background-color:powderblue;");
+    seedPar.setAttribute("style", "background-color:white;");
+    laserPar.setAttribute("style", "background-color:white;");
+}
+
+
 
 function DistanceClickToPiece(e:MouseEvent, p:OnTheFieldPiece):number{
     return Math.sqrt( (e.offsetX-p.CenterX)**2 + (e.offsetY-p.CenterY)**2 );
@@ -215,6 +321,8 @@ export function RandomYonField(){
 
 export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, startY : number):void{
     NewStuff.add(e);
+    if ("CheckLaserHit" in e)
+        NewLaserHitables.add(e as LaserHitable);
     e.CenterX = startX;
     e.CenterY = startY;
 } 
@@ -248,6 +356,8 @@ export function RemovePlant(p:Plant){
 
 export function RemovePiece(p:GameElement){
     DeadStuff.add(p);
+    if ("CheckLaserHit" in p)
+        DeadLaserHitables.add(p as LaserHitable);
     //more clean up???
 }
 
@@ -275,11 +385,8 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++){
-            if (!(Plants[i][j] === null))
-                console.log(Plants[i][j], Plants[i][j].Name, plantTypes, plantTypes.includes(Plants[i][j].Name));
             if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name))
             {
-                console.log("found edible");
                 let g = (Plants[i][j] as EdiblePlant);
                 if (g.Available)
                 {
@@ -345,7 +452,7 @@ export function AddCounter(c:Counter):void{
 
 export function GrowWeed(i :number, j :number) :void
 {
-    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+    if (i < 0 || j < 0 || i >= plant_cols || j >= plant_rows)
         return;
     if (Plants[i][j] === null)
     {
@@ -407,6 +514,11 @@ function InitializeGameElements() : void{
     GameElements = new Array<GameElement>();
     DeadStuff = new Set<GameElement>();
     NewStuff = new Set<GameElement>();
+
+    LaserHitables = new Array<LaserHitable>();
+    DeadLaserHitables = new Set<LaserHitable>();
+    NewLaserHitables = new Set<LaserHitable>();
+
 
     elapsed_time = 0;
 

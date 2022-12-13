@@ -1,9 +1,10 @@
 import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
-import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed } from "./timing.js";
+import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed, WurmStunTime } from "./timing.js";
 import { Feeder } from "./feeder.js";
 import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
 import { Wurm } from "./wurm.js";
+import { LaserHitable } from "./laserHitable.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -23,7 +24,7 @@ const bodyImage = new Image();
 bodyImage.src = "../Resources/wurm_body.png";
 const sight_range = 500;
 
-export class WurmHead extends MovesToDestinationControl implements BackAttachable {
+export class WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
     Layer =3;
@@ -44,6 +45,16 @@ export class WurmHead extends MovesToDestinationControl implements BackAttachabl
         return this.CenterY + radius*Math.sin(this.angle);
     }
     
+    CheckLaserHit(x: number, y: number): void {
+        super.CheckLaserHit(x,y);
+        if (this.hit){
+            this.stun_counter = WurmStunTime;
+            this.feeder_target = null;
+            //play sound
+        }
+        this.hit = false;
+    }
+
     Follower: WurmBodyPiece;
     
     isStunned: boolean;

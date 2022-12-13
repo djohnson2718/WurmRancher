@@ -1,5 +1,6 @@
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { GoodGrass } from "./goodGrass.js";
+import { LaserBeam } from "./laserBeam.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import { Theme } from "./theme.js";
@@ -12,6 +13,7 @@ const seedRange = 150;
 const seedRadius = 50;
 const sprayRange = 180;
 const sprayRadius = 70;
+const laserRange = 160;
 var mouseX;
 var mouseY;
 var Plants = new Array();
@@ -23,6 +25,9 @@ var rancherAccuracy;
 var shotsHit;
 var shotsFired;
 var infoPar;
+var seedPar;
+var sprayPar;
+var laserPar;
 export var CurrentLevel;
 var weedRatio;
 var game_running;
@@ -31,6 +36,9 @@ var laser_cool_down_counter;
 export var GameElements;
 export var DeadStuff;
 var NewStuff;
+var NewLaserHitables;
+var LaserHitables;
+var DeadLaserHitables;
 var canvas;
 export var context;
 document.addEventListener("DOMContentLoaded", startGame);
@@ -40,17 +48,20 @@ function startGame() {
     canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
-    infoPar = document.getElementsByTagName("Info")[0];
+    infoPar = document.getElementById("Info");
+    seedPar = document.getElementById("seed");
+    sprayPar = document.getElementById("spray");
+    laserPar = document.getElementById("laser");
     document.body.insertBefore(canvas, document.body.childNodes[0]);
     theRancher = new Rancher();
-    currentTool = ToolType.Seed;
+    SetToolSeed();
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    window.addEventListener('keydown', KeyPress);
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
     LoadLevel(new FirstGrassEaterLevel(new Theme()));
-    currentTool = ToolType.Seed;
 }
 function GameLoopMethod() {
     //console.log("entered loop" + String(game_running));
@@ -66,51 +77,131 @@ function GameLoopMethod() {
             //console.log("calling update" + String(element));
             element.Update();
         }
-        if (currentTool == ToolType.Seed) {
-            //console.log([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY],Distance([mouseX,mouseY], [theRancher.CenterX, theRancher.CenterY]) );
-            if (Distance([mouseX, mouseY], [theRancher.CenterX, theRancher.CenterY]) < seedRange) {
-                //console.log("drawing")
+        switch (currentTool) {
+            case (ToolType.Seed):
+                if (Distance([mouseX, mouseY], [theRancher.CenterX, theRancher.CenterY]) < seedRange) {
+                    //console.log("drawing")
+                    context.beginPath();
+                    context.arc(mouseX, mouseY, seedRadius, 0, 2 * Math.PI);
+                    context.stroke();
+                }
                 context.beginPath();
-                context.arc(mouseX, mouseY, seedRadius, 0, 2 * Math.PI);
+                context.arc(theRancher.CenterX, theRancher.CenterY, seedRange, 0, 2 * Math.PI);
                 context.stroke();
-            }
+                break;
+            case ToolType.Laser:
+                context.beginPath();
+                context.arc(theRancher.CenterX, theRancher.CenterY, laserRange, 0, 2 * Math.PI);
+                context.stroke();
+                break;
+            case ToolType.Spray:
+                if (Distance([mouseX, mouseY], [theRancher.CenterX, theRancher.CenterY]) < sprayRange) {
+                    //console.log("drawing")
+                    context.beginPath();
+                    context.arc(mouseX, mouseY, sprayRadius, 0, 2 * Math.PI);
+                    context.stroke();
+                }
+                context.beginPath();
+                context.arc(theRancher.CenterX, theRancher.CenterY, sprayRange, 0, 2 * Math.PI);
+                context.stroke();
         }
         GameElements = GameElements.filter(function (e) { return !DeadStuff.has(e); });
         DeadStuff.clear();
+        LaserHitables = LaserHitables.filter(function (e) { return !DeadLaserHitables.has(e); });
+        DeadLaserHitables.clear();
         for (const element of NewStuff) {
             GameElements.push(element);
         }
         if (NewStuff.size > 0)
             GameElements.sort(function (a, b) { return b.Layer - a.Layer; });
         NewStuff.clear();
+        for (const element of NewLaserHitables)
+            LaserHitables.push(element);
+        NewLaserHitables.clear();
     }
 }
 function MouseDown(e) {
     e.preventDefault();
     if (e.button == 2) { //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
-        console.log(GameElements);
+        //console.log(GameElements);
         theRancher.SetDestination(e.offsetX, e.offsetY);
     }
     else if (e.button == 0) //left
      {
-        //if seed selected
-        if (DistanceClickToPiece(e, theRancher) > seedRange)
-            return;
-        //if (SoundEffectsOn)
-        //    seeds_sown.Play();
-        for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
-            //console.log(I);
-            //console.log(Plants[I[0]][I[1]]);
-            //console.log(Plants);
-            //console.log(Plants[I[0]]);
-            if (Plants[I[0]][I[1]] == null) {
-                //console.log("planting a plant at", I[0],I[1])
-                Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
-                NewStuff.add(Plants[I[0]][I[1]]);
-            }
+        switch (currentTool) {
+            case ToolType.Seed:
+                if (DistanceClickToPiece(e, theRancher) > seedRange)
+                    return;
+                //if (SoundEffectsOn)
+                //    seeds_sown.Play();
+                for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
+                    if (Plants[I[0]][I[1]] == null) {
+                        //console.log("planting a plant at", I[0],I[1])
+                        Plants[I[0]][I[1]] = new GoodGrass(I[0], I[1]);
+                        NewStuff.add(Plants[I[0]][I[1]]);
+                    }
+                }
+                break;
+            case ToolType.Laser:
+                if (DistanceClickToPiece(e, theRancher) > laserRange)
+                    return;
+                NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX, e.offsetY));
+                for (let ldp of LaserHitables) {
+                    console.log("check laser hits");
+                    ldp.CheckLaserHit(e.offsetX, e.offsetY);
+                }
+                break;
+            case ToolType.Spray:
+                if (DistanceClickToPiece(e, theRancher) > sprayRange)
+                    return;
+                //play sound
+                console.log("starting spray");
+                for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, sprayRadius)) {
+                    if (Plants[I[0]][I[1]] != null) {
+                        console.log("spraying plant at", I);
+                        Plants[I[0]][I[1]].Spray();
+                    }
+                }
+                break;
         }
     }
+}
+function KeyPress(e) {
+    console.log(e.key);
+    switch (e.key) {
+        case "z":
+            SetToolLaser();
+            break;
+        case "x":
+            SetToolSpray();
+            break;
+        case "c":
+            SetToolSeed();
+            break;
+    }
+}
+function SetToolLaser() {
+    currentTool = ToolType.Laser;
+    laserPar.setAttribute("style", "background-color:powderblue;");
+    seedPar.setAttribute("style", "background-color:white;");
+    sprayPar.setAttribute("style", "background-color:white;");
+}
+function SetToolSeed() {
+    //console.log("seeting seed");
+    //console.log(seedPar);
+    //console.log(currentTool);
+    currentTool = ToolType.Seed;
+    seedPar.setAttribute("style", "background-color:powderblue;");
+    laserPar.setAttribute("style", "background-color:white;");
+    sprayPar.setAttribute("style", "background-color:white;");
+}
+function SetToolSpray() {
+    //console.log("seeting spray");
+    currentTool = ToolType.Spray;
+    sprayPar.setAttribute("style", "background-color:powderblue;");
+    seedPar.setAttribute("style", "background-color:white;");
+    laserPar.setAttribute("style", "background-color:white;");
 }
 function DistanceClickToPiece(e, p) {
     return Math.sqrt(Math.pow((e.offsetX - p.CenterX), 2) + Math.pow((e.offsetY - p.CenterY), 2));
@@ -142,6 +233,8 @@ export function RandomYonField() {
 }
 export function AddCreature(e, startX, startY) {
     NewStuff.add(e);
+    if ("CheckLaserHit" in e)
+        NewLaserHitables.add(e);
     e.CenterX = startX;
     e.CenterY = startY;
 }
@@ -171,6 +264,8 @@ export function RemovePlant(p) {
 }
 export function RemovePiece(p) {
     DeadStuff.add(p);
+    if ("CheckLaserHit" in p)
+        DeadLaserHitables.add(p);
     //more clean up???
 }
 export function ReportGrassGrow(g) {
@@ -193,10 +288,7 @@ export function GetClosestPlant(to, plantTypes) {
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++) {
-            if (!(Plants[i][j] === null))
-                console.log(Plants[i][j], Plants[i][j].Name, plantTypes, plantTypes.includes(Plants[i][j].Name));
             if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name)) {
-                console.log("found edible");
                 let g = Plants[i][j];
                 if (g.Available) {
                     let dist = DistanceObjects(to, g);
@@ -248,7 +340,7 @@ export function AddCounter(c) {
     document.body.insertBefore(c.textbox, document.body.childNodes[0]);
 }
 export function GrowWeed(i, j) {
-    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+    if (i < 0 || j < 0 || i >= plant_cols || j >= plant_rows)
         return;
     if (Plants[i][j] === null) {
         Plants[i][j] = new Weed(i, j);
@@ -295,6 +387,9 @@ function InitializeGameElements() {
     GameElements = new Array();
     DeadStuff = new Set();
     NewStuff = new Set();
+    LaserHitables = new Array();
+    DeadLaserHitables = new Set();
+    NewLaserHitables = new Set();
     elapsed_time = 0;
     for (var col = 0; col < plant_cols; col++) {
         Plants[col] = new Array();
