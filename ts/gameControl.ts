@@ -10,6 +10,7 @@ import { ImagePiece } from "./imagePiece.js";
 import { LaserBeam } from "./laserBeam.js";
 import { LaserHitable } from "./laserHitable.js";
 import { Level } from "./level.js";
+import { Levels } from "./levels.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
@@ -66,6 +67,10 @@ var NewStuff : Set<GameElement>;
 var NewLaserHitables : Set<LaserHitable>;
 var LaserHitables : Array<LaserHitable>;
 var DeadLaserHitables : Set<LaserHitable>;
+var LevelSelectDiv : HTMLDivElement;
+var LevelSelectButton : HTMLButtonElement;
+var LevelSelectMenu : HTMLMenuElement;
+var SideContainer : HTMLDivElement;
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -73,15 +78,31 @@ export var context : CanvasRenderingContext2D | null;
 document.addEventListener("DOMContentLoaded", startGame);
 
 function startGame(){
-    canvas =  document.createElement("canvas");
-    canvas.height = playingFieldHeight;
-    canvas.width = playingFieldWidth;
+    canvas =  document.getElementById("playingField") as HTMLCanvasElement;
+    //canvas.height = playingFieldHeight;
+    //canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
     infoPar = document.getElementById("Info") as HTMLParagraphElement;
     seedPar = document.getElementById("seed") as HTMLParagraphElement;
     sprayPar = document.getElementById("spray") as HTMLParagraphElement;
     laserPar = document.getElementById("laser") as HTMLParagraphElement;
+    LevelSelectDiv = document.getElementById("levelSelectDiv") as HTMLDivElement;
+    LevelSelectButton = document.getElementById("levelSelect") as HTMLButtonElement;
+    LevelSelectMenu = document.getElementById("levelSelectMenu") as HTMLMenuElement;
+    SideContainer = document.getElementById("side") as HTMLDivElement;
+
+    for (const Level of Levels){
+        let li = document.createElement("li");
+        let button = document.createElement("button");
+        button.addEventListener("click",LevelButtonClicked(Level));
+        button.textContent = Level.Name;
+        let text = document.createTextNode(Level.Description);
+        li.appendChild(button);
+        li.appendChild(text);        
+        LevelSelectMenu.appendChild(li);
+    }
+    
 
     document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
@@ -94,6 +115,7 @@ function startGame(){
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e){e.preventDefault();})
+    LevelSelectButton.addEventListener("click", SelectLevel);
     window.addEventListener('keydown', KeyPress);
     
 
@@ -107,12 +129,13 @@ function startGame(){
 
 function GameLoopMethod():void{
     //console.log("entered loop" + String(game_running));
-    context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
+    
 
     //console.log(GameElements);
 
     if (game_running)
     {
+        context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
         //console.log("in the game running");
         this.elapsed_time++;
 
@@ -183,6 +206,8 @@ function GameLoopMethod():void{
 }
 
 function MouseDown(e :MouseEvent){
+    if (!game_running)
+        return;
     e.preventDefault();
     if (e.button == 2){ //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
@@ -447,7 +472,8 @@ export function ShowMessage(message : String) :void{
 }
 
 export function AddCounter(c:Counter):void{
-    document.body.insertBefore(c.textbox, document.body.childNodes[0]);
+    SideContainer.appendChild(c.textbox);
+    //document.body.insertBefore(c.textbox, document.body.childNodes[0]);
 }
 
 export function GrowWeed(i :number, j :number) :void
@@ -482,7 +508,7 @@ export function GrowRandomPoisonWeed() :void
     GrowPoisonWeed(Math.floor(Math.random()*plant_cols), Math.floor(Math.random()*plant_rows));
 }
 
-function LoadLevel(level :Level){
+function LoadLevel(level : Level){
     //this.GameOverLabel.Visibility = Visibility.Collapsed;
     if (CurrentLevel != null)
         CurrentLevel.Quit();
@@ -499,6 +525,7 @@ function LoadLevel(level :Level){
 
     //this.QuickObjectives.Text = level.QuickObjectives;
     game_running = true;
+    CloseLevelMenu();
 }
 
 //function ClearAll() : void
@@ -545,5 +572,27 @@ function InitializeGameElements() : void{
     }
 }
 
+function CloseLevelMenu(){
+    LevelSelectButton.textContent = "Select Level";
+    LevelSelectDiv.style.visibility = "hidden";
+}
 
+function SelectLevel(this: HTMLElement, ev: MouseEvent) {
+    console.log("select level clicked");
+    if (LevelSelectDiv.style.visibility == "hidden"){
+        game_running=false;
+        LevelSelectDiv.style.visibility = "visible";
+        LevelSelectButton.textContent = "Resume";
+    }
+    else{
+        game_running = true;
+        CloseLevelMenu();
+    }
+}
+
+function LevelButtonClicked(Level: Level): (this: HTMLButtonElement, ev: MouseEvent) => any {
+    return function(this: HTMLButtonElement, ev: MouseEvent){
+        LoadLevel(Level);
+    }
+}
 

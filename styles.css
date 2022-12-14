@@ -1,0 +1,40 @@
+.levelSelectDiv {
+    background-color: bisque;
+    padding: 1em;
+    border: solid thin black;
+    visibility: hidden;
+}
+
+menu {
+    list-style-type:square;
+    display: grid;
+    padding: 0;
+    margin-bottom: 0;
+    gap: 1em;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-areas: 
+        'canvas side'
+        'lmenu side';
+    gap: 10px;
+    grid-template-columns: ;
+    
+}
+
+.playingField {
+    grid-area: canvas;
+}
+
+.side-container{
+    grid-area: side;
+    display: flex;
+    flex-direction: column;
+    background-color: aquamarine;
+}
+
+.lower-menu{
+    grid-area: lmenu;
+    background-color: blueviolet;
+}

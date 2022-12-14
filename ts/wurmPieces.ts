@@ -38,11 +38,11 @@ export class WurmHead extends LaserHitable implements BackAttachable {
     stun_counter : number;
 
     get backAttachX(): number{
-        return this.CenterX + radius*Math.cos(this.angle);
+        return this.CenterX + radius*0.8*Math.cos(this.angle);
     }
 
     get backAttachY(): number{
-        return this.CenterY + radius*Math.sin(this.angle);
+        return this.CenterY + radius*0.8*Math.sin(this.angle);
     }
     
     CheckLaserHit(x: number, y: number): void {
@@ -57,7 +57,9 @@ export class WurmHead extends LaserHitable implements BackAttachable {
 
     Follower: WurmBodyPiece;
     
-    isStunned: boolean;
+    get isStunned(): boolean{
+        return this.stun_counter > 0;
+    }
 
     target_angle :number;
 
@@ -76,9 +78,10 @@ export class WurmHead extends LaserHitable implements BackAttachable {
 
     Update() :void
     {
-        if (this.stun_counter > 0)
+        if (this.isStunned)
         {
             this.stun_counter--;
+            ImagePiece.prototype.Update.call(this);
             return;
         }
         if (this.feeder_target != null)
@@ -162,8 +165,11 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
         Update() :void
         {
-            if (this.head.isStunned)
+            if (this.head.isStunned){
+                ImagePiece.prototype.Update.call(this);
                 return;
+            }
+                
             this.angle += this.radians_per_frame* Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
 
             

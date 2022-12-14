@@ -1,6 +1,7 @@
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { GoodGrass } from "./goodGrass.js";
 import { LaserBeam } from "./laserBeam.js";
+import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import { Theme } from "./theme.js";
@@ -39,25 +40,44 @@ var NewStuff;
 var NewLaserHitables;
 var LaserHitables;
 var DeadLaserHitables;
+var LevelSelectDiv;
+var LevelSelectButton;
+var LevelSelectMenu;
+var SideContainer;
 var canvas;
 export var context;
 document.addEventListener("DOMContentLoaded", startGame);
 function startGame() {
-    canvas = document.createElement("canvas");
-    canvas.height = playingFieldHeight;
-    canvas.width = playingFieldWidth;
+    canvas = document.getElementById("playingField");
+    //canvas.height = playingFieldHeight;
+    //canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
     infoPar = document.getElementById("Info");
     seedPar = document.getElementById("seed");
     sprayPar = document.getElementById("spray");
     laserPar = document.getElementById("laser");
+    LevelSelectDiv = document.getElementById("levelSelectDiv");
+    LevelSelectButton = document.getElementById("levelSelect");
+    LevelSelectMenu = document.getElementById("levelSelectMenu");
+    SideContainer = document.getElementById("side");
+    for (const Level of Levels) {
+        let li = document.createElement("li");
+        let button = document.createElement("button");
+        button.addEventListener("click", LevelButtonClicked(Level));
+        button.textContent = Level.Name;
+        let text = document.createTextNode(Level.Description);
+        li.appendChild(button);
+        li.appendChild(text);
+        LevelSelectMenu.appendChild(li);
+    }
     document.body.insertBefore(canvas, document.body.childNodes[0]);
     theRancher = new Rancher();
     SetToolSeed();
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    LevelSelectButton.addEventListener("click", SelectLevel);
     window.addEventListener('keydown', KeyPress);
     setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
     console.log("finished set up");
@@ -65,9 +85,9 @@ function startGame() {
 }
 function GameLoopMethod() {
     //console.log("entered loop" + String(game_running));
-    context.clearRect(0, 0, playingFieldWidth, playingFieldHeight);
     //console.log(GameElements);
     if (game_running) {
+        context.clearRect(0, 0, playingFieldWidth, playingFieldHeight);
         //console.log("in the game running");
         this.elapsed_time++;
         if (this.laser_cool_down_counter > 0)
@@ -121,6 +141,8 @@ function GameLoopMethod() {
     }
 }
 function MouseDown(e) {
+    if (!game_running)
+        return;
     e.preventDefault();
     if (e.button == 2) { //right
         console.log("mouse clicked" + String(e.offsetX) + " " + String(e.offsetY));
@@ -337,7 +359,8 @@ export function ShowMessage(message) {
     infoPar.textContent = "Message: " + message;
 }
 export function AddCounter(c) {
-    document.body.insertBefore(c.textbox, document.body.childNodes[0]);
+    SideContainer.appendChild(c.textbox);
+    //document.body.insertBefore(c.textbox, document.body.childNodes[0]);
 }
 export function GrowWeed(i, j) {
     if (i < 0 || j < 0 || i >= plant_cols || j >= plant_rows)
@@ -374,6 +397,7 @@ function LoadLevel(level) {
     //this.GrassGrow = null;
     //this.QuickObjectives.Text = level.QuickObjectives;
     game_running = true;
+    CloseLevelMenu();
 }
 //function ClearAll() : void
 //{
@@ -407,5 +431,26 @@ function InitializeGameElements() {
         shotsFired = 0;
         shotsHit = 0;
     }
+}
+function CloseLevelMenu() {
+    LevelSelectButton.textContent = "Select Level";
+    LevelSelectDiv.style.visibility = "hidden";
+}
+function SelectLevel(ev) {
+    console.log("select level clicked");
+    if (LevelSelectDiv.style.visibility == "hidden") {
+        game_running = false;
+        LevelSelectDiv.style.visibility = "visible";
+        LevelSelectButton.textContent = "Resume";
+    }
+    else {
+        game_running = true;
+        CloseLevelMenu();
+    }
+}
+function LevelButtonClicked(Level) {
+    return function (ev) {
+        LoadLevel(Level);
+    };
 }
 //# sourceMappingURL=gameControl.js.map

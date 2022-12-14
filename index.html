@@ -8,14 +8,43 @@ canvas {
     background-color: #f1f1f1;
 }
 </style>
+<link rel="stylesheet" href="styles.css" />
 </head>
 
 <script src = "./js/gameControl.js" type="module" ></script>
 
-<p id="Info"> Info: </p>
-<p id="laser">Laser (z)</p>
-<p id="spray">Spray (x)</p>
-<p id="seed">Seed (c)</p>
+<div class="grid-container">
+    <div class="playingField">
+        <canvas  id="playingField"></canvas>
+    </div>
+    <div class="side-container" id="side">
+        <p id="Info"> Info: </p>
+        <p id="laser">Laser (z)</p>
+        <p id="spray">Spray (x)</p>
+        <p id="seed">Seed (c)</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+        <p>more</p>
+    </div>
+    <div class="lower-menu">
+        <button id="levelSelect">Select Level</button>
+        <div class="levelSelectDiv" id="levelSelectDiv">
+            <b>Select a level</b>
+            <menu id="levelSelectMenu">
+            </menu>
+        </div>
+    </div>
+
+</div>
+
+
+
 
 </body>
 </html>

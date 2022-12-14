@@ -20,10 +20,10 @@ export class WurmHead extends LaserHitable {
         //click event handler
     }
     get backAttachX() {
-        return this.CenterX + radius * Math.cos(this.angle);
+        return this.CenterX + radius * 0.8 * Math.cos(this.angle);
     }
     get backAttachY() {
-        return this.CenterY + radius * Math.sin(this.angle);
+        return this.CenterY + radius * 0.8 * Math.sin(this.angle);
     }
     CheckLaserHit(x, y) {
         super.CheckLaserHit(x, y);
@@ -33,6 +33,9 @@ export class WurmHead extends LaserHitable {
             //play sound
         }
         this.hit = false;
+    }
+    get isStunned() {
+        return this.stun_counter > 0;
     }
     SetTargetAngle() {
         this.target_angle = Math.atan((this.CenterY - this.destination_y) / (this.CenterX - this.destination_x));
@@ -44,8 +47,9 @@ export class WurmHead extends LaserHitable {
             this.target_angle -= Math.PI * 2;
     }
     Update() {
-        if (this.stun_counter > 0) {
+        if (this.isStunned) {
             this.stun_counter--;
+            ImagePiece.prototype.Update.call(this);
             return;
         }
         if (this.feeder_target != null) {
@@ -99,8 +103,10 @@ export class WurmBodyPiece extends ImagePiece {
         return this.CenterY + radius * Math.sin(this.angle);
     }
     Update() {
-        if (this.head.isStunned)
+        if (this.head.isStunned) {
+            ImagePiece.prototype.Update.call(this);
             return;
+        }
         this.angle += this.radians_per_frame * Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
         if (this.total_bites_suffered > 0 && this.total_bites_suffered < ParasiteKillTime)
             this.total_bites_suffered--;
