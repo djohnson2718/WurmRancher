@@ -49,8 +49,8 @@ export var context;
 document.addEventListener("DOMContentLoaded", startGame);
 function startGame() {
     canvas = document.getElementById("playingField");
-    //canvas.height = playingFieldHeight;
-    //canvas.width = playingFieldWidth;
+    canvas.height = playingFieldHeight;
+    canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
     infoPar = document.getElementById("Info");
@@ -71,7 +71,7 @@ function startGame() {
         li.appendChild(text);
         LevelSelectMenu.appendChild(li);
     }
-    document.body.insertBefore(canvas, document.body.childNodes[0]);
+    //document.body.insertBefore(canvas, document.body.childNodes[0]);    
     theRancher = new Rancher();
     SetToolSeed();
     canvas.addEventListener('mousedown', MouseDown);

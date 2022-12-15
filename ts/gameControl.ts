@@ -76,11 +76,11 @@ var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
 
 document.addEventListener("DOMContentLoaded", startGame);
-
+ 
 function startGame(){
     canvas =  document.getElementById("playingField") as HTMLCanvasElement;
-    //canvas.height = playingFieldHeight;
-    //canvas.width = playingFieldWidth;
+    canvas.height = playingFieldHeight;
+    canvas.width = playingFieldWidth;
     context = canvas.getContext("2d");
     context.font = "14px sans";
     infoPar = document.getElementById("Info") as HTMLParagraphElement;
@@ -104,7 +104,7 @@ function startGame(){
     }
     
 
-    document.body.insertBefore(canvas, document.body.childNodes[0]);    
+    //document.body.insertBefore(canvas, document.body.childNodes[0]);    
 
 
     theRancher = new Rancher();

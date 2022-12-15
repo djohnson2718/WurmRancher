@@ -18,13 +18,14 @@ menu {
     grid-template-areas: 
         'canvas side'
         'lmenu side';
-    gap: 10px;
-    grid-template-columns: ;
-    
+    gap: 30px;
+    grid-template-columns: 839px 100px;
+    grid-template-rows: 689px 200px;
 }
 
 .playingField {
     grid-area: canvas;
+    background-color: brown;
 }
 
 .side-container{
@@ -37,4 +38,9 @@ menu {
 .lower-menu{
     grid-area: lmenu;
     background-color: blueviolet;
+}
+
+.button-area{
+    display: flex;
+    gap:20px;
 }
