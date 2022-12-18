@@ -4,6 +4,7 @@ import { LaserBeam } from "./laserBeam.js";
 import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
+import { laserSound } from "./resources.js";
 import { Theme } from "./theme.js";
 import * as timing from "./timing.js";
 import { Weed } from "./weed.js";
@@ -20,7 +21,7 @@ var mouseY;
 var Plants = new Array();
 const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
 const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
-var soundEffectsOn;
+var soundEffectsOn = true;
 var numberOfGoodGrass;
 var rancherAccuracy;
 var shotsHit;
@@ -31,7 +32,7 @@ var sprayPar;
 var laserPar;
 export var CurrentLevel;
 var weedRatio;
-var game_running;
+export var game_running;
 var elapsed_time;
 var laser_cool_down_counter;
 export var GameElements;
@@ -44,6 +45,7 @@ var LevelSelectDiv;
 var LevelSelectButton;
 var LevelSelectMenu;
 var SideContainer;
+var CounterContainer;
 var canvas;
 export var context;
 document.addEventListener("DOMContentLoaded", startGame);
@@ -61,6 +63,7 @@ function startGame() {
     LevelSelectButton = document.getElementById("levelSelect");
     LevelSelectMenu = document.getElementById("levelSelectMenu");
     SideContainer = document.getElementById("side");
+    CounterContainer = document.getElementById("counter-area");
     for (const Level of Levels) {
         let li = document.createElement("li");
         let button = document.createElement("button");
@@ -169,6 +172,7 @@ function MouseDown(e) {
                 if (DistanceClickToPiece(e, theRancher) > laserRange)
                     return;
                 NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX, e.offsetY));
+                PlaySound(laserSound);
                 for (let ldp of LaserHitables) {
                     console.log("check laser hits");
                     ldp.CheckLaserHit(e.offsetX, e.offsetY);
@@ -349,17 +353,20 @@ export function GetClosestPrey(to, care_about_dibs, preyName) {
     //console.log("found",closest);
     return closest;
 }
-export function ShowVictory(message) {
+export function ReportVictory(message) {
     infoPar.textContent = "Victory: " + message;
+    game_running = false;
 }
-export function ShowDefeat(message) {
+export function ReportDefeat(message) {
     infoPar.textContent = "Defeat: " + message;
+    game_running = false;
 }
 export function ShowMessage(message) {
     infoPar.textContent = "Message: " + message;
 }
 export function AddCounter(c) {
-    SideContainer.appendChild(c.textbox);
+    CounterContainer.appendChild(c.textbox);
+    GameElements.push(c);
     //document.body.insertBefore(c.textbox, document.body.childNodes[0]);
 }
 export function GrowWeed(i, j) {
@@ -414,6 +421,9 @@ function InitializeGameElements() {
     LaserHitables = new Array();
     DeadLaserHitables = new Set();
     NewLaserHitables = new Set();
+    while (CounterContainer.firstChild) {
+        CounterContainer.removeChild(CounterContainer.firstChild);
+    }
     elapsed_time = 0;
     for (var col = 0; col < plant_cols; col++) {
         Plants[col] = new Array();
@@ -444,7 +454,7 @@ function SelectLevel(ev) {
         LevelSelectButton.textContent = "Resume";
     }
     else {
-        game_running = true;
+        game_running = !CurrentLevel.gameover;
         CloseLevelMenu();
     }
 }
@@ -452,5 +462,10 @@ function LevelButtonClicked(Level) {
     return function (ev) {
         LoadLevel(Level);
     };
+}
+export function PlaySound(sound) {
+    if (soundEffectsOn) {
+        sound.play();
+    }
 }
 //# sourceMappingURL=gameControl.js.map

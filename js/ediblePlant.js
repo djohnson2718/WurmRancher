@@ -1,5 +1,6 @@
-import { RemovePlant } from "./gameControl.js";
+import { PlaySound, RemovePlant } from "./gameControl.js";
 import { Plant } from "./plant.js";
+import { apple_crunchSound } from "./resources.js";
 import { EatGrassTime } from "./timing.js";
 export class EdiblePlant extends Plant {
     constructor() {
@@ -17,6 +18,7 @@ export class EdiblePlant extends Plant {
         if (this.bites_taken == EatGrassTime) {
             //if (SoundEffectsOn)
             //    GrassEatenSound.Play();
+            PlaySound(apple_crunchSound);
             return this.eat_value;
         }
         else

@@ -1,3 +1,4 @@
+import { PlaySound } from "./gameControl.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 export class LaserHitable extends MovesToDestinationControl {
     constructor() {
@@ -8,6 +9,8 @@ export class LaserHitable extends MovesToDestinationControl {
         console.log("in check laser hit");
         if (!this.hit && (x >= this.x && (x - this.x) <= this.Width) && y >= this.y && (y - this.y) < this.Height) {
             //Play die sound
+            if (this.LaserHitSound)
+                PlaySound(this.LaserHitSound);
             console.log("it was a hit!");
             this.hit = true;
             //report shot event

@@ -19,7 +19,7 @@ menu {
         'canvas side'
         'lmenu side';
     gap: 30px;
-    grid-template-columns: 839px 100px;
+    grid-template-columns: 839px 120px;
     grid-template-rows: 689px 200px;
 }
 

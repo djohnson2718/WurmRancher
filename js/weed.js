@@ -1,9 +1,6 @@
 import { CurrentLevel, GrowWeed } from "./gameControl.js";
 import { Plant } from "./plant.js";
-var weedPic = new Image();
-weedPic.src = "../Resources/weed.png";
-var weedSprayedPic = new Image();
-weedSprayedPic.src = "../Resources/weedsprayed.png";
+import { weedSprayedPic, weedPic } from "./resources.js";
 export class Weed extends Plant {
     constructor(indexX, indexY) {
         super(indexX, indexY);

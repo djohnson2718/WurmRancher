@@ -1,9 +1,8 @@
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
+import { rancherImage } from "./resources.js";
 import * as timing from "./timing.js";
 const height = 30;
 const width = 30;
-const rancherImage = new Image(height, width);
-rancherImage.src = "../Resources/rancher.png";
 export class Rancher extends MovesToDestinationControl {
     constructor() {
         super(height, width, timing.RelativeSpeedToPixelsPerFrame(timing.relRancherSpeed), timing.RelativeRotateToRadiansPerFrame(timing.relRancherRotate));

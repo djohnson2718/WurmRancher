@@ -1,4 +1,4 @@
-import { ShowDefeat, ShowMessage, ShowVictory } from "./gameControl.js";
+import { ReportDefeat, ShowMessage, ReportVictory } from "./gameControl.js";
 import { Theme } from "./theme.js";
 import { RelativeTimeToFrames } from "./timing.js";
 
@@ -65,7 +65,7 @@ export class Level{
         this.gameover = true;
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
-        ShowVictory(message);
+        ReportVictory(message);
     }
 
     Defeat(message : string = null) : void{
@@ -74,7 +74,7 @@ export class Level{
         if (message == null)
             message = "You failed to complete the mission objectives.";            
         this.gameover = true;
-        ShowDefeat(message);
+        ReportDefeat(message);
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
     }
@@ -98,6 +98,5 @@ export class Level{
     OneTimeTriggerIsUp(rel_time:number){
         return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
     }
-
 
 }

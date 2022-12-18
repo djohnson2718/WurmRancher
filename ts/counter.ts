@@ -1,4 +1,6 @@
-export class Counter{
+import { GameElement } from "./gameElement.js";
+
+export abstract class Counter implements GameElement{
     textbox : HTMLLabelElement;
     label : string;
 
@@ -7,7 +9,12 @@ export class Counter{
         this.textbox = document.createElement("label");
         this.textbox.textContent = this.label;
     }
-    set Value(v : string){
+    set Value(v : number | string){
         this.textbox.textContent = this.label + ": " + v;
     }
+
+    abstract Update(): void;
+    abstract Name : string;
+    abstract Layer : number;
+
 }

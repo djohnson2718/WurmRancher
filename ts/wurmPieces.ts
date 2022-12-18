@@ -2,9 +2,10 @@ import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed, WurmStunTime } from "./timing.js";
 import { Feeder } from "./feeder.js";
-import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { Wurm } from "./wurm.js";
 import { LaserHitable } from "./laserHitable.js";
+import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -18,21 +19,20 @@ export interface BackAttachable {
 const height = 30;
 const width = 30;
 const radius = 15;
-const headImage = new Image();
-headImage.src = "../Resources/wurm_head.png";
-const bodyImage = new Image();
-bodyImage.src = "../Resources/wurm_body.png";
+
 const sight_range = 500;
 
 export class WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
     Layer =3;
+    //WurmEats : Event;
+
     constructor(wurmObject :Wurm){
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
-        //click event handler
+        this.LaserHitSound = electic_buzz;
     }
 
     stun_counter : number;
@@ -50,7 +50,6 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         if (this.hit){
             this.stun_counter = WurmStunTime;
             this.feeder_target = null;
-            //play sound
         }
         this.hit = false;
     }
@@ -102,6 +101,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
                     //Eats(this, new EatEventData(this.feeder_target));
                     //if (theControl.SoundEffectsOn)
                     //    EatSound.Play();
+                    PlaySound(dragonSound);
                 }
                     
                 

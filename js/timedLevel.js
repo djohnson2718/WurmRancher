@@ -1,8 +1,9 @@
 import { Level } from "./level.js";
 import { AddCounter } from "./gameControl.js";
 import { FramesToRealTime, RelativeTimeToFrames } from "./timing.js";
-import { Counter } from "./counter.js";
+import { Timer } from "./timer.js";
 export class TimedLevel extends Level {
+    //timer: Timer;
     constructor(theme, rel_time_allowed) {
         super(theme);
         this.rel_time_allowed = rel_time_allowed;
@@ -10,15 +11,13 @@ export class TimedLevel extends Level {
     InitializeLevel() {
         super.InitializeLevel();
         this.frames_left = RelativeTimeToFrames(this.rel_time_allowed);
-        this.timer = new Counter("Time Left");
-        this.timer.Value = String(this.frames_left);
-        AddCounter(this.timer);
+        //this.timer = new Timer(this);
+        AddCounter(new Timer(this));
     }
     Update() {
         super.Update();
         if (!this.gameover) {
             this.frames_left--;
-            this.timer.Value = String(this.frames_left);
             if (this.frames_left <= 0) {
                 this.Defeat();
                 this.gameover = true;

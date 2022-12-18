@@ -1,23 +1,21 @@
 import { ImagePiece } from "./imagePiece.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed, WurmStunTime } from "./timing.js";
-import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserHitable } from "./laserHitable.js";
+import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
 const height = 30;
 const width = 30;
 const radius = 15;
-const headImage = new Image();
-headImage.src = "../Resources/wurm_head.png";
-const bodyImage = new Image();
-bodyImage.src = "../Resources/wurm_body.png";
 const sight_range = 500;
 export class WurmHead extends LaserHitable {
+    //WurmEats : Event;
     constructor(wurmObject) {
         super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
         this.Layer = 3;
         this.feeder_target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
-        //click event handler
+        this.LaserHitSound = electic_buzz;
     }
     get backAttachX() {
         return this.CenterX + radius * 0.8 * Math.cos(this.angle);
@@ -30,7 +28,6 @@ export class WurmHead extends LaserHitable {
         if (this.hit) {
             this.stun_counter = WurmStunTime;
             this.feeder_target = null;
-            //play sound
         }
         this.hit = false;
     }
@@ -66,6 +63,7 @@ export class WurmHead extends LaserHitable {
                     //Eats(this, new EatEventData(this.feeder_target));
                     //if (theControl.SoundEffectsOn)
                     //    EatSound.Play();
+                    PlaySound(dragonSound);
                 }
             }
         }

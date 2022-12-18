@@ -1,4 +1,4 @@
-import { ShowDefeat, ShowMessage, ShowVictory } from "./gameControl.js";
+import { ReportDefeat, ShowMessage, ReportVictory } from "./gameControl.js";
 import { RelativeTimeToFrames } from "./timing.js";
 export var CompletionStatus;
 (function (CompletionStatus) {
@@ -52,7 +52,7 @@ export class Level {
         this.gameover = true;
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
-        ShowVictory(message);
+        ReportVictory(message);
     }
     Defeat(message = null) {
         if (this.gameover)
@@ -60,7 +60,7 @@ export class Level {
         if (message == null)
             message = "You failed to complete the mission objectives.";
         this.gameover = true;
-        ShowDefeat(message);
+        ReportDefeat(message);
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
     }
