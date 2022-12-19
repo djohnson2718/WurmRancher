@@ -172,8 +172,10 @@ function GameLoopMethod(timestamp: number):void{
             NewStuff.clear();
         }
 
-        if (CurrentLevel.NoUserControl)
+        if (CurrentLevel.NoUserControl){
+            window.requestAnimationFrame(GameLoopMethod);
             return;
+        }
         
 
         switch(currentTool){

@@ -113,8 +113,10 @@ function GameLoopMethod(timestamp) {
             GameElements.sort(function (a, b) { return b.Layer - a.Layer; });
             NewStuff.clear();
         }
-        if (CurrentLevel.NoUserControl)
+        if (CurrentLevel.NoUserControl) {
+            window.requestAnimationFrame(GameLoopMethod);
             return;
+        }
         switch (currentTool) {
             case (ToolType.Seed):
                 if (Distance([mouseX, mouseY], [theRancher.CenterX, theRancher.CenterY]) < seedRange) {

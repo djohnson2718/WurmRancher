@@ -10,13 +10,13 @@ export class LaserBeam {
         this.sourceX = sourceX;
         this.sourceY = sourceY;
     }
-    Update() {
-        this.time++;
+    Update(timeStep) {
+        this.time += timeStep;
         if (this.time >= LaserFadeTime) {
             RemovePiece(this);
         }
         context.save();
-        context.globalAlpha = (LaserFadeTime - this.time) / LaserFadeTime;
+        context.globalAlpha = Math.max(0, (LaserFadeTime - this.time) / LaserFadeTime);
         context.lineWidth = 5;
         context.strokeStyle = '#ff0000';
         context.beginPath();

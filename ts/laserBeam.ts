@@ -17,14 +17,14 @@ export class LaserBeam implements GameElement{
         this.sourceY = sourceY;
     }
 
-    Update():void{
-        this.time++;
+    Update(timeStep:number):void{
+        this.time+=timeStep;
         if (this.time >= LaserFadeTime){
             RemovePiece(this);
         }
         
         context.save()
-        context.globalAlpha = (LaserFadeTime - this.time)/LaserFadeTime;
+        context.globalAlpha = Math.max(0,(LaserFadeTime - this.time)/LaserFadeTime);
         context.lineWidth = 5;
         context.strokeStyle = '#ff0000';
         context.beginPath();

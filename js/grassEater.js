@@ -29,7 +29,7 @@ export class GrassEater extends LaserDestructablePiece {
             this.target_plant = GetClosestPlant(this, ["GoodGrass"]);
             if (this.target_plant != null) {
                 this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(332);
+                this.target_plant.Dibs(777);
             }
             else
                 this.SetDestination(RandomXonField(), RandomYonField());

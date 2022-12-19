@@ -8,10 +8,10 @@ export class LaserDestructablePiece extends LaserHitable {
     }
     Update(time_step) {
         if (this.hit) {
-            this.fade_time_elapsed++;
+            this.fade_time_elapsed += time_step;
             if (this.fade_time_elapsed > CreatureDeathFadeTime)
                 RemovePiece(this);
-            this.Opacity = (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime;
+            this.Opacity = Math.max(0, (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime);
         }
         super.Update(time_step);
     }

@@ -13,9 +13,9 @@ namespace WurmRacher
 {
     public class TimedLevel : Level
     {
-        double rel_time_allowed;
-        int frames_left;
-        protected double high_score = double.NaN;
+        double time_allowed;
+        //int frames_left;
+        //protected double high_score = double.NaN;
         
         Counter timer;
         public TimedLevel(Theme theme, int rel_time_allowed_) : base(theme)

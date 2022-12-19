@@ -24,13 +24,13 @@ export class MonsterLevel extends TimedLevel {
     }
     Update(time_step) {
         super.Update(time_step);
-        if (this.IntervalTimeIsUp(4))
+        if (this.IntervalTimeIsUp(4000))
             AddCreatureOnEdge(new GrassEater());
-        if (this.IntervalTimeIsUp(3))
+        if (this.IntervalTimeIsUp(3000))
             AddCreatureOnEdge(new Feeder());
-        if (this.IntervalTimeIsUp(11))
+        if (this.IntervalTimeIsUp(11000))
             AddCreatureOnEdge(new Monster());
-        if (this.IntervalTimeIsUp(6))
+        if (this.IntervalTimeIsUp(6000))
             GrowRandomWeed();
         if (this.theWurm.Length >= this.length_to_win)
             this.Victory();

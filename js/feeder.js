@@ -47,7 +47,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                 this.target_plant = null;
             if (this.target_plant != null) {
                 this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(333);
+                this.target_plant.Dibs(777);
             }
             else
                 this.SetDestination(RandomXonField(), RandomYonField());
