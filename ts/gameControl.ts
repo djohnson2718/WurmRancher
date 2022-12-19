@@ -7,6 +7,7 @@ import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
 import { GrassEater } from "./grassEater.js";
 import { ImagePiece } from "./imagePiece.js";
+import { IntroDemo } from "./introDemo.js";
 import { LaserBeam } from "./laserBeam.js";
 import { LaserHitable } from "./laserHitable.js";
 import { Level } from "./level.js";
@@ -44,7 +45,7 @@ const plant_cols = Math.floor(playingFieldWidth/plant_size)+1;
 
 
 
-var soundEffectsOn: boolean =true;
+var soundEffectsOn: boolean = false;
 var numberOfGoodGrass: number;
 var rancherAccuracy: number;
 var shotsHit: number;
@@ -125,20 +126,21 @@ function startGame(){
     setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
 
-    LoadLevel(new FirstGrassEaterLevel(new Theme()));
+    LoadLevel(new IntroDemo()); //chagne to intro
 
     
 }
 
 function GameLoopMethod():void{
-    //console.log("entered loop" + String(game_running));
+    console.log("entered loop" + String(game_running) + GameElements.length);
     
 
     //console.log(GameElements);
 
     if (game_running)
     {
-        context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
+        context.drawImage(CurrentLevel.theme.background,0,0, playingFieldWidth, playingFieldHeight);
+        //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
         //console.log("in the game running");
         this.elapsed_time++;
 
@@ -150,9 +152,21 @@ function GameLoopMethod():void{
 
         for (const element of GameElements){
             //console.log("calling update" + String(element));
+            console.log(element);
             element.Update();
         }
 
+        for (const element of NewStuff){
+            GameElements.push(element);
+        }
+
+        if (NewStuff.size > 0){
+            GameElements.sort( function(a,b){return b.Layer-a.Layer;});
+            NewStuff.clear();
+        }
+
+        if (CurrentLevel.NoUserControl)
+            return;
         
 
         switch(currentTool){
@@ -186,21 +200,11 @@ function GameLoopMethod():void{
 
         }
 
-
-
         GameElements =   GameElements.filter( function(e){return !DeadStuff.has(e);});
         DeadStuff.clear();
 
         LaserHitables = LaserHitables.filter( function(e){return !DeadLaserHitables.has(e);});
         DeadLaserHitables.clear();
-
-        for (const element of NewStuff){
-            GameElements.push(element);
-        }
-
-        if (NewStuff.size > 0)
-            GameElements.sort( function(a,b){return b.Layer-a.Layer;});
-        NewStuff.clear();
 
         for(const element of NewLaserHitables)
             LaserHitables.push(element);
@@ -348,6 +352,7 @@ export function RandomYonField(){
 
 
 export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, startY : number):void{
+    console.log("adding creatrue", e);
     NewStuff.add(e);
     if ("CheckLaserHit" in e)
         NewLaserHitables.add(e as LaserHitable);
@@ -522,6 +527,8 @@ function LoadLevel(level : Level){
     CurrentLevel = level;
     InitializeGameElements();
     level.InitializeLevel();
+    console.log("fininish level.init ", GameElements.length);
+    //canvas.setAttribute("backgroundImsage", level.theme.background);
 
     //MainBackGroundMusicME.Stop();
     //MainBackGroundMusicME.Source = level.Theme.Music;

@@ -26,6 +26,7 @@ menu {
 .playingField {
     grid-area: canvas;
     background-color: brown;
+    display: -moz-stack;
 }
 
 .side-container{
