@@ -8,8 +8,8 @@ export class Weed extends Plant {
         this.SprayedPic = weedSprayedPic;
         this.PieceImage = weedPic;
     }
-    Update() {
-        this.count++;
+    Update(time_step) {
+        this.count += time_step;
         if (this.count >= CurrentLevel.WeedGrowthRate && !this.sprayed) {
             this.count = 0;
             let r = Math.random();
@@ -22,7 +22,7 @@ export class Weed extends Plant {
             else
                 GrowWeed(this.indexX, this.indexY + 1);
         }
-        super.Update();
+        super.Update(time_step);
     }
 }
 //# sourceMappingURL=weed.js.map

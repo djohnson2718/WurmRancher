@@ -1,5 +1,5 @@
 import { ImagePiece } from "./imagePiece.js";
-import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed, WurmStunTime } from "./timing.js";
+import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
 import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
@@ -10,7 +10,7 @@ const sight_range = 500;
 export class WurmHead extends LaserHitable {
     //WurmEats : Event;
     constructor(wurmObject) {
-        super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
+        super(height, width, WurmSpeed, WurmHeadRotate);
         this.Layer = 3;
         this.feeder_target = null;
         this.PieceImage = headImage;
@@ -43,7 +43,7 @@ export class WurmHead extends LaserHitable {
         if (this.target_angle >= 2 * Math.PI)
             this.target_angle -= Math.PI * 2;
     }
-    Update() {
+    Update(time_step) {
         if (this.isStunned) {
             this.stun_counter--;
             ImagePiece.prototype.Update.call(this);
@@ -75,7 +75,7 @@ export class WurmHead extends LaserHitable {
                 this.SetDestination(RandomXonField(), RandomYonField());
             }
         }
-        super.Update();
+        super.Update(time_step);
     }
     get Name() { return "Wurm Head"; }
 }
@@ -83,7 +83,7 @@ export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);
         this.Layer = 4;
-        this.radians_per_frame = RelativeRotateToRadiansPerFrame(relWurmBodyRotate); //be careful here!!!!
+        this.radians_per_ms = WurmBodyRotate; //be careful here!!!!
         //public event EventHandler<EventArgs> EatenByParasite;
         this.fade_time_elapsed = 0;
         this.total_bites_suffered = 0;
@@ -100,12 +100,12 @@ export class WurmBodyPiece extends ImagePiece {
     get backAttachY() {
         return this.CenterY + radius * Math.sin(this.angle);
     }
-    Update() {
+    Update(time_step) {
         if (this.head.isStunned) {
             ImagePiece.prototype.Update.call(this);
             return;
         }
-        this.angle += this.radians_per_frame * Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
+        this.angle += this.radians_per_ms * time_step * Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
         if (this.total_bites_suffered > 0 && this.total_bites_suffered < ParasiteKillTime)
             this.total_bites_suffered--;
         this.CenterX = this.Leader.backAttachX + radius * Math.cos(this.angle);
@@ -116,7 +116,7 @@ export class WurmBodyPiece extends ImagePiece {
             //EatenByParasite(this, new EventArgs());
             //this.Opacity = (double)(Timing.CreatureDeathFadeTime - this.fade_time_elapsed) / Timing.CreatureDeathFadeTime;               
         }
-        super.Update();
+        super.Update(time_step);
     }
     get IsEatenByParasite() {
         return (this.total_bites_suffered >= ParasiteKillTime);

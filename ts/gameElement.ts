@@ -1,5 +1,5 @@
 export interface GameElement {
-    Update: Function;
+    Update(time_step:number): void;
     Name:string;
     Layer:number;
 }

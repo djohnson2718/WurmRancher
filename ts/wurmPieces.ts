@@ -1,6 +1,6 @@
 import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
-import { CreatureDeathFadeTime, ParasiteKillTime, RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relWurmBodyRotate, relWurmHeadRotate, relWurmSpeed, WurmStunTime } from "./timing.js";
+import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
 import { Feeder } from "./feeder.js";
 import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { Wurm } from "./wurm.js";
@@ -29,7 +29,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
     //WurmEats : Event;
 
     constructor(wurmObject :Wurm){
-        super(height, width, RelativeSpeedToPixelsPerFrame(relWurmSpeed), RelativeRotateToRadiansPerFrame(relWurmHeadRotate));
+        super(height, width, WurmSpeed, WurmHeadRotate);
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
         this.LaserHitSound = electic_buzz;
@@ -75,7 +75,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
             this.target_angle -= Math.PI * 2;
     }
 
-    Update() :void
+    Update(time_step:number) :void
     {
         if (this.isStunned)
         {
@@ -119,7 +119,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
             }
         }
             
-        super.Update();
+        super.Update(time_step);
     }
 
     get Name(){return "Wurm Head";}
@@ -130,6 +130,8 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
         Layer = 4;
         Leader :BackAttachable;
         head :WurmHead;
+
+        radians_per_ms = WurmBodyRotate; //be careful here!!!!
 
         constructor(leader_ :BackAttachable , head_:WurmHead)
         {
@@ -155,7 +157,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
             return this.CenterY + radius*Math.sin(this.angle);
         }
     
-        radians_per_frame = RelativeRotateToRadiansPerFrame(relWurmBodyRotate); //be careful here!!!!
+        
         
         //public event EventHandler<EventArgs> EatenByParasite;
 
@@ -163,14 +165,14 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
         fade_time_elapsed : number = 0;
         total_bites_suffered : number = 0;
 
-        Update() :void
+        Update(time_step:number) :void
         {
             if (this.head.isStunned){
                 ImagePiece.prototype.Update.call(this);
                 return;
             }
                 
-            this.angle += this.radians_per_frame* Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
+            this.angle += this.radians_per_ms*time_step* Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
 
             
             if (this.total_bites_suffered > 0  && this.total_bites_suffered < ParasiteKillTime)
@@ -189,7 +191,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
                 //this.Opacity = (double)(Timing.CreatureDeathFadeTime - this.fade_time_elapsed) / Timing.CreatureDeathFadeTime;               
             }
-           super.Update();
+           super.Update(time_step);
         }
 
 

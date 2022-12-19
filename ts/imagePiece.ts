@@ -14,7 +14,7 @@ export abstract class ImagePiece extends OnTheFieldPiece implements GameElement 
         this.angle = angle;
     }
 
-    Update() : void{
+    Update(time_step:number) : void{
         //console.log("about to draw something.", this.PieceImage.src);
         context.save();
         context.globalAlpha = this.Opacity;

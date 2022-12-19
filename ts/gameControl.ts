@@ -1,4 +1,5 @@
 //import { AreaEffectCircle } from "../js/areaEffectCircle.js";
+import { time } from "console";
 import { Counter } from "./counter.js";
 import { EdiblePlant } from "./ediblePlant.js";
 import { Feeder } from "./feeder.js";
@@ -60,7 +61,7 @@ var weedRatio: number;
 
 export var game_running :boolean;
 
-var elapsed_time : number;
+//var elapsed_time : number;
 var laser_cool_down_counter : number;
 
 export var GameElements : Array<GameElement>;
@@ -123,7 +124,7 @@ function startGame(){
     window.addEventListener('keydown', KeyPress);
     
 
-    setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
+    //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
 
     LoadLevel(new IntroDemo()); //chagne to intro
@@ -131,29 +132,35 @@ function startGame(){
     
 }
 
-function GameLoopMethod():void{
-    console.log("entered loop" + String(game_running) + GameElements.length);
-    
+var previousTimeStamp : number;
 
-    //console.log(GameElements);
-
+function GameLoopMethod(timestamp: number):void{
+    console.log(timestamp, Date.now());
     if (game_running)
     {
+        let timeStep : number;
+        if (previousTimeStamp)
+            timeStep = timestamp - previousTimeStamp;
+        else
+            timeStep = 0;
+
+        previousTimeStamp = timestamp;
+
         context.drawImage(CurrentLevel.theme.background,0,0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
         //console.log("in the game running");
-        this.elapsed_time++;
+        //this.elapsed_time++;
 
         
-        if (this.laser_cool_down_counter > 0)
-            this.laser_cool_down_counter--;
+        if (laser_cool_down_counter > 0)
+            laser_cool_down_counter = Math.min(0, laser_cool_down_counter-timeStep);
 
-        CurrentLevel.Update();
+        CurrentLevel.Update(timeStep);
 
         for (const element of GameElements){
             //console.log("calling update" + String(element));
             console.log(element);
-            element.Update();
+            element.Update(timeStep);
         }
 
         for (const element of NewStuff){
@@ -209,6 +216,8 @@ function GameLoopMethod():void{
         for(const element of NewLaserHitables)
             LaserHitables.push(element);
         NewLaserHitables.clear();
+
+        window.requestAnimationFrame(GameLoopMethod);
     }
 }
 
@@ -539,6 +548,7 @@ function LoadLevel(level : Level){
     //this.QuickObjectives.Text = level.QuickObjectives;
     game_running = true;
     CloseLevelMenu();
+    window.requestAnimationFrame(GameLoopMethod);
 }
 
 //function ClearAll() : void
@@ -563,10 +573,6 @@ function InitializeGameElements() : void{
         CounterContainer.removeChild(CounterContainer.firstChild);
     }
     
-
-
-    elapsed_time = 0;
-
 
     for (var col = 0;  col < plant_cols; col ++){
         Plants[col] = new Array<Plant>();
@@ -604,7 +610,12 @@ function SelectLevel(this: HTMLElement, ev: MouseEvent) {
     }
     else{
         game_running = !CurrentLevel.gameover;
+
         CloseLevelMenu();
+        if (game_running){
+            previousTimeStamp = null;
+            window.requestAnimationFrame(GameLoopMethod);
+        }
     }
 }
 

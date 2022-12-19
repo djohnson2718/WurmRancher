@@ -13,13 +13,13 @@ export class Plant extends ImagePiece {
         this.x = indexX * plant_size;
         this.y = indexY * plant_size;
     }
-    Update() {
+    Update(time_step) {
         //console.log("updating plant");
         if (this.sprayed)
-            this.time_since_spray++;
+            this.time_since_spray += time_step;
         if (this.time_since_spray >= SprayEffectivenessTime)
             RemovePlant(this);
-        super.Update();
+        super.Update(time_step);
     }
     Spray() {
         console.log("plant sprayed", this);

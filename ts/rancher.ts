@@ -12,7 +12,7 @@ const width = 30;
 export class Rancher extends MovesToDestinationControl {
     
     constructor(){
-        super(height, width, timing.RelativeSpeedToPixelsPerFrame(timing.relRancherSpeed),timing.RelativeRotateToRadiansPerFrame(timing.relRancherRotate));
+        super(height, width, timing.RancherSpeed, timing.RancherRotate);
         this.PieceImage = rancherImage;
         this.x = 100;
         this.y = 100;

@@ -1,5 +1,4 @@
 import { Counter } from "./counter.js";
-import { FramesToRealTime } from "./timing.js";
 export class Timer extends Counter {
     constructor(level) {
         super("Time left");
@@ -7,8 +6,8 @@ export class Timer extends Counter {
         this.Layer = -1;
         this.level = level;
     }
-    Update() {
-        this.Value = FramesToRealTime(this.level.frames_left).toFixed(1);
+    Update(timeStep) {
+        this.Value = ((this.level.time_allowed - this.level.elapsed_time) / 1000).toFixed(1);
     }
 }
 //# sourceMappingURL=timer.js.map

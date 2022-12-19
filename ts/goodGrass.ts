@@ -27,11 +27,11 @@ export class GoodGrass extends EdiblePlant {
         return this.mature && this.dibs == 0;
     }
 
-    Update():void{
+    Update(time_step:number):void{
         //console.log("update grass");
         if (!this.mature)
             {
-                this.elapsed_time++;
+                this.elapsed_time+= time_step;
                 if (this.elapsed_time >= GrassGrowTime)
                 {
                     this.mature = true;
@@ -42,7 +42,7 @@ export class GoodGrass extends EdiblePlant {
                     ReportGrassGrow(this);
                 }
             }
-            super.Update();   
+            super.Update(time_step);   
     }
 
     get Name(){return "GoodGrass";}

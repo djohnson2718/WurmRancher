@@ -13,7 +13,7 @@ export class MonsterLevel extends TimedLevel{
     theWurm : Wurm;
 
     constructor(theme :Theme){
-        super(theme,80);
+        super(theme,80000);
         this.Name = "The monster is coming";
         this.Description = `Your tasty feeders have attracted the attention of some of the native fauna.  Protect them at all costs!  Grow your wurm to length ${this.length_to_win} to win.`;
         this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}.`;
@@ -31,9 +31,9 @@ export class MonsterLevel extends TimedLevel{
     }
 
 
-    Update() : void
+    Update(time_step:number) : void
     {
-        super.Update();
+        super.Update(time_step);
         
         if (this.IntervalTimeIsUp(4))
             AddCreatureOnEdge(new GrassEater());

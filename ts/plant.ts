@@ -21,13 +21,13 @@ export abstract class Plant extends ImagePiece {
         this.y = indexY*plant_size;
     }
 
-    Update() :void{
+    Update(time_step:number) :void{
         //console.log("updating plant");
         if (this.sprayed)
-            this.time_since_spray++;
+            this.time_since_spray+=time_step;
         if (this.time_since_spray >= SprayEffectivenessTime)
             RemovePlant(this);
-        super.Update();
+        super.Update(time_step);
     }
 
     Spray() :void{

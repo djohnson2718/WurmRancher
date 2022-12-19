@@ -2,7 +2,7 @@ import { DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField } from
 import { GoodGrass } from "./goodGrass.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
 import { grassEaterImage, gruntzSound } from "./resources.js";
-import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relGrassEaterRotate, relGrassEaterSpeed } from "./timing.js";
+import { GrassEaterRotate, GrassEaterSpeed } from "./timing.js";
 
 const height = 30;
 const width =30;
@@ -14,22 +14,22 @@ export class GrassEater extends LaserDestructablePiece{
     hit = false;
 
     constructor(){
-        super(height,width, RelativeSpeedToPixelsPerFrame(relGrassEaterSpeed), RelativeRotateToRadiansPerFrame(relGrassEaterRotate));
+        super(height,width, GrassEaterSpeed, GrassEaterRotate);
         this.PieceImage = grassEaterImage;
         this.LaserHitSound = gruntzSound;
     }
 
     target_plant : GoodGrass = null;
 
-    Update() : void{
+    Update(time_step:number) : void{
         if (this.hit){
-            super.Update();
+            super.Update(time_step);
             return;
         }
         
         if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit))
             {
-                this.target_plant.Eat();
+                this.target_plant.Eat(time_step);
                 if (this.target_plant.Eaten)
                     this.target_plant = null;
             }
@@ -40,12 +40,12 @@ export class GrassEater extends LaserDestructablePiece{
                 if (this.target_plant != null)
                 {
                     this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                    this.target_plant.Dibs(10);
+                    this.target_plant.Dibs(332);
                 }
                 else
                     this.SetDestination(RandomXonField(),RandomYonField());
             }
-            super.Update();
+            super.Update(time_step);
     }
     
 }

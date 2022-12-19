@@ -16,8 +16,8 @@ export class Weed extends Plant{
 
     count :number;
 
-    Update():void{
-        this.count++;
+    Update(time_step:number):void{
+        this.count+=time_step;
         if (this.count >= CurrentLevel.WeedGrowthRate && !this.sprayed)
         {
             this.count = 0;
@@ -31,7 +31,7 @@ export class Weed extends Plant{
             else
                 GrowWeed(this.indexX, this.indexY+1);
         }
-        super.Update();
+        super.Update(time_step);
     }
 
 }

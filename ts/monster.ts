@@ -2,7 +2,7 @@ import { Feeder } from "./feeder.js";
 import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
 import { monsterImage } from "./resources.js";
-import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relMonsterRotate, relMonsterSpeed } from "./timing.js";
+import { MonsterRotate, MonsterSpeed } from "./timing.js";
 
 
 var height = 50;
@@ -13,13 +13,13 @@ export class Monster extends LaserDestructablePiece{
     Name = "Monster";
     Layer = 5;
     constructor(){
-        super(height,width,RelativeSpeedToPixelsPerFrame(relMonsterSpeed), RelativeRotateToRadiansPerFrame(relMonsterRotate));
+        super(height,width,MonsterSpeed, MonsterRotate);
         this.PieceImage = monsterImage;
     }
 
 
     target_feeder : Feeder;
-    Update() :void
+    Update(time_step:number) :void
     {
         if (!this.hit)
         {
@@ -53,6 +53,6 @@ export class Monster extends LaserDestructablePiece{
                     this.SetDestination(RandomXonField(),RandomYonField());
             }
         }
-        super.Update();
+        super.Update(time_step);
     }
 }

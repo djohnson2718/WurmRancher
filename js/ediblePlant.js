@@ -7,31 +7,29 @@ export class EdiblePlant extends Plant {
         super(...arguments);
         this.bites_taken = 0;
         this.dibs = 0;
+        this.eaten = false;
     }
-    Eat() {
-        this.bites_taken++;
+    Eat(time_step) {
+        this.dibs = 166;
+        if (this.eaten)
+            return 0;
+        this.bites_taken += time_step;
         //console.log("eating", this.bites_taken);
-        if (this.bites_taken >= EatGrassTime)
+        if (this.bites_taken >= EatGrassTime) {
             RemovePlant(this);
-        this.dibs = 5;
-        //returns 1 if the caller should get credit for eating this.
-        if (this.bites_taken == EatGrassTime) {
-            //if (SoundEffectsOn)
-            //    GrassEatenSound.Play();
             PlaySound(apple_crunchSound);
             return this.eat_value;
         }
-        else
-            return 0;
+        return 0;
     }
     get Eaten() {
         return this.bites_taken >= EatGrassTime;
     }
-    Update() {
+    Update(time_step) {
         if (this.dibs > 0) {
-            this.dibs--;
+            this.dibs = Math.min(0, this.dibs - time_step);
         }
-        super.Update();
+        super.Update(time_step);
     }
     Dibs(d) {
         this.dibs = d;

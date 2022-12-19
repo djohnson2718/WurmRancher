@@ -6,7 +6,7 @@ export class ImagePiece extends OnTheFieldPiece {
         this.Opacity = 1;
         this.angle = angle;
     }
-    Update() {
+    Update(time_step) {
         //console.log("about to draw something.", this.PieceImage.src);
         context.save();
         context.globalAlpha = this.Opacity;

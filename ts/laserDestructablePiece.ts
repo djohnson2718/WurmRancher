@@ -6,7 +6,7 @@ export abstract class LaserDestructablePiece extends LaserHitable {
     
     fade_time_elapsed = 0;
 
-    Update(): void {
+    Update(time_step:number): void {
         if (this.hit)
         {
             this.fade_time_elapsed++;
@@ -16,6 +16,6 @@ export abstract class LaserDestructablePiece extends LaserHitable {
 
             this.Opacity = (CreatureDeathFadeTime - this.fade_time_elapsed)/ CreatureDeathFadeTime;
         }
-        super.Update();
+        super.Update(time_step);
     }
 }

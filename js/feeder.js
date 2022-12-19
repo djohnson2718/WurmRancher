@@ -1,5 +1,5 @@
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
-import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
+import { FeederRotate, FeederSpeed } from "./timing.js";
 import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 const height = 30;
 const width = 30;
@@ -10,7 +10,7 @@ feederPic.src = "../Resources/feeder.png";
 export class Feeder extends MovesToDestinationControl //implements Prey
  {
     constructor() {
-        super(height, width, RelativeSpeedToPixelsPerFrame(relFeederSpeed), RelativeRotateToRadiansPerFrame(relFeederRotate));
+        super(height, width, FeederSpeed, FeederRotate);
         this.eaten = false;
         this.fattened = 0;
         //feederSize: number;
@@ -20,14 +20,14 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         this.target_plant = null;
     }
     Dibs() {
-        this.dibs = 10;
+        this.dibs = 333;
     }
-    Update() {
-        super.Update();
+    Update(time_step) {
+        super.Update(time_step);
         if (this.dibs > 0)
-            this.dibs--;
+            this.dibs = Math.min(0, this.dibs - time_step);
         if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1) {
-            let eats = this.target_plant.Eat();
+            let eats = this.target_plant.Eat(time_step);
             if (eats != 0) {
                 this.fattened += eats;
                 //if (EatsGrass != null)
@@ -47,7 +47,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                 this.target_plant = null;
             if (this.target_plant != null) {
                 this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(10);
+                this.target_plant.Dibs(333);
             }
             else
                 this.SetDestination(RandomXonField(), RandomYonField());

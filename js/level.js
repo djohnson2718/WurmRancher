@@ -1,5 +1,4 @@
-import { ReportDefeat, ShowMessage, ReportVictory } from "./gameControl.js";
-import { RelativeTimeToFrames } from "./timing.js";
+import { ReportDefeat, ReportVictory } from "./gameControl.js";
 export var CompletionStatus;
 (function (CompletionStatus) {
     CompletionStatus[CompletionStatus["Unattempted"] = 0] = "Unattempted";
@@ -12,8 +11,8 @@ export class Level {
     }
     constructor(theme) {
         //default values
-        this.WeedGrowthRate = RelativeTimeToFrames(3);
-        this.PoisonWeedGrowthRate = RelativeTimeToFrames(4);
+        this.WeedGrowthRate = 3000;
+        this.PoisonWeedGrowthRate = 4000;
         this.Name = "unknown";
         this.Description = "no description available";
         this.NoUserControl = false;
@@ -21,19 +20,20 @@ export class Level {
         this.QuickObjectives = "objectives unknown";
         this.SeedDisabled = "false";
         this.MakeFeedersAtWill = "false";
-        this.elapsed_frames = 0;
         this.theme = theme;
         // load saved data?
     }
-    Update() {
+    Update(time_step) {
         if (this.gameover)
             return;
-        this.elapsed_frames++;
-        if (this.elapsed_frames == 1 && !this.NoUserControl)
-            ShowMessage(this.Name + ": " + this.Description);
+        this.last_time_step = time_step;
+        this.elapsed_time += time_step;
+        //this.elapsed_frames++;
+        //if (this.elapsed_frames == 1 && !this.NoUserControl)
+        //    ShowMessage(this.Name + ": " + this.Description );
     }
     InitializeLevel() {
-        this.elapsed_frames = 0;
+        this.elapsed_time = 0;
         this.gameover = false;
         if (this.completionStatus == CompletionStatus.Unattempted) {
             this.completionStatus = CompletionStatus.Attempted;
@@ -69,14 +69,15 @@ export class Level {
         //if (!this.gameover && StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
     }
-    IntervalTimeIsUp(rel_interval, real_offset = 0) {
-        let interval = RelativeTimeToFrames(rel_interval);
-        let offset = RelativeTimeToFrames(real_offset);
+    IntervalTimeIsUp(interval, offset = 0) {
+        return ((this.elapsed_time + offset) % interval < this.last_time_step);
+        //let interval = RelativeTimeToFrames(rel_interval);
+        //let offset = RelativeTimeToFrames(real_offset);
         //console.log(this.elapsed_frames, interval,offset, this.elapsed_frames % interval == offset)
-        return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
+        //return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
     }
     OneTimeTriggerIsUp(rel_time) {
-        return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
+        return ((this.elapsed_time >= rel_time) && this.elapsed_time - rel_time < this.last_time_step);
     }
 }
 //# sourceMappingURL=level.js.map

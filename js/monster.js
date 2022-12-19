@@ -1,17 +1,17 @@
 import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
 import { monsterImage } from "./resources.js";
-import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relMonsterRotate, relMonsterSpeed } from "./timing.js";
+import { MonsterRotate, MonsterSpeed } from "./timing.js";
 var height = 50;
 var width = 50;
 export class Monster extends LaserDestructablePiece {
     constructor() {
-        super(height, width, RelativeSpeedToPixelsPerFrame(relMonsterSpeed), RelativeRotateToRadiansPerFrame(relMonsterRotate));
+        super(height, width, MonsterSpeed, MonsterRotate);
         this.Name = "Monster";
         this.Layer = 5;
         this.PieceImage = monsterImage;
     }
-    Update() {
+    Update(time_step) {
         if (!this.hit) {
             if (this.target_feeder != null) {
                 if (this.target_feeder.eaten) {
@@ -37,7 +37,7 @@ export class Monster extends LaserDestructablePiece {
                     this.SetDestination(RandomXonField(), RandomYonField());
             }
         }
-        super.Update();
+        super.Update(time_step);
     }
 }
 //# sourceMappingURL=monster.js.map

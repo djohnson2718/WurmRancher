@@ -1,6 +1,6 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
-import { RelativeRotateToRadiansPerFrame, RelativeSpeedToPixelsPerFrame, relFeederRotate, relFeederSpeed } from "./timing.js";
+import { FeederRotate, FeederSpeed } from "./timing.js";
 import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 
 const height =30;
@@ -10,8 +10,6 @@ const max_fattened = 10;
 
 const feederPic = new Image(height,width);
 feederPic.src = "../Resources/feeder.png";
-
-
 
 export class Feeder extends MovesToDestinationControl //implements Prey
 {
@@ -24,21 +22,21 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     target_plant : EdiblePlant;
 
     constructor (){
-        super(height,width, RelativeSpeedToPixelsPerFrame(relFeederSpeed), RelativeRotateToRadiansPerFrame(relFeederRotate));
+        super(height,width, FeederSpeed, FeederRotate);
         this.PieceImage = feederPic;
         this.target_plant = null;
     }
     Dibs() :void{
-        this.dibs = 10;
+        this.dibs = 333;
     }
 
-    Update():void{
-        super.Update();
-        if (this.dibs >0)
-                this.dibs--;
+    Update(time_step:number):void{
+        super.Update(time_step);
+        if (this.dibs > 0)
+                this.dibs = Math.min(0, this.dibs-time_step);
             if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1)
             {
-                let eats = this.target_plant.Eat();
+                let eats = this.target_plant.Eat(time_step);
                 if (eats != 0)
                 {
                     this.fattened += eats;
@@ -64,7 +62,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                 if (this.target_plant != null)
                 {
                     this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                    this.target_plant.Dibs(10);
+                    this.target_plant.Dibs(333);
                 }
                 else
                     this.SetDestination(RandomXonField(),RandomYonField());

@@ -7,7 +7,7 @@ import { Wurm } from "./wurm.js";
 import { WurmCounter } from "./wurmCounter.js";
 export class MonsterLevel extends TimedLevel {
     constructor(theme) {
-        super(theme, 80);
+        super(theme, 80000);
         this.length_to_win = 12;
         this.Name = "The monster is coming";
         this.Description = `Your tasty feeders have attracted the attention of some of the native fauna.  Protect them at all costs!  Grow your wurm to length ${this.length_to_win} to win.`;
@@ -22,8 +22,8 @@ export class MonsterLevel extends TimedLevel {
         GrowRandomWeed();
         GrowRandomWeed();
     }
-    Update() {
-        super.Update();
+    Update(time_step) {
+        super.Update(time_step);
         if (this.IntervalTimeIsUp(4))
             AddCreatureOnEdge(new GrassEater());
         if (this.IntervalTimeIsUp(3))

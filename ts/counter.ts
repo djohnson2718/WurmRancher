@@ -13,7 +13,7 @@ export abstract class Counter implements GameElement{
         this.textbox.textContent = this.label + ": " + v;
     }
 
-    abstract Update(): void;
+    abstract Update(timeStep :number): void;
     abstract Name : string;
     abstract Layer : number;
 

@@ -1,7 +1,6 @@
 import { Counter } from "./counter.js";
 import { GameElement } from "./gameElement.js";
 import { TimedLevel } from "./timedLevel.js";
-import { FramesToRealTime } from "./timing.js";
 
 export class Timer extends Counter implements GameElement{
 
@@ -13,7 +12,7 @@ export class Timer extends Counter implements GameElement{
         super("Time left");
         this.level = level;
     }
-    Update() : void{
-        this.Value = FramesToRealTime(this.level.frames_left).toFixed(1);
+    Update(timeStep : number) : void{
+        this.Value = ((this.level.time_allowed - this.level.elapsed_time)/1000).toFixed(1);
     }
 }

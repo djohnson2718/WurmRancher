@@ -5,7 +5,6 @@ import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { Rancher } from "./rancher.js";
 import { laserSound } from "./resources.js";
-import * as timing from "./timing.js";
 import { Weed } from "./weed.js";
 var theRancher;
 const playingFieldWidth = 839;
@@ -32,7 +31,7 @@ var laserPar;
 export var CurrentLevel;
 var weedRatio;
 export var game_running;
-var elapsed_time;
+//var elapsed_time : number;
 var laser_cool_down_counter;
 export var GameElements;
 export var DeadStuff;
@@ -81,25 +80,31 @@ function startGame() {
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     LevelSelectButton.addEventListener("click", SelectLevel);
     window.addEventListener('keydown', KeyPress);
-    setInterval(GameLoopMethod, 1000 / timing.frames_per_sec);
+    //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
     LoadLevel(new IntroDemo()); //chagne to intro
 }
-function GameLoopMethod() {
-    console.log("entered loop" + String(game_running) + GameElements.length);
-    //console.log(GameElements);
+var previousTimeStamp;
+function GameLoopMethod(timestamp) {
+    console.log(timestamp, Date.now());
     if (game_running) {
+        let timeStep;
+        if (previousTimeStamp)
+            timeStep = timestamp - previousTimeStamp;
+        else
+            timeStep = 0;
+        previousTimeStamp = timestamp;
         context.drawImage(CurrentLevel.theme.background, 0, 0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
         //console.log("in the game running");
-        this.elapsed_time++;
-        if (this.laser_cool_down_counter > 0)
-            this.laser_cool_down_counter--;
-        CurrentLevel.Update();
+        //this.elapsed_time++;
+        if (laser_cool_down_counter > 0)
+            laser_cool_down_counter = Math.min(0, laser_cool_down_counter - timeStep);
+        CurrentLevel.Update(timeStep);
         for (const element of GameElements) {
             //console.log("calling update" + String(element));
             console.log(element);
-            element.Update();
+            element.Update(timeStep);
         }
         for (const element of NewStuff) {
             GameElements.push(element);
@@ -145,6 +150,7 @@ function GameLoopMethod() {
         for (const element of NewLaserHitables)
             LaserHitables.push(element);
         NewLaserHitables.clear();
+        window.requestAnimationFrame(GameLoopMethod);
     }
 }
 function MouseDown(e) {
@@ -412,6 +418,7 @@ function LoadLevel(level) {
     //this.QuickObjectives.Text = level.QuickObjectives;
     game_running = true;
     CloseLevelMenu();
+    window.requestAnimationFrame(GameLoopMethod);
 }
 //function ClearAll() : void
 //{
@@ -431,7 +438,6 @@ function InitializeGameElements() {
     while (CounterContainer.firstChild) {
         CounterContainer.removeChild(CounterContainer.firstChild);
     }
-    elapsed_time = 0;
     for (var col = 0; col < plant_cols; col++) {
         Plants[col] = new Array();
         for (var row = 0; row < plant_rows; row++)
@@ -463,6 +469,10 @@ function SelectLevel(ev) {
     else {
         game_running = !CurrentLevel.gameover;
         CloseLevelMenu();
+        if (game_running) {
+            previousTimeStamp = null;
+            window.requestAnimationFrame(GameLoopMethod);
+        }
     }
 }
 function LevelButtonClicked(Level) {

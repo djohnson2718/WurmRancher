@@ -1,6 +1,5 @@
 import { ReportDefeat, ShowMessage, ReportVictory } from "./gameControl.js";
 import { Theme } from "./theme.js";
-import { RelativeTimeToFrames } from "./timing.js";
 
 export enum CompletionStatus{
     Unattempted = 0,
@@ -14,8 +13,8 @@ export class Level{
     theme : Theme;
 
     //default values
-    WeedGrowthRate = RelativeTimeToFrames(3);
-    PoisonWeedGrowthRate = RelativeTimeToFrames(4);
+    WeedGrowthRate = 3000;
+    PoisonWeedGrowthRate = 4000;
     Name = "unknown";
     Description = "no description available";
     NoUserControl = false;
@@ -23,6 +22,8 @@ export class Level{
     QuickObjectives = "objectives unknown";
     SeedDisabled = "false";
     MakeFeedersAtWill = "false";
+    elapsed_time : number;
+    last_time_step :number;
     
     get ID():string{
         return this.Name + this.Version;
@@ -33,18 +34,19 @@ export class Level{
         // load saved data?
     }
 
-    elapsed_frames = 0;
-
-    Update() : void{
+    Update(time_step: number) : void{
         if (this.gameover)
             return;
-        this.elapsed_frames++;
-        if (this.elapsed_frames == 1 && !this.NoUserControl)
-            ShowMessage(this.Name + ": " + this.Description );
+        this.last_time_step = time_step;
+        this.elapsed_time += time_step;
+    
+        //this.elapsed_frames++;
+        //if (this.elapsed_frames == 1 && !this.NoUserControl)
+        //    ShowMessage(this.Name + ": " + this.Description );
     }
 
     InitializeLevel() :void{
-        this.elapsed_frames = 0;
+        this.elapsed_time = 0;
         this.gameover = false;
         if (this.completionStatus == CompletionStatus.Unattempted)
         {
@@ -88,15 +90,16 @@ export class Level{
         //    StatusChanged(this, new EventArgs());
     }
 
-    IntervalTimeIsUp( rel_interval : number, real_offset : number=0) : boolean{
-        let interval = RelativeTimeToFrames(rel_interval);
-        let offset = RelativeTimeToFrames(real_offset);
+    IntervalTimeIsUp( interval : number, offset : number=0) : boolean{
+        return ((this.elapsed_time + offset) % interval < this.last_time_step);
+        //let interval = RelativeTimeToFrames(rel_interval);
+        //let offset = RelativeTimeToFrames(real_offset);
         //console.log(this.elapsed_frames, interval,offset, this.elapsed_frames % interval == offset)
-        return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
+        //return (this.elapsed_frames % interval == offset); // make sure this works ok with numbers!!!
     }
 
     OneTimeTriggerIsUp(rel_time:number){
-        return (this.elapsed_frames == RelativeTimeToFrames(rel_time));
+        return ((this.elapsed_time >= rel_time) &&  this.elapsed_time - rel_time < this.last_time_step);
     }
 
 }

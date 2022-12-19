@@ -1,34 +1,33 @@
 import { Level } from "./level.js";
 import { AddCounter } from "./gameControl.js";
-import { FramesToRealTime, RelativeTimeToFrames } from "./timing.js";
 import { Theme } from "./theme.js";
 import { Timer } from "./timer.js";
 
 export class TimedLevel extends Level{
-    rel_time_allowed : number;
-    frames_left : number;
-    high_score : number;
+    time_allowed : number;
+    //frames_left : number;
+    //high_score : number;
 
     //timer: Timer;
 
-    constructor(theme:Theme, rel_time_allowed) {
+    constructor(theme:Theme, time_allowed) {
         super(theme);
-        this.rel_time_allowed = rel_time_allowed;
+        this.time_allowed = time_allowed;
     }
 
     InitializeLevel():void{
         super.InitializeLevel();
-        this.frames_left = RelativeTimeToFrames(this.rel_time_allowed);
+        //this.frames_left = RelativeTimeToFrames(this.rel_time_allowed);
         //this.timer = new Timer(this);
         AddCounter(new Timer(this));
     }
 
-    Update():void{
-        super.Update();
+    Update(time_step:number):void{
+        super.Update(time_step);
         if (!this.gameover)
         {
-            this.frames_left--;
-            if (this.frames_left <= 0){
+            //this.frames_left--;
+            if (this.elapsed_time >= this.time_allowed){
                 this.Defeat();
                 this.gameover = true;
             }
@@ -36,9 +35,9 @@ export class TimedLevel extends Level{
     }
 
     Victory(message: string = null): void {
-        let score = FramesToRealTime(this.frames_left);
+        let score = this.time_allowed - this.elapsed_time;
         if (message == null)
-            message = "You completed the objectives in time and beat the level!";
+            message = `You completed the objectives with ${score} seconds to spare and beat the level!`;
 
         // create the high score control
         

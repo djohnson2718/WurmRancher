@@ -13,7 +13,7 @@ export class FirstGrassEaterLevel extends TimedLevel {
     theWurm : Wurm;
 
     constructor(theme : Theme){
-        super(theme,80);
+        super(theme,80000);
         this.Name = "We've got company!";
         this.Description = `The blue creatures want to steal your grass!  Blast them with your gun!  Grow your wurm to length ${this.length_to_win} before the timer runs out to win!`;
         this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}`;
@@ -27,14 +27,14 @@ export class FirstGrassEaterLevel extends TimedLevel {
         //AddCounter(new WurmCounter(this.theWurm));
     }
 
-    Update(): void {
-        super.Update();
+    Update(time_step:number): void {
+        super.Update(time_step);
 
-        if (this.IntervalTimeIsUp(4))
+        if (this.IntervalTimeIsUp(4000))
             AddCreatureOnEdge(new GrassEater());
-        if (this.IntervalTimeIsUp(3))
+        if (this.IntervalTimeIsUp(3000))
             AddCreatureOnEdge(new Feeder());
-        if (this.IntervalTimeIsUp(8))
+        if (this.IntervalTimeIsUp(8000))
             GrowRandomWeed();
         
         if (this.theWurm.Length >= this.length_to_win)

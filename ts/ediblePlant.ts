@@ -12,34 +12,31 @@ export abstract class EdiblePlant extends Plant {
 
     dibs : number=0;
 
-    Eat():number{
-        this.bites_taken++;
-        //console.log("eating", this.bites_taken);
-        if (this.bites_taken >= EatGrassTime)
-            RemovePlant(this);
-        this.dibs = 5;
+    eaten = false;
 
-        //returns 1 if the caller should get credit for eating this.
-        if (this.bites_taken == EatGrassTime)
-        {
-            //if (SoundEffectsOn)
-            //    GrassEatenSound.Play();
+    Eat(time_step:number):number{
+        this.dibs = 166;
+        if (this.eaten)
+            return 0;
+        this.bites_taken+=time_step;
+        //console.log("eating", this.bites_taken);
+        if (this.bites_taken >= EatGrassTime){
+            RemovePlant(this);
             PlaySound(apple_crunchSound);
             return this.eat_value;
         }
-        else
-            return 0;
+        return 0;
     }
 
     get Eaten() : boolean{
         return this.bites_taken >= EatGrassTime;
     }
 
-    Update() :void{
+    Update(time_step:number) :void{
         if (this.dibs>0){
-            this.dibs--;
+            this.dibs = Math.min(0, this.dibs-time_step);
         }
-        super.Update();
+        super.Update(time_step);
         
     }
 
