@@ -7,6 +7,7 @@ export class Theme{
     constructor( music:HTMLAudioElement, background : HTMLImageElement,){
         this.background = background;
         this.music = music;
+        this.music.loop = true;
     }
     
 }

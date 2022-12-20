@@ -1,7 +1,7 @@
 import { DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField } from "./gameControl.js";
 import { GoodGrass } from "./goodGrass.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { grassEaterImage, gruntzSound } from "./resources.js";
+import { GrassEaterDeathSound, grassEaterImage } from "./resources.js";
 import { GrassEaterRotate, GrassEaterSpeed } from "./timing.js";
 
 const height = 30;
@@ -16,7 +16,7 @@ export class GrassEater extends LaserDestructablePiece{
     constructor(){
         super(height,width, GrassEaterSpeed, GrassEaterRotate);
         this.PieceImage = grassEaterImage;
-        this.LaserHitSound = gruntzSound;
+        this.LaserHitSound = GrassEaterDeathSound;
     }
 
     target_plant : GoodGrass = null;

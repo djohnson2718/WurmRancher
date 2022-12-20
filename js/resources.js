@@ -1,9 +1,10 @@
 export const BlazeOn = new Audio("../Resources/DST-BlazeOn.mp3");
-export const InCircles = new Audio();
-export const RockX = new Audio();
+export const InCircles = new Audio("../Resources/DST-InCircles.mp3");
+export const RockX = new Audio("../Resources/DST-RockX.mp3");
 export const laserSound = new Audio("../Resources/39459__the-bizniss__laser.wav");
+export const GrassEaterDeathSound = new Audio("../Resources/zapsplat_cartoon_wet_squelchy_pop_high_pitched_76642.mp3");
 export const dragonSound = new Audio("../Resources/4504__noisecollector__dragon1.wav");
-export const gruntzSound = new Audio("../Resources/104697__grunz__grunz-ow.wav");
+//export const gruntzSound = new Audio("../Resources/104697__grunz__grunz-ow.wav");
 export const painsSound = new Audio("../Resources/76972__michel88__pains.wav");
 export const pig_gruntSound = new Audio("../Resources/76973__michel88__piggrunt1.wav");
 export const electic_buzz = new Audio("../Resources/55829__sergenious__electric.wav");

@@ -46,7 +46,7 @@ const plant_cols = Math.floor(playingFieldWidth/plant_size)+1;
 
 
 
-var soundEffectsOn: boolean = false;
+var soundEffectsOn: boolean = true;
 var numberOfGoodGrass: number;
 var rancherAccuracy: number;
 var shotsHit: number;
@@ -535,10 +535,13 @@ function LoadLevel(level : Level){
     if (CurrentLevel != null)
         CurrentLevel.Quit();
 
+    if (CurrentLevel)
+        CurrentLevel.theme.music.pause();
     CurrentLevel = level;
     InitializeGameElements();
     level.InitializeLevel();
     console.log("fininish level.init ", GameElements.length);
+    level.theme.music.play();
     //canvas.setAttribute("backgroundImsage", level.theme.background);
 
     //MainBackGroundMusicME.Stop();

@@ -3,6 +3,7 @@ export class Theme {
     constructor(music, background) {
         this.background = background;
         this.music = music;
+        this.music.loop = true;
     }
 }
 export const Mud = new Theme(RockX, SoilMudBackground);
