@@ -632,3 +632,13 @@ export function PlaySound(sound:HTMLAudioElement){
         sound.play();
     }
 }
+
+export function WeedRatio() : number{
+    let count = 0;
+    for (let i = 0; i < plant_cols; i++)
+        for (let j = 0; j < plant_rows; j++)
+            if (!(Plants[i][j] === null) && Plants[i][j].Name=="Weed")
+                count +=1;
+    return count/plant_cols/plant_rows;
+
+}

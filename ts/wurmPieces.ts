@@ -79,7 +79,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
     {
         if (this.isStunned)
         {
-            this.stun_counter--;
+            this.stun_counter-=time_step;
             ImagePiece.prototype.Update.call(this);
             return;
         }

@@ -45,7 +45,7 @@ export class WurmHead extends LaserHitable {
     }
     Update(time_step) {
         if (this.isStunned) {
-            this.stun_counter--;
+            this.stun_counter -= time_step;
             ImagePiece.prototype.Update.call(this);
             return;
         }

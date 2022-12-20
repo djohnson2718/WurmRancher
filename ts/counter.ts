@@ -1,6 +1,6 @@
 import { GameElement } from "./gameElement.js";
 
-export abstract class Counter implements GameElement{
+export class Counter implements GameElement{
     textbox : HTMLLabelElement;
     label : string;
 
@@ -13,8 +13,8 @@ export abstract class Counter implements GameElement{
         this.textbox.textContent = this.label + ": " + v;
     }
 
-    abstract Update(timeStep :number): void;
-    abstract Name : string;
-    abstract Layer : number;
+    Update(timeStep :number): void{}
+    Name = "none";
+    Layer =-1;
 
 }
