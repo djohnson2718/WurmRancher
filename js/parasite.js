@@ -20,7 +20,7 @@ export class Parasite extends LaserDestructablePiece {
                     this.CenterX = this.target_wurm_piece.CenterX;
                     this.CenterY = this.target_wurm_piece.CenterY;
                     this.Angle = this.target_wurm_piece.angle;
-                    this.target_wurm_piece.ParasiteBite();
+                    this.target_wurm_piece.ParasiteBite(time_step);
                     if (this.target_wurm_piece.IsEatenByParasite) {
                         //PlaySound(parasiteEatSound);
                         this.target_wurm_piece = null;
@@ -30,7 +30,7 @@ export class Parasite extends LaserDestructablePiece {
                 }
                 else {
                     this.SetDestination(this.target_wurm_piece.CenterX, this.target_wurm_piece.CenterY);
-                    if (DistanceObjects(this, this.target_wurm_piece) <= this.Width / 2) {
+                    if (DistanceObjects(this, this.target_wurm_piece) <= this.Width / 3) {
                         if (this.target_wurm_piece.Available(true)) {
                             this.is_attached = true;
                             this.resting = true;

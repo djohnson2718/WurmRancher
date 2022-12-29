@@ -1,5 +1,5 @@
 //import { relWurmHeadRotate } from "./timing.js";
-import {AddCreature} from "./gameControl.js";
+import {AddCreature, RemovePiece} from "./gameControl.js";
 import {BackAttachable, WurmBodyPiece, WurmHead} from "./wurmPieces.js";
 
 const food_per_segment = 4;
@@ -32,6 +32,18 @@ export class Wurm {
 
     get Length() :number{
         return this.length;
+    }
+
+    pieceEatenByParasite(w:WurmBodyPiece){
+        if (w.Follower != null)
+        {
+            w.Follower.Leader = w.Leader;
+        }
+        if (w == this.tail)
+            this.tail = w.Leader;
+
+        RemovePiece(w);
+        length--;
     }
 
     head_Eats(head : WurmHead) :void

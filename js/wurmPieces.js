@@ -108,14 +108,16 @@ export class WurmBodyPiece extends ImagePiece {
         }
         this.angle += this.radians_per_ms * time_step * Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
         if (this.total_bites_suffered > 0 && this.total_bites_suffered < ParasiteKillTime)
-            this.total_bites_suffered--;
+            this.total_bites_suffered -= time_step;
         this.CenterX = this.Leader.backAttachX + radius * Math.cos(this.angle);
         this.CenterY = this.Leader.backAttachY + radius * Math.sin(this.angle);
         if (this.IsEatenByParasite) {
-            this.fade_time_elapsed++;
-            if (this.fade_time_elapsed > CreatureDeathFadeTime) { }
+            this.fade_time_elapsed += time_step;
+            if (this.fade_time_elapsed > CreatureDeathFadeTime) {
+                this.head.wurmObject.pieceEatenByParasite(this);
+            }
             //EatenByParasite(this, new EventArgs());
-            //this.Opacity = (double)(Timing.CreatureDeathFadeTime - this.fade_time_elapsed) / Timing.CreatureDeathFadeTime;               
+            this.Opacity = (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime;
         }
         super.Update(time_step);
     }
@@ -127,8 +129,8 @@ export class WurmBodyPiece extends ImagePiece {
             throw new DOMException("something is wrong... everything that hunts wurm pieces cares about dibs");
         return (this.total_bites_suffered == 0);
     }
-    ParasiteBite() {
-        this.total_bites_suffered += 2; //we will decrement them on update as well.            
+    ParasiteBite(timeStep) {
+        this.total_bites_suffered += 2 * timeStep; //we will decrement them on update as well.            
     }
 }
 //export interface EatEventData extends EventArgs {

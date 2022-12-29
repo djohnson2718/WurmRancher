@@ -177,7 +177,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
             
             if (this.total_bites_suffered > 0  && this.total_bites_suffered < ParasiteKillTime)
-                this.total_bites_suffered--;
+                this.total_bites_suffered-= time_step;
 
             
             this.CenterX = this.Leader.backAttachX + radius * Math.cos(this.angle);
@@ -185,19 +185,21 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
             if (this.IsEatenByParasite)
             {                
-                this.fade_time_elapsed++;
+                this.fade_time_elapsed+=time_step;
 
-                if (this.fade_time_elapsed > CreatureDeathFadeTime){}
+                if (this.fade_time_elapsed > CreatureDeathFadeTime){
+                    this.head.wurmObject.pieceEatenByParasite(this);
+                }
                     //EatenByParasite(this, new EventArgs());
 
-                //this.Opacity = (double)(Timing.CreatureDeathFadeTime - this.fade_time_elapsed) / Timing.CreatureDeathFadeTime;               
+                this.Opacity = (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime;               
             }
            super.Update(time_step);
         }
 
 
         get IsEatenByParasite():boolean {
-                return (this.total_bites_suffered >= ParasiteKillTime);
+            return (this.total_bites_suffered >= ParasiteKillTime);
         }
 
         Available(care_about_dibs:boolean) : boolean 
@@ -207,9 +209,9 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
             return (this.total_bites_suffered == 0);            
         }
 
-        ParasiteBite() :void
+        ParasiteBite(timeStep : number) :void
         {
-            this.total_bites_suffered+=2;    //we will decrement them on update as well.            
+            this.total_bites_suffered+=2*timeStep;    //we will decrement them on update as well.            
         }
 
         

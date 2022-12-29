@@ -38,7 +38,7 @@ export class ParasiteLevel extends TimedLevel{
             AddCreatureOnEdge(new Feeder());
         if (this.IntervalTimeIsUp(8000))
             AddCreatureOnEdge(new Parasite());
-        if (this.IntervalTimeIsUp(4))
+        if (this.IntervalTimeIsUp(4000))
             GrowRandomWeed();
 
         if (this.theWurm.Length >= this.length_to_win)

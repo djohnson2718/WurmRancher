@@ -1,5 +1,5 @@
 //import { relWurmHeadRotate } from "./timing.js";
-import { AddCreature } from "./gameControl.js";
+import { AddCreature, RemovePiece } from "./gameControl.js";
 import { WurmBodyPiece, WurmHead } from "./wurmPieces.js";
 const food_per_segment = 4;
 export class Wurm {
@@ -22,6 +22,15 @@ export class Wurm {
     }
     get Length() {
         return this.length;
+    }
+    pieceEatenByParasite(w) {
+        if (w.Follower != null) {
+            w.Follower.Leader = w.Leader;
+        }
+        if (w == this.tail)
+            this.tail = w.Leader;
+        RemovePiece(w);
+        length--;
     }
     head_Eats(head) {
         if (!head.feeder_target.eaten) {
