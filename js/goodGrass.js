@@ -15,7 +15,7 @@ export class GoodGrass extends EdiblePlant {
         this.mature = starts_mature;
     }
     get Available() {
-        console.log(this.mature, this.dibs);
+        //console.log(this.mature, this.dibs);
         return this.mature && this.dibs == 0;
     }
     Update(time_step) {

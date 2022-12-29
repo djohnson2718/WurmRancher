@@ -135,7 +135,7 @@ function startGame(){
 var previousTimeStamp : number;
 
 function GameLoopMethod(timestamp: number):void{
-    console.log(timestamp, Date.now());
+    //console.log(timestamp, Date.now());
     if (game_running)
     {
         let timeStep : number;
@@ -143,6 +143,8 @@ function GameLoopMethod(timestamp: number):void{
             timeStep = timestamp - previousTimeStamp;
         else
             timeStep = 0;
+        
+        console.log("Frame time", timeStep);
 
         previousTimeStamp = timestamp;
 
@@ -159,7 +161,7 @@ function GameLoopMethod(timestamp: number):void{
 
         for (const element of GameElements){
             //console.log("calling update" + String(element));
-            console.log(element);
+            //console.log(element);
             element.Update(timeStep);
         }
 
@@ -260,7 +262,7 @@ function MouseDown(e :MouseEvent){
                 NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX,e.offsetY));
                 PlaySound(laserSound);
                 for (let ldp of LaserHitables){
-                    console.log("check laser hits")
+                    //console.log("check laser hits")
                     ldp.CheckLaserHit(e.offsetX,e.offsetY);
                 }
             break;
@@ -363,7 +365,7 @@ export function RandomYonField(){
 
 
 export function AddCreature(e:OnTheFieldPiece & GameElement, startX : number, startY : number):void{
-    console.log("adding creatrue", e);
+    //console.log("adding creatrue", e);
     NewStuff.add(e);
     if ("CheckLaserHit" in e)
         NewLaserHitables.add(e as LaserHitable);
@@ -644,4 +646,21 @@ export function WeedRatio() : number{
                 count +=1;
     return count/plant_cols/plant_rows;
 
+}
+
+export function FillWithGrass() :void{
+    for (var col = 0;  col < plant_cols; col ++)
+        for (var row = 0; row < plant_rows; row ++){
+            Plants[col][row] = new GoodGrass(col,row, true);
+            NewStuff.add(Plants[col][row]);
+        }
+            
+}
+
+export function HasGoodGrass() : boolean {
+    for (var col = 0;  col < plant_cols; col ++)
+        for (var row = 0; row < plant_rows; row ++)
+            if (!(Plants[col][row] ===  null) && Plants[col][row].Name == "GoodGrass")
+                return true;
+    return false;
 }

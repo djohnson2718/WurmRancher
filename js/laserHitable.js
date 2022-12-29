@@ -14,6 +14,8 @@ export class LaserHitable extends MovesToDestinationControl {
             console.log("it was a hit!");
             this.hit = true;
             //report shot event
+            if (this.Shot)
+                this.Shot();
         }
     }
 }

@@ -86,13 +86,14 @@ function startGame() {
 }
 var previousTimeStamp;
 function GameLoopMethod(timestamp) {
-    console.log(timestamp, Date.now());
+    //console.log(timestamp, Date.now());
     if (game_running) {
         let timeStep;
         if (previousTimeStamp)
             timeStep = timestamp - previousTimeStamp;
         else
             timeStep = 0;
+        console.log("Frame time", timeStep);
         previousTimeStamp = timestamp;
         context.drawImage(CurrentLevel.theme.background, 0, 0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
@@ -103,7 +104,7 @@ function GameLoopMethod(timestamp) {
         CurrentLevel.Update(timeStep);
         for (const element of GameElements) {
             //console.log("calling update" + String(element));
-            console.log(element);
+            //console.log(element);
             element.Update(timeStep);
         }
         for (const element of NewStuff) {
@@ -186,7 +187,7 @@ function MouseDown(e) {
                 NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX, e.offsetY));
                 PlaySound(laserSound);
                 for (let ldp of LaserHitables) {
-                    console.log("check laser hits");
+                    //console.log("check laser hits")
                     ldp.CheckLaserHit(e.offsetX, e.offsetY);
                 }
                 break;
@@ -270,7 +271,7 @@ export function RandomYonField() {
     return Math.floor(Math.random() * playingFieldHeight);
 }
 export function AddCreature(e, startX, startY) {
-    console.log("adding creatrue", e);
+    //console.log("adding creatrue", e);
     NewStuff.add(e);
     if ("CheckLaserHit" in e)
         NewLaserHitables.add(e);
@@ -497,5 +498,19 @@ export function WeedRatio() {
             if (!(Plants[i][j] === null) && Plants[i][j].Name == "Weed")
                 count += 1;
     return count / plant_cols / plant_rows;
+}
+export function FillWithGrass() {
+    for (var col = 0; col < plant_cols; col++)
+        for (var row = 0; row < plant_rows; row++) {
+            Plants[col][row] = new GoodGrass(col, row, true);
+            NewStuff.add(Plants[col][row]);
+        }
+}
+export function HasGoodGrass() {
+    for (var col = 0; col < plant_cols; col++)
+        for (var row = 0; row < plant_rows; row++)
+            if (!(Plants[col][row] === null) && Plants[col][row].Name == "GoodGrass")
+                return true;
+    return false;
 }
 //# sourceMappingURL=gameControl.js.map

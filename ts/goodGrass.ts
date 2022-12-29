@@ -23,7 +23,7 @@ export class GoodGrass extends EdiblePlant {
     }
 
     get Available() : boolean {
-        console.log(this.mature, this.dibs);
+        //console.log(this.mature, this.dibs);
         return this.mature && this.dibs == 0;
     }
 
