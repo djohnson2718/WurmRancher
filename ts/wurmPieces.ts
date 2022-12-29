@@ -128,6 +128,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
     {
         Layer = 4;
+        Name = "WurmBody";
         Leader :BackAttachable;
         head :WurmHead;
 
@@ -211,7 +212,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
             this.total_bites_suffered+=2;    //we will decrement them on update as well.            
         }
 
-        get Name(){return "Wurm Body";}
+        
     }
 
 //export interface EatEventData extends EventArgs {

@@ -83,6 +83,7 @@ export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);
         this.Layer = 4;
+        this.Name = "WurmBody";
         this.radians_per_ms = WurmBodyRotate; //be careful here!!!!
         //public event EventHandler<EventArgs> EatenByParasite;
         this.fade_time_elapsed = 0;
@@ -129,7 +130,6 @@ export class WurmBodyPiece extends ImagePiece {
     ParasiteBite() {
         this.total_bites_suffered += 2; //we will decrement them on update as well.            
     }
-    get Name() { return "Wurm Body"; }
 }
 //export interface EatEventData extends EventArgs {
 //    creatureEaten: Feeder;
