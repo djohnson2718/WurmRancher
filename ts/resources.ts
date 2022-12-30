@@ -33,14 +33,18 @@ SoilCrackedBackground.src = "../Resources/SoilCracked0086_7_S.jpg";
 
 export const parasiteImage = new Image();
 parasiteImage.src = "../Resources/parasite.png";
-export const big_monster = new Image();
-big_monster.src = "../Resources/big_monster.png";
+export const big_monsterImage = new Image();
+big_monsterImage.src = "../Resources/big_monster.png";
 export const grassEaterImage = new Image();
 grassEaterImage.src = "../Resources/grass_eater.png";
 export const rancherImage = new Image(); 
 rancherImage.src =  "../Resources/rancher.png";
 export const monsterImage = new Image();
 monsterImage.src = "../Resources/monster.png";
+export const poisonWeedImage = new Image();
+poisonWeedImage.src = "../Resources/poison_weed.png";
+export const poisonWeedSprayedImage = new Image();
+poisonWeedSprayedImage.src = "../Resources/poison_weed_sprayed.png";
 
 
 
@@ -78,9 +82,7 @@ bodyImage.src = "../Resources/wurm_body.png";
   <data name="monster_eye_shot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\monster_eye_shot.wav;System.IO.MemoryStream, mscorlib, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
   </data>
-  <data name="poison_weed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\poison_weed.wav;System.IO.MemoryStream, mscorlib, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
-  </data>
+  
   <data name="poison_weed_sprayed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\poison_weed_sprayed.wav;System.IO.MemoryStream, mscorlib, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
   </data>

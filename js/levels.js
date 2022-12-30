@@ -1,8 +1,9 @@
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { MonsterLevel } from "./monsterLevel.js";
 import { ParasiteLevel } from "./parasiteLevel.js";
+import { PoisonWeedLevel } from "./poisonWeedLevel.js";
 import { ProtectTheGrassLevel } from "./protectTheGrassLevel.js";
-import { Cracked, Mud, Pebbles, RedPebbles, Snow } from "./theme.js";
+import { Cracked, Mud, Pebbles, RedPebbles, Sand, Snow } from "./theme.js";
 import { WeedLevel } from "./weedLevel.js";
 export var Levels;
 Levels = [
@@ -10,6 +11,7 @@ Levels = [
     new MonsterLevel(Pebbles),
     new WeedLevel(Snow),
     new ParasiteLevel(Cracked),
-    new ProtectTheGrassLevel(Mud)
+    new ProtectTheGrassLevel(Mud),
+    new PoisonWeedLevel(Sand)
 ];
 //# sourceMappingURL=levels.js.map

@@ -3,6 +3,7 @@ import { IntroDemo } from "./introDemo.js";
 import { LaserBeam } from "./laserBeam.js";
 import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
+import { PoisonWeed } from "./poisonWeed.js";
 import { Rancher } from "./rancher.js";
 import { laserSound } from "./resources.js";
 import { Weed } from "./weed.js";
@@ -392,10 +393,10 @@ export function GrowWeed(i, j) {
     }
 }
 export function GrowPoisonWeed(i, j) {
-    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+    if (i < 0 || j < 0 || i >= plant_cols || j >= plant_rows)
         return;
     if (Plants[i][j] === null) {
-        //Plants[i][j] = new PoisonWeed(this, i, j);
+        Plants[i][j] = new PoisonWeed(i, j);
         NewStuff.add(Plants[i][j]);
     }
 }

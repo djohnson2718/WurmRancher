@@ -10,7 +10,7 @@ export class TimedLevel extends Level{
 
     //timer: Timer;
 
-    constructor(theme:Theme, time_allowed) {
+    constructor(theme:Theme, time_allowed:number) {
         super(theme);
         this.time_allowed = time_allowed;
     }

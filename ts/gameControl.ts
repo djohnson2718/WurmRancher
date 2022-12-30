@@ -1,13 +1,7 @@
-//import { AreaEffectCircle } from "../js/areaEffectCircle.js";
-import { time } from "console";
 import { Counter } from "./counter.js";
 import { EdiblePlant } from "./ediblePlant.js";
-import { Feeder } from "./feeder.js";
-import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
-import { GrassEater } from "./grassEater.js";
-import { ImagePiece } from "./imagePiece.js";
 import { IntroDemo } from "./introDemo.js";
 import { LaserBeam } from "./laserBeam.js";
 import { LaserHitable } from "./laserHitable.js";
@@ -16,13 +10,12 @@ import { Levels } from "./levels.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
+import { PoisonWeed } from "./poisonWeed.js";
 import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
 import { laserSound } from "./resources.js";
-import { Theme } from "./theme.js";
-import * as timing from "./timing.js";
 import { Weed } from "./weed.js";
-import { Wurm } from "./wurm.js";
+
 
 
  
@@ -513,11 +506,11 @@ export function GrowWeed(i :number, j :number) :void
 
 export function GrowPoisonWeed(i :number, j:number) :void
 {
-    if (i < 0 || j < 0 || i >= this.plant_cols || j >= this.plant_rows)
+    if (i < 0 || j < 0 || i >= plant_cols || j >= plant_rows)
         return;
     if (Plants[i][j] === null)
     {
-        //Plants[i][j] = new PoisonWeed(this, i, j);
+        Plants[i][j] = new PoisonWeed(i, j);
         NewStuff.add(Plants[i][j]);
     }
 }

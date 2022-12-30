@@ -11,7 +11,6 @@ export abstract class LaserHitable extends MovesToDestinationControl{
     CheckLaserHit(x: number, y: number): void {
         console.log("in check laser hit");
         if (!this.hit && ( x >= this.x && (x - this.x) <= this.Width) &&  y  >= this.y && (y-this.y) < this.Height){
-            //Play die sound
 
             if (this.LaserHitSound)
                 PlaySound(this.LaserHitSound);
