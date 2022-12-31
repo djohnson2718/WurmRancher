@@ -1,7 +1,7 @@
-import { RandomXonField, RandomYonField, RemovePiece } from "./gameControl";
+import { DestroyGoodThings, GrowWeedAtPoint, RandomXonField, RandomYonField, RemovePiece } from "./gameControl";
 import { LaserHitable } from "./laserHitable.js";
 import { big_monsterImage } from "./resources";
-import { BigMonsterRotate, BigMonsterSpeed, BigMonsterStompTime, CreatureDeathFadeTime } from "./timing";
+import { BigMonsterRotate, BigMonsterSpeed, BigMonsterStompTime, BigMonsterWeedSpawnTime, CreatureDeathFadeTime } from "./timing";
 
 const height = 90;
 const width = 90;

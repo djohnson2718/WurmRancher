@@ -657,3 +657,11 @@ export function HasGoodGrass() : boolean {
                 return true;
     return false;
 }
+
+export function GrowWeedAtPoint(x:number,y:number){
+    GrowWeed(ClosestPlantIndexX(x,y), ClosestPlantIndexY(x,y));
+}
+
+export function DestroyGoodThings(x : number, y:number, radius : number){
+    //TODO
+}

@@ -514,4 +514,10 @@ export function HasGoodGrass() {
                 return true;
     return false;
 }
+export function GrowWeedAtPoint(x, y) {
+    GrowWeed(ClosestPlantIndexX(x, y), ClosestPlantIndexY(x, y));
+}
+export function DestroyGoodThings(x, y, radius) {
+    //TODO
+}
 //# sourceMappingURL=gameControl.js.map
