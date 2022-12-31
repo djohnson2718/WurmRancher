@@ -12,7 +12,7 @@ const eyeXs = [10, 10, 10];
 const eyeYs = [10, 45, 80];
 export class BigMonster extends LaserHitable {
     constructor() {
-        super(height, width, BigMonsterSpeed / 4, BigMonsterRotate);
+        super(height, width, BigMonsterSpeed, BigMonsterRotate);
         this.Layer = 3;
         this.Name = "BigMonster";
         this.eyesShot = [false, false, false];

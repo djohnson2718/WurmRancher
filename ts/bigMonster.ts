@@ -20,7 +20,7 @@ export class BigMonster extends LaserHitable{
     eyesShot = [false, false, false];
 
     constructor(){
-        super(height,width,BigMonsterSpeed/4, BigMonsterRotate);
+        super(height,width,BigMonsterSpeed, BigMonsterRotate);
         this.PieceImage = big_monsterImage;
     }
 

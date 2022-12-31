@@ -270,7 +270,7 @@ function MouseDown(e :MouseEvent){
                     if (isHit)
                         shotsHit +=1;
                 }
-                
+
             break;
             case ToolType.Spray:
                 if (DistanceClickToPiece(e, theRancher) > sprayRange)
@@ -565,6 +565,7 @@ function LoadLevel(level : Level){
         SetToolSeed();
 
     game_running = true;
+    infoPar.textContent = level.QuickObjectives;
     CloseLevelMenu();
     previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);

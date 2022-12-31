@@ -439,6 +439,7 @@ function LoadLevel(level) {
     else
         SetToolSeed();
     game_running = true;
+    infoPar.textContent = level.QuickObjectives;
     CloseLevelMenu();
     previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);
