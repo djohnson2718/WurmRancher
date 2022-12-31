@@ -15,6 +15,7 @@ import { PoisonWeed } from "./poisonWeed.js";
 import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
 import { laserSound, squishSound } from "./resources.js";
+import { GameCoolDownTime } from "./timing.js";
 import { Weed } from "./weed.js";
 
 
@@ -127,10 +128,11 @@ function startGame(){
 }
 
 var previousTimeStamp : number;
+var game_cool_down =0;
 
 function GameLoopMethod(timestamp: number):void{
     //console.log(timestamp, Date.now());
-    if (game_running)
+    if (game_running || game_cool_down < GameCoolDownTime)
     {
         let timeStep : number;
         if (previousTimeStamp)
@@ -140,7 +142,10 @@ function GameLoopMethod(timestamp: number):void{
         
         //console.log("Frame time", timeStep);
 
+
         previousTimeStamp = timestamp;
+
+
 
         context.drawImage(CurrentLevel.theme.background,0,0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
@@ -151,7 +156,11 @@ function GameLoopMethod(timestamp: number):void{
         if (laser_cool_down_counter > 0)
             laser_cool_down_counter = Math.min(0, laser_cool_down_counter-timeStep);
 
-        CurrentLevel.Update(timeStep);
+ 
+        if (game_running)
+            CurrentLevel.Update(timeStep);
+        else
+            game_cool_down += timeStep;
 
         for (const element of GameElements){
             //console.log("calling update" + String(element));
@@ -214,6 +223,17 @@ function GameLoopMethod(timestamp: number):void{
         for(const element of NewLaserHitables)
             LaserHitables.push(element);
         NewLaserHitables.clear();
+
+        if (!game_running){
+            context.globalAlpha = 0.5;
+            context.fillStyle = "white";
+            context.fillRect(0,0,playingFieldWidth,playingFieldHeight);
+            context.globalAlpha = 1;
+            context.textAlign = "center";
+            context.font= "30px sans";
+            context.fillStyle = "black";
+            context.fillText(result_message, playingFieldWidth/2, playingFieldHeight -70);
+        }
 
         window.requestAnimationFrame(GameLoopMethod);
     }
@@ -486,13 +506,16 @@ export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, pre
     return closest;
 }
 
+var result_message : string;
 export function ReportVictory(message : String) : void{
     infoPar.textContent = "Victory: " + message;
+    result_message = "Victory! " + message;
     game_running = false;
 }
 
 export function ReportDefeat(message :String) :void{
     infoPar.textContent = "Defeat: " + message;
+    result_message = "Defeat! " + message;
     game_running = false;
 }
 
@@ -564,6 +587,7 @@ function LoadLevel(level : Level){
     else
         SetToolSeed();
 
+    game_cool_down = 0;
     game_running = true;
     infoPar.textContent = level.QuickObjectives;
     CloseLevelMenu();

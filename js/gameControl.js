@@ -6,6 +6,7 @@ import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plan
 import { PoisonWeed } from "./poisonWeed.js";
 import { Rancher } from "./rancher.js";
 import { laserSound, squishSound } from "./resources.js";
+import { GameCoolDownTime } from "./timing.js";
 import { Weed } from "./weed.js";
 var theRancher;
 const playingFieldWidth = 839;
@@ -86,9 +87,10 @@ function startGame() {
     LoadLevel(new IntroDemo()); //chagne to intro
 }
 var previousTimeStamp;
+var game_cool_down = 0;
 function GameLoopMethod(timestamp) {
     //console.log(timestamp, Date.now());
-    if (game_running) {
+    if (game_running || game_cool_down < GameCoolDownTime) {
         let timeStep;
         if (previousTimeStamp)
             timeStep = timestamp - previousTimeStamp;
@@ -102,7 +104,10 @@ function GameLoopMethod(timestamp) {
         //this.elapsed_time++;
         if (laser_cool_down_counter > 0)
             laser_cool_down_counter = Math.min(0, laser_cool_down_counter - timeStep);
-        CurrentLevel.Update(timeStep);
+        if (game_running)
+            CurrentLevel.Update(timeStep);
+        else
+            game_cool_down += timeStep;
         for (const element of GameElements) {
             //console.log("calling update" + String(element));
             //console.log(element);
@@ -154,6 +159,16 @@ function GameLoopMethod(timestamp) {
         for (const element of NewLaserHitables)
             LaserHitables.push(element);
         NewLaserHitables.clear();
+        if (!game_running) {
+            context.globalAlpha = 0.5;
+            context.fillStyle = "white";
+            context.fillRect(0, 0, playingFieldWidth, playingFieldHeight);
+            context.globalAlpha = 1;
+            context.textAlign = "center";
+            context.font = "30px sans";
+            context.fillStyle = "black";
+            context.fillText(result_message, playingFieldWidth / 2, playingFieldHeight - 70);
+        }
         window.requestAnimationFrame(GameLoopMethod);
     }
 }
@@ -379,12 +394,15 @@ export function GetClosestPrey(to, care_about_dibs, preyName) {
     //console.log("found",closest);
     return closest;
 }
+var result_message;
 export function ReportVictory(message) {
     infoPar.textContent = "Victory: " + message;
+    result_message = "Victory! " + message;
     game_running = false;
 }
 export function ReportDefeat(message) {
     infoPar.textContent = "Defeat: " + message;
+    result_message = "Defeat! " + message;
     game_running = false;
 }
 export function ShowMessage(message) {
@@ -438,6 +456,7 @@ function LoadLevel(level) {
         SetToolLaser();
     else
         SetToolSeed();
+    game_cool_down = 0;
     game_running = true;
     infoPar.textContent = level.QuickObjectives;
     CloseLevelMenu();

@@ -19,7 +19,7 @@ export const WurmBodyRotate = 200 / 1000 * Math.PI / 180;
 export const ParasiteRotate = 300 / 1000 * Math.PI / 180;
 export const BigMonsterRotate = 130 / 1000 * Math.PI / 180;
 export const BigMonsterAngryRotate = 270 / 1000 * Math.PI / 180;
-//In mili seconds, times multiplier
+//In mili seconds
 export const GrassGrowTime = 4000;
 export const EatGrassTime = 1000;
 export const WurmStunTime = 2000;
@@ -29,7 +29,8 @@ export const ParasiteKillTime = 2000;
 export const BigMonsterTantrumTime = 2000;
 export const BigMonsterStompTime = 250;
 export const BigMonsterWeedSpawnTime = 750;
-//In seconds, no multiplier
+//In milliseconds, no multiplier
 export const LaserFadeTime = 250;
 export const CreatureDeathFadeTime = 1000;
+export const GameCoolDownTime = 1100;
 //# sourceMappingURL=timing.js.map
