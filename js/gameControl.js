@@ -21,10 +21,10 @@ var Plants = new Array();
 const plant_rows = Math.floor(playingFieldHeight / plant_size) + 1; //probs these are names wrong, but its ok
 const plant_cols = Math.floor(playingFieldWidth / plant_size) + 1;
 var soundEffectsOn = true;
-var numberOfGoodGrass;
-var rancherAccuracy;
-var shotsHit;
-var shotsFired;
+//var numberOfGoodGrass: number;
+//var rancherAccuracy: number;
+export var shotsHit;
+export var shotsFired;
 var infoPar;
 var seedPar;
 var sprayPar;
@@ -187,9 +187,18 @@ function MouseDown(e) {
                     return;
                 NewStuff.add(new LaserBeam(theRancher.CenterX, theRancher.CenterY, e.offsetX, e.offsetY));
                 PlaySound(laserSound);
+                let isHit = false;
+                let hitWurmHead = false;
                 for (let ldp of LaserHitables) {
                     //console.log("check laser hits")
-                    ldp.CheckLaserHit(e.offsetX, e.offsetY);
+                    let hitLdp = ldp.CheckLaserHit(e.offsetX, e.offsetY);
+                    isHit = isHit || hitLdp;
+                    hitWurmHead = hitWurmHead || (hitLdp && ldp.Name == "Wurm Head");
+                }
+                if (!hitWurmHead) {
+                    shotsFired += 1;
+                    if (isHit)
+                        shotsHit += 1;
                 }
                 break;
             case ToolType.Spray:
@@ -464,7 +473,6 @@ function InitializeGameElements() {
         theRancher = new Rancher();
         AddCreature(theRancher, playingFieldWidth / 2, playingFieldHeight / 2);
         laser_cool_down_counter = 0;
-        //reset tool?
         shotsFired = 0;
         shotsHit = 0;
     }

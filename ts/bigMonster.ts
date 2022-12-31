@@ -87,7 +87,7 @@ export class BigMonster extends LaserHitable{
     }
 
 
-    CheckLaserHit(x: number, y: number): void {
+    CheckLaserHit(x: number, y: number): boolean {
         for (let i = 0; i < 3; i++){
             if (!this.eyesShot[i]){
                 let eyeCenterX0 = eyeXs[i] - width/2;
@@ -106,9 +106,11 @@ export class BigMonster extends LaserHitable{
                     }
                     else
                         this.fading = true;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
 }

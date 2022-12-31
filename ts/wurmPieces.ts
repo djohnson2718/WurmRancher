@@ -26,6 +26,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
     Layer =3;
+    Name= "Wurm Head";
     //WurmEats : Event;
 
     constructor(wurmObject :Wurm){
@@ -45,13 +46,15 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         return this.CenterY + radius*0.8*Math.sin(this.angle);
     }
     
-    CheckLaserHit(x: number, y: number): void {
-        super.CheckLaserHit(x,y);
+    CheckLaserHit(x: number, y: number): boolean {
+        let result = super.CheckLaserHit(x,y);
         if (this.hit){
             this.stun_counter = WurmStunTime;
             this.feeder_target = null;
         }
         this.hit = false;
+
+        return result;
     }
 
     Follower: WurmBodyPiece;
@@ -122,7 +125,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         super.Update(time_step);
     }
 
-    get Name(){return "Wurm Head";}
+    
 }
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey

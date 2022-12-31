@@ -88,9 +88,11 @@ export class BigMonster extends LaserHitable {
                     }
                     else
                         this.fading = true;
+                    return true;
                 }
             }
         }
+        return false;
     }
 }
 //# sourceMappingURL=bigMonster.js.map

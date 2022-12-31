@@ -15,7 +15,10 @@ export class LaserHitable extends MovesToDestinationControl {
             //report shot event
             if (this.Shot)
                 this.Shot();
+            return true;
         }
+        else
+            return false;
     }
 }
 //# sourceMappingURL=laserHitable.js.map

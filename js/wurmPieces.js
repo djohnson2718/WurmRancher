@@ -12,6 +12,7 @@ export class WurmHead extends LaserHitable {
     constructor(wurmObject) {
         super(height, width, WurmSpeed, WurmHeadRotate);
         this.Layer = 3;
+        this.Name = "Wurm Head";
         this.feeder_target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
@@ -24,12 +25,13 @@ export class WurmHead extends LaserHitable {
         return this.CenterY + radius * 0.8 * Math.sin(this.angle);
     }
     CheckLaserHit(x, y) {
-        super.CheckLaserHit(x, y);
+        let result = super.CheckLaserHit(x, y);
         if (this.hit) {
             this.stun_counter = WurmStunTime;
             this.feeder_target = null;
         }
         this.hit = false;
+        return result;
     }
     get isStunned() {
         return this.stun_counter > 0;
@@ -77,7 +79,6 @@ export class WurmHead extends LaserHitable {
         }
         super.Update(time_step);
     }
-    get Name() { return "Wurm Head"; }
 }
 export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
