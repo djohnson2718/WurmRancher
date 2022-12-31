@@ -46,4 +46,9 @@ export class GoodGrass extends EdiblePlant {
     }
 
     get Name(){return "GoodGrass";}
+
+    Spray(): void {
+        if (this.mature)
+            super.Spray();
+    }
 }

@@ -2,6 +2,7 @@ import { BigMonster } from "./bigMonster.js";
 import { Feeder } from "./feeder.js";
 import { AddCounter, AddCreatureOnEdge, GrowRandomWeed } from "./gameControl.js";
 import { GrassEater } from "./grassEater.js";
+import { Theme } from "./theme.js";
 import { TimedLevel } from "./timedLevel.js";
 import { Wurm } from "./wurm.js";
 import { WurmCounter } from "./wurmCounter.js";
@@ -12,6 +13,9 @@ export class BigMonsterLevel extends TimedLevel{
     Description = `There seems to be a new kind of creature interfering with your operation... it is huge, tramples your grass and feeders, and spreads weeds. You laser seems ineffective against his thick armor. Maybe if you shoot him in the eye it will work... but that might make him mad.  Grow your wurm to length ${this.length_to_win} to win.`;
     theWurm : Wurm;
 
+    constructor(theme:Theme){
+        super(theme, 80000);
+    }
     InitializeLevel() :void
     {
         super.InitializeLevel();
@@ -20,8 +24,12 @@ export class BigMonsterLevel extends TimedLevel{
         GrowRandomWeed();
         GrowRandomWeed();
         GrowRandomWeed();
+
+        //for testing
+        AddCreatureOnEdge(new BigMonster());
         
     }
+
 
     Update(timeStep:number) : void
     {

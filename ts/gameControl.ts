@@ -1,5 +1,6 @@
 import { Counter } from "./counter.js";
 import { EdiblePlant } from "./ediblePlant.js";
+import { Feeder } from "./feeder.js";
 import { GameElement } from "./gameElement.js";
 import { GoodGrass } from "./goodGrass.js";
 import { IntroDemo } from "./introDemo.js";
@@ -13,7 +14,7 @@ import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromInde
 import { PoisonWeed } from "./poisonWeed.js";
 import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
-import { laserSound } from "./resources.js";
+import { laserSound, squishSound } from "./resources.js";
 import { Weed } from "./weed.js";
 
 
@@ -137,7 +138,7 @@ function GameLoopMethod(timestamp: number):void{
         else
             timeStep = 0;
         
-        console.log("Frame time", timeStep);
+        //console.log("Frame time", timeStep);
 
         previousTimeStamp = timestamp;
 
@@ -285,10 +286,10 @@ function KeyPress(e:KeyboardEvent){
             SetToolLaser();
         break;
         case "x":
-            SetToolSpray();
+            if (!CurrentLevel.SeedDisabled) SetToolSpray();
         break;
         case "c":
-            SetToolSeed();
+            if (!CurrentLevel.SeedDisabled) SetToolSeed();
         break;
     }
 }
@@ -324,7 +325,7 @@ function DistanceClickToPiece(e:MouseEvent, p:OnTheFieldPiece):number{
     return Math.sqrt( (e.offsetX-p.CenterX)**2 + (e.offsetY-p.CenterY)**2 );
 }
 
-function Distance(p1: Array<number>, p2:Array<number>):number{
+export function Distance(p1: Array<number>, p2:Array<number>):number{
     return Math.sqrt( (p1[0]-p2[0])**2 + (p1[1] - p2[1])**2);
 }
 
@@ -546,8 +547,14 @@ function LoadLevel(level : Level){
     //this.GrassGrow = null;
 
     //this.QuickObjectives.Text = level.QuickObjectives;
+    if (level.SeedDisabled)
+        SetToolLaser();
+    else
+        SetToolSeed();
+
     game_running = true;
     CloseLevelMenu();
+    previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);
 }
 
@@ -632,6 +639,7 @@ export function PlaySound(sound:HTMLAudioElement){
 }
 
 export function WeedRatio() : number{
+    console.log("computing weed ratio");
     let count = 0;
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++)
@@ -663,5 +671,23 @@ export function GrowWeedAtPoint(x:number,y:number){
 }
 
 export function DestroyGoodThings(x : number, y:number, radius : number){
-    //TODO
+    for (const I of PlantSpotsInRadius(x,y, radius))
+            {
+                if (Plants[I[0]][I[1]] !== null && Plants[I[0]][I[1]].Name== "GoodGrass")
+                    RemovePlant(Plants[I[0]][I[1]]);
+            }
+
+            let squished_one = false;
+            for (const e of GameElements)
+            {
+                if (e.Name=="Feeder")
+                {
+                    let eF = (e as Feeder);
+                    if (Distance([eF.CenterX, eF.CenterY], [x,y]) <= radius)
+                        RemovePiece(eF);
+                    squished_one = true;
+                }                
+            }
+            if (squished_one)
+                PlaySound(squishSound);
 }

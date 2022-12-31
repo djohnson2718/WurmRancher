@@ -5,7 +5,7 @@ import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
 import { Rancher } from "./rancher.js";
-import { laserSound } from "./resources.js";
+import { laserSound, squishSound } from "./resources.js";
 import { Weed } from "./weed.js";
 var theRancher;
 const playingFieldWidth = 839;
@@ -94,7 +94,7 @@ function GameLoopMethod(timestamp) {
             timeStep = timestamp - previousTimeStamp;
         else
             timeStep = 0;
-        console.log("Frame time", timeStep);
+        //console.log("Frame time", timeStep);
         previousTimeStamp = timestamp;
         context.drawImage(CurrentLevel.theme.background, 0, 0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
@@ -214,10 +214,12 @@ function KeyPress(e) {
             SetToolLaser();
             break;
         case "x":
-            SetToolSpray();
+            if (!CurrentLevel.SeedDisabled)
+                SetToolSpray();
             break;
         case "c":
-            SetToolSeed();
+            if (!CurrentLevel.SeedDisabled)
+                SetToolSeed();
             break;
     }
 }
@@ -246,7 +248,7 @@ function SetToolSpray() {
 function DistanceClickToPiece(e, p) {
     return Math.sqrt(Math.pow((e.offsetX - p.CenterX), 2) + Math.pow((e.offsetY - p.CenterY), 2));
 }
-function Distance(p1, p2) {
+export function Distance(p1, p2) {
     return Math.sqrt(Math.pow((p1[0] - p2[0]), 2) + Math.pow((p1[1] - p2[1]), 2));
 }
 export function DistanceObjects(o1, o2) {
@@ -423,8 +425,13 @@ function LoadLevel(level) {
     //theCanvas.Background = level.Theme.Background;
     //this.GrassGrow = null;
     //this.QuickObjectives.Text = level.QuickObjectives;
+    if (level.SeedDisabled)
+        SetToolLaser();
+    else
+        SetToolSeed();
     game_running = true;
     CloseLevelMenu();
+    previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);
 }
 //function ClearAll() : void
@@ -493,6 +500,7 @@ export function PlaySound(sound) {
     }
 }
 export function WeedRatio() {
+    console.log("computing weed ratio");
     let count = 0;
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++)
@@ -518,6 +526,20 @@ export function GrowWeedAtPoint(x, y) {
     GrowWeed(ClosestPlantIndexX(x, y), ClosestPlantIndexY(x, y));
 }
 export function DestroyGoodThings(x, y, radius) {
-    //TODO
+    for (const I of PlantSpotsInRadius(x, y, radius)) {
+        if (Plants[I[0]][I[1]] !== null && Plants[I[0]][I[1]].Name == "GoodGrass")
+            RemovePlant(Plants[I[0]][I[1]]);
+    }
+    let squished_one = false;
+    for (const e of GameElements) {
+        if (e.Name == "Feeder") {
+            let eF = e;
+            if (Distance([eF.CenterX, eF.CenterY], [x, y]) <= radius)
+                RemovePiece(eF);
+            squished_one = true;
+        }
+    }
+    if (squished_one)
+        PlaySound(squishSound);
 }
 //# sourceMappingURL=gameControl.js.map

@@ -9,6 +9,8 @@ export class ProtectTheGrassLevel extends Level{
     Description = `We have a nice field of grass all ready, but there is a massive herd of grass eaters coming in.  Blast all ${this.num_eaters} of them before the grass is all gone!`;
     QuickObjectives = `Shoot all ${this.num_eaters} grasss eaters before the grass is gone.`;
 
+    SeedDisabled = true;
+
     eaters_arrived:number;
     eaters_shot:number;
 

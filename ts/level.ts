@@ -20,8 +20,8 @@ export class Level{
     NoUserControl = false;
     Version = "1";
     QuickObjectives = "objectives unknown";
-    SeedDisabled = "false";
-    MakeFeedersAtWill = "false";
+    SeedDisabled = false;
+    MakeFeedersAtWill = false;
     elapsed_time : number;
     last_time_step :number;
     

@@ -9,7 +9,7 @@ export abstract class LaserHitable extends MovesToDestinationControl{
     Shot : Function;
 
     CheckLaserHit(x: number, y: number): void {
-        console.log("in check laser hit");
+        console.log("in check laser hit",x,y);
         if (!this.hit && ( x >= this.x && (x - this.x) <= this.Width) &&  y  >= this.y && (y-this.y) < this.Height){
 
             if (this.LaserHitSound)

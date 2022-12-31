@@ -18,8 +18,8 @@ export class Level {
         this.NoUserControl = false;
         this.Version = "1";
         this.QuickObjectives = "objectives unknown";
-        this.SeedDisabled = "false";
-        this.MakeFeedersAtWill = "false";
+        this.SeedDisabled = false;
+        this.MakeFeedersAtWill = false;
         this.theme = theme;
         // load saved data?
     }

@@ -6,8 +6,8 @@ import { TimedLevel } from "./timedLevel.js";
 import { Wurm } from "./wurm.js";
 import { WurmCounter } from "./wurmCounter.js";
 export class BigMonsterLevel extends TimedLevel {
-    constructor() {
-        super(...arguments);
+    constructor(theme) {
+        super(theme, 80000);
         this.length_to_win = 12;
         this.Name = "Monster Boss";
         this.Description = `There seems to be a new kind of creature interfering with your operation... it is huge, tramples your grass and feeders, and spreads weeds. You laser seems ineffective against his thick armor. Maybe if you shoot him in the eye it will work... but that might make him mad.  Grow your wurm to length ${this.length_to_win} to win.`;
@@ -19,6 +19,8 @@ export class BigMonsterLevel extends TimedLevel {
         GrowRandomWeed();
         GrowRandomWeed();
         GrowRandomWeed();
+        //for testing
+        AddCreatureOnEdge(new BigMonster());
     }
     Update(timeStep) {
         super.Update(timeStep);

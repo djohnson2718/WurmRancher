@@ -13,6 +13,7 @@ export class WeedLevel extends TimedLevel{
     Name = "Weed Invasion!";
     length_to_win = 10;
     ratio_to_win = .20;
+    weed_ratio :number;
 
     theWurm : Wurm;
     WeedDensityCounter : Counter;
@@ -31,7 +32,8 @@ export class WeedLevel extends TimedLevel{
         AddCounter(this.WeedDensityCounter);
         while (WeedRatio() < .4)
             GrowRandomWeed();
-        this.WeedDensityCounter.Value = WeedRatio().toFixed(2);
+        this.weed_ratio = WeedRatio();
+        this.WeedDensityCounter.Value = (this.weed_ratio*100).toFixed(1) + "%";
     }
 
     Update(time_step: number): void {
@@ -45,13 +47,14 @@ export class WeedLevel extends TimedLevel{
             AddCreatureOnEdge(new Feeder());
         if (this.IntervalTimeIsUp(15000))
             AddCreatureOnEdge(new Monster());
-
-        if ((this.theWurm.Length >= this.length_to_win) && this.IntervalTimeIsUp(500))
-        {
-            let weed_ratio = WeedRatio();
-            this.WeedDensityCounter.Value =  WeedRatio().toFixed(2);
-            if (weed_ratio <= this.ratio_to_win)
-                this.Victory();
+        
+        if (this.IntervalTimeIsUp(300)){
+            this.weed_ratio = WeedRatio();
+            this.WeedDensityCounter.Value =  (this.weed_ratio*100).toFixed(1) + "%";
         }
+
+        if ((this.theWurm.Length >= this.length_to_win) && this.weed_ratio <= this.ratio_to_win)
+                this.Victory();
+        
     }
 }

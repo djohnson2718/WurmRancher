@@ -9,6 +9,7 @@ export class ProtectTheGrassLevel extends Level {
         this.num_eaters = 60;
         this.Description = `We have a nice field of grass all ready, but there is a massive herd of grass eaters coming in.  Blast all ${this.num_eaters} of them before the grass is all gone!`;
         this.QuickObjectives = `Shoot all ${this.num_eaters} grasss eaters before the grass is gone.`;
+        this.SeedDisabled = true;
     }
     InitializeLevel() {
         super.InitializeLevel();
