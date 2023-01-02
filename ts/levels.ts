@@ -1,5 +1,7 @@
 import { BigMonsterLevel } from "./bigMonsterLevel.js";
+import { BigWurmContest } from "./bigWurmContest.js";
 import { DoubleWurmLevel } from "./doubleWurmLevel.js";
+import { FeederLevel } from "./feederLevel.js";
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { Level } from "./level.js";
 import { MonsterLevel } from "./monsterLevel.js";
@@ -21,5 +23,7 @@ Levels = [
     new PoisonWeedLevel(Sand),
     new BigMonsterLevel(RedPebbles),
     new SharpShooterLevel(Pebbles),
-    new DoubleWurmLevel(Snow)
+    new DoubleWurmLevel(Snow),
+    new FeederLevel(Cracked),
+    new BigWurmContest(Mud)
 ]

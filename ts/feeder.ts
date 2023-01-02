@@ -6,7 +6,7 @@ import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonFie
 const height =30;
 const width = 30;
 const max_vision = 200;
-const max_fattened = 10;
+export const max_fattened = 10;
 
 const feederPic = new Image(height,width);
 feederPic.src = "../Resources/feeder.png";

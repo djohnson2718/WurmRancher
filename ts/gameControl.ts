@@ -360,6 +360,11 @@ function KeyPress(e:KeyboardEvent){
         case "c":
             if (!CurrentLevel.SeedDisabled) SetToolSeed();
         break;
+        case " ":
+            if (CurrentLevel.MakeFeedersAtWill)
+                AddCreatureOnEdge(new Feeder);
+        break;
+
     }
 }
 

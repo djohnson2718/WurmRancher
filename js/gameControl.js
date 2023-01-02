@@ -1,3 +1,4 @@
+import { Feeder } from "./feeder.js";
 import { GoodGrass } from "./goodGrass.js";
 import { IntroDemo } from "./introDemo.js";
 import { LaserBeam } from "./laserBeam.js";
@@ -272,6 +273,10 @@ function KeyPress(e) {
         case "c":
             if (!CurrentLevel.SeedDisabled)
                 SetToolSeed();
+            break;
+        case " ":
+            if (CurrentLevel.MakeFeedersAtWill)
+                AddCreatureOnEdge(new Feeder);
             break;
     }
 }
