@@ -75,6 +75,7 @@ var OptionsDiv : HTMLDivElement;
 var CloseButton :HTMLButtonElement;
 var MusicVolumerSlider : HTMLInputElement;
 var EffectsVolumeSlider : HTMLInputElement;
+var GameSpeedSlider : HTMLInputElement;
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -107,6 +108,7 @@ function startGame(){
     CloseButton = document.getElementById("closeButton") as HTMLButtonElement;
     EffectsVolumeSlider = document.getElementById("effectsVolumeSlider") as HTMLInputElement;
     MusicVolumerSlider = document.getElementById("musicVolumeSlider") as HTMLInputElement;
+    GameSpeedSlider = document.getElementById("speedSlider") as HTMLInputElement;
 
     for (const Level of Levels){
         let li = document.createElement("li");
@@ -150,6 +152,7 @@ function startGame(){
     window.addEventListener('keydown', KeyPress);
 
     MusicVolumerSlider.oninput =  function(){CurrentLevel.theme.music.volume = Number(MusicVolumerSlider.value)/100;};
+    GameSpeedSlider.oninput = function(){game_speed = Number(GameSpeedSlider.value)/100;};
     
 
     //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
@@ -162,6 +165,7 @@ function startGame(){
 
 var previousTimeStamp : number;
 var game_cool_down =0;
+var game_speed = 1;
 
 function GameLoopMethod(timestamp: number):void{
     //console.log(timestamp, Date.now());
@@ -169,7 +173,7 @@ function GameLoopMethod(timestamp: number):void{
     {
         let timeStep : number;
         if (previousTimeStamp)
-            timeStep = timestamp - previousTimeStamp;
+            timeStep = (timestamp - previousTimeStamp)*game_speed;
         else
             timeStep = 0;
         
@@ -682,8 +686,8 @@ function InitializeGameElements() : void{
 //}
 
 function CloseMenus(){
-    LevelSelectButton.style.display = "block";
-    OptionsButton.style.display = "block";
+    //LevelSelectButton.style.display = "block";
+    //OptionsButton.style.display = "block";
     LevelSelectDiv.style.display = "none";
     OptionsDiv.style.display = "none";
     CloseButton.style.display = "none";
@@ -705,14 +709,17 @@ var save_game_cool_down : number;
 
 function MenuButtonClicked(this : HTMLButtonElement, ev:MouseEvent) {
     let sender = this as ButtonWithAssociateDiv;
+    CloseMenus();
     console.log(sender.id, "clicked");
-    game_running=false;
-    save_game_cool_down = game_cool_down;
-    game_cool_down = 9999999;
+    if (game_running){
+        game_running=false;
+        save_game_cool_down = game_cool_down;
+        game_cool_down = 9999999;
+    }
     //sender.associatedDiv.style.visibility = "visible";
     sender.associatedDiv.style.display = "block";
-    LevelSelectButton.style.display = "none";
-    OptionsButton.style.display = "none";
+    //LevelSelectButton.style.display = "none";
+    //OptionsButton.style.display = "none";
     CloseButton.style.display = "block";
 }
 
