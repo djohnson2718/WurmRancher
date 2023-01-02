@@ -30,19 +30,26 @@ canvas {
     <div class="lower-menu">
         <div class="button-area">
             <button id="levelSelect" height = 30 width = 100>Select Level</button>
-            <button id="optionButton">Options</button>
+            <button id="optionButton" height = 30 width = 100>Options</button>
+            <button id="closeButton">Close and Resume</button>
         </div>
         <div class="levelSelectDiv" id="levelSelectDiv">
             <b>Select a level</b>
             <menu id="levelSelectMenu">
             </menu>
         </div>
+        <div class="optionsDiv" id="optionsDiv">
+            <b>Options</b>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="100" class="slider" id="effectsVolumeSlider">
+              </div>
+            <div class="slidecontainer">
+            <input type="range" min="1" max="100" value="100" class="slider" id="musicVolumeSlider">
+            </div>
+            
+        </div>
     </div>
-
 </div>
-
-
-
 
 </body>
 </html>

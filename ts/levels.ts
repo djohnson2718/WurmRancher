@@ -1,4 +1,5 @@
 import { BigMonsterLevel } from "./bigMonsterLevel.js";
+import { DoubleWurmLevel } from "./doubleWurmLevel.js";
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { Level } from "./level.js";
 import { MonsterLevel } from "./monsterLevel.js";
@@ -19,5 +20,6 @@ Levels = [
     new ProtectTheGrassLevel(Mud),
     new PoisonWeedLevel(Sand),
     new BigMonsterLevel(RedPebbles),
-    new SharpShooterLevel(Pebbles)
+    new SharpShooterLevel(Pebbles),
+    new DoubleWurmLevel(Snow)
 ]

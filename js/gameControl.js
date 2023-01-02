@@ -46,9 +46,16 @@ var LevelSelectButton;
 var LevelSelectMenu;
 var SideContainer;
 var CounterContainer;
+var OptionsButton;
+var OptionsDiv;
+var CloseButton;
+var MusicVolumerSlider;
+var EffectsVolumeSlider;
 var canvas;
 export var context;
 document.addEventListener("DOMContentLoaded", startGame);
+class ButtonWithAssociateDiv extends HTMLButtonElement {
+}
 function startGame() {
     canvas = document.getElementById("playingField");
     canvas.height = playingFieldHeight;
@@ -64,6 +71,11 @@ function startGame() {
     LevelSelectMenu = document.getElementById("levelSelectMenu");
     SideContainer = document.getElementById("side");
     CounterContainer = document.getElementById("counter-area");
+    OptionsButton = document.getElementById("optionButton");
+    OptionsDiv = document.getElementById("optionsDiv");
+    CloseButton = document.getElementById("closeButton");
+    EffectsVolumeSlider = document.getElementById("effectsVolumeSlider");
+    MusicVolumerSlider = document.getElementById("musicVolumeSlider");
     for (const Level of Levels) {
         let li = document.createElement("li");
         let button = document.createElement("button");
@@ -80,8 +92,20 @@ function startGame() {
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-    LevelSelectButton.addEventListener("click", SelectLevel);
+    LevelSelectButton.associatedDiv = LevelSelectDiv;
+    LevelSelectButton.addEventListener("click", MenuButtonClicked);
+    LevelSelectButton.closed_message = "Select Level";
+    LevelSelectButton.open_message = "Close and Resume";
+    LevelSelectButton.textContent = LevelSelectButton.closed_message;
+    OptionsButton.associatedDiv = OptionsDiv;
+    OptionsButton.addEventListener("click", MenuButtonClicked);
+    OptionsButton.closed_message = "Options";
+    OptionsButton.open_message = "Close and Resume";
+    OptionsButton.textContent = OptionsButton.closed_message;
+    CloseButton.style.display = "none";
+    CloseButton.addEventListener("click", CloseButtonClicked);
     window.addEventListener('keydown', KeyPress);
+    MusicVolumerSlider.oninput = function () { CurrentLevel.theme.music.volume = Number(MusicVolumerSlider.value) / 100; };
     //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
     console.log("finished set up");
     LoadLevel(new IntroDemo()); //chagne to intro
@@ -445,6 +469,7 @@ function LoadLevel(level) {
     InitializeGameElements();
     level.InitializeLevel();
     console.log("fininish level.init ", GameElements.length);
+    level.theme.music.volume = Number(MusicVolumerSlider.value) / 100;
     level.theme.music.play();
     //canvas.setAttribute("backgroundImsage", level.theme.background);
     //MainBackGroundMusicME.Stop();
@@ -459,7 +484,7 @@ function LoadLevel(level) {
     game_cool_down = 0;
     game_running = true;
     infoPar.textContent = level.QuickObjectives;
-    CloseLevelMenu();
+    CloseMenus();
     previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);
 }
@@ -497,25 +522,40 @@ function InitializeGameElements() {
         shotsHit = 0;
     }
 }
-function CloseLevelMenu() {
-    LevelSelectButton.textContent = "Select Level";
-    LevelSelectDiv.style.visibility = "hidden";
+//function CloseLevelMenu(){
+//    LevelSelectButton.textContent = "Select Level";
+//    LevelSelectDiv.style.visibility = "hidden";
+//}
+function CloseMenus() {
+    LevelSelectButton.style.display = "block";
+    OptionsButton.style.display = "block";
+    LevelSelectDiv.style.display = "none";
+    OptionsDiv.style.display = "none";
+    CloseButton.style.display = "none";
 }
-function SelectLevel(ev) {
-    console.log("select level clicked");
-    if (LevelSelectDiv.style.visibility == "hidden") {
-        game_running = false;
-        LevelSelectDiv.style.visibility = "visible";
-        LevelSelectButton.textContent = "Resume";
+function CloseButtonClicked(ev) {
+    CloseMenus();
+    game_running = !CurrentLevel.gameover;
+    game_cool_down = save_game_cool_down;
+    console.log("attempting resume", game_running, game_cool_down);
+    CloseMenus();
+    if (game_running) {
+        previousTimeStamp = null;
+        window.requestAnimationFrame(GameLoopMethod);
     }
-    else {
-        game_running = !CurrentLevel.gameover;
-        CloseLevelMenu();
-        if (game_running) {
-            previousTimeStamp = null;
-            window.requestAnimationFrame(GameLoopMethod);
-        }
-    }
+}
+var save_game_cool_down;
+function MenuButtonClicked(ev) {
+    let sender = this;
+    console.log(sender.id, "clicked");
+    game_running = false;
+    save_game_cool_down = game_cool_down;
+    game_cool_down = 9999999;
+    //sender.associatedDiv.style.visibility = "visible";
+    sender.associatedDiv.style.display = "block";
+    LevelSelectButton.style.display = "none";
+    OptionsButton.style.display = "none";
+    CloseButton.style.display = "block";
 }
 function LevelButtonClicked(Level) {
     return function (ev) {
@@ -524,6 +564,7 @@ function LevelButtonClicked(Level) {
 }
 export function PlaySound(sound) {
     if (soundEffectsOn) {
+        sound.volume = Number(EffectsVolumeSlider.value) / 100;
         sound.play();
     }
 }

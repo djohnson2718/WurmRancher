@@ -66,15 +66,26 @@ var NewLaserHitables : Set<LaserHitable>;
 var LaserHitables : Array<LaserHitable>;
 var DeadLaserHitables : Set<LaserHitable>;
 var LevelSelectDiv : HTMLDivElement;
-var LevelSelectButton : HTMLButtonElement;
+var LevelSelectButton : ButtonWithAssociateDiv;
 var LevelSelectMenu : HTMLMenuElement;
 var SideContainer : HTMLDivElement;
 var CounterContainer : HTMLDivElement;
+var OptionsButton : ButtonWithAssociateDiv;
+var OptionsDiv : HTMLDivElement;
+var CloseButton :HTMLButtonElement;
+var MusicVolumerSlider : HTMLInputElement;
+var EffectsVolumeSlider : HTMLInputElement;
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
 
 document.addEventListener("DOMContentLoaded", startGame);
+
+class ButtonWithAssociateDiv extends HTMLButtonElement{
+    associatedDiv : HTMLDivElement;
+    closed_message : string;
+    open_message : string;
+}
  
 function startGame(){
     canvas =  document.getElementById("playingField") as HTMLCanvasElement;
@@ -87,10 +98,15 @@ function startGame(){
     sprayPar = document.getElementById("spray") as HTMLParagraphElement;
     laserPar = document.getElementById("laser") as HTMLParagraphElement;
     LevelSelectDiv = document.getElementById("levelSelectDiv") as HTMLDivElement;
-    LevelSelectButton = document.getElementById("levelSelect") as HTMLButtonElement;
+    LevelSelectButton = document.getElementById("levelSelect") as ButtonWithAssociateDiv;
     LevelSelectMenu = document.getElementById("levelSelectMenu") as HTMLMenuElement;
     SideContainer = document.getElementById("side") as HTMLDivElement;
     CounterContainer = document.getElementById("counter-area") as HTMLDivElement;
+    OptionsButton = document.getElementById("optionButton") as ButtonWithAssociateDiv;
+    OptionsDiv = document.getElementById("optionsDiv") as HTMLDivElement;
+    CloseButton = document.getElementById("closeButton") as HTMLButtonElement;
+    EffectsVolumeSlider = document.getElementById("effectsVolumeSlider") as HTMLInputElement;
+    MusicVolumerSlider = document.getElementById("musicVolumeSlider") as HTMLInputElement;
 
     for (const Level of Levels){
         let li = document.createElement("li");
@@ -115,8 +131,25 @@ function startGame(){
     canvas.addEventListener('mousedown', MouseDown);
     canvas.addEventListener('mousemove', MouseMove);
     canvas.addEventListener('contextmenu', function (e){e.preventDefault();})
-    LevelSelectButton.addEventListener("click", SelectLevel);
+    
+    LevelSelectButton.associatedDiv = LevelSelectDiv;
+    LevelSelectButton.addEventListener("click", MenuButtonClicked);
+    LevelSelectButton.closed_message = "Select Level";
+    LevelSelectButton.open_message = "Close and Resume";
+    LevelSelectButton.textContent = LevelSelectButton.closed_message;
+
+    OptionsButton.associatedDiv = OptionsDiv;
+    OptionsButton.addEventListener("click", MenuButtonClicked);
+    OptionsButton.closed_message = "Options";
+    OptionsButton.open_message = "Close and Resume";
+    OptionsButton.textContent = OptionsButton.closed_message;
+
+    CloseButton.style.display = "none";
+    CloseButton.addEventListener("click", CloseButtonClicked);
+
     window.addEventListener('keydown', KeyPress);
+
+    MusicVolumerSlider.oninput =  function(){CurrentLevel.theme.music.volume = Number(MusicVolumerSlider.value)/100;};
     
 
     //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
@@ -572,6 +605,9 @@ function LoadLevel(level : Level){
     InitializeGameElements();
     level.InitializeLevel();
     console.log("fininish level.init ", GameElements.length);
+
+
+    level.theme.music.volume = Number(MusicVolumerSlider.value)/100;
     level.theme.music.play();
     //canvas.setAttribute("backgroundImsage", level.theme.background);
 
@@ -590,7 +626,7 @@ function LoadLevel(level : Level){
     game_cool_down = 0;
     game_running = true;
     infoPar.textContent = level.QuickObjectives;
-    CloseLevelMenu();
+    CloseMenus();
     previousTimeStamp = null;
     window.requestAnimationFrame(GameLoopMethod);
 }
@@ -640,27 +676,44 @@ function InitializeGameElements() : void{
     }
 }
 
-function CloseLevelMenu(){
-    LevelSelectButton.textContent = "Select Level";
-    LevelSelectDiv.style.visibility = "hidden";
+//function CloseLevelMenu(){
+//    LevelSelectButton.textContent = "Select Level";
+//    LevelSelectDiv.style.visibility = "hidden";
+//}
+
+function CloseMenus(){
+    LevelSelectButton.style.display = "block";
+    OptionsButton.style.display = "block";
+    LevelSelectDiv.style.display = "none";
+    OptionsDiv.style.display = "none";
+    CloseButton.style.display = "none";
 }
 
-function SelectLevel(this: HTMLElement, ev: MouseEvent) {
-    console.log("select level clicked");
-    if (LevelSelectDiv.style.visibility == "hidden"){
-        game_running=false;
-        LevelSelectDiv.style.visibility = "visible";
-        LevelSelectButton.textContent = "Resume";
+function CloseButtonClicked(this : HTMLButtonElement, ev:MouseEvent){
+    CloseMenus();
+    game_running = !CurrentLevel.gameover;
+    game_cool_down = save_game_cool_down;
+    console.log("attempting resume", game_running, game_cool_down);
+    CloseMenus();
+    if (game_running){            
+        previousTimeStamp = null;
+        window.requestAnimationFrame(GameLoopMethod);
     }
-    else{
-        game_running = !CurrentLevel.gameover;
+}
 
-        CloseLevelMenu();
-        if (game_running){
-            previousTimeStamp = null;
-            window.requestAnimationFrame(GameLoopMethod);
-        }
-    }
+var save_game_cool_down : number;
+
+function MenuButtonClicked(this : HTMLButtonElement, ev:MouseEvent) {
+    let sender = this as ButtonWithAssociateDiv;
+    console.log(sender.id, "clicked");
+    game_running=false;
+    save_game_cool_down = game_cool_down;
+    game_cool_down = 9999999;
+    //sender.associatedDiv.style.visibility = "visible";
+    sender.associatedDiv.style.display = "block";
+    LevelSelectButton.style.display = "none";
+    OptionsButton.style.display = "none";
+    CloseButton.style.display = "block";
 }
 
 function LevelButtonClicked(Level: Level): (this: HTMLButtonElement, ev: MouseEvent) => any {
@@ -671,6 +724,7 @@ function LevelButtonClicked(Level: Level): (this: HTMLButtonElement, ev: MouseEv
 
 export function PlaySound(sound:HTMLAudioElement){
     if (soundEffectsOn){
+        sound.volume = Number(EffectsVolumeSlider.value)/100;
         sound.play();
     }
 }

@@ -1,4 +1,5 @@
 import { BigMonsterLevel } from "./bigMonsterLevel.js";
+import { DoubleWurmLevel } from "./doubleWurmLevel.js";
 import { FirstGrassEaterLevel } from "./firstGrassEaterLevel.js";
 import { MonsterLevel } from "./monsterLevel.js";
 import { ParasiteLevel } from "./parasiteLevel.js";
@@ -16,6 +17,7 @@ Levels = [
     new ProtectTheGrassLevel(Mud),
     new PoisonWeedLevel(Sand),
     new BigMonsterLevel(RedPebbles),
-    new SharpShooterLevel(Pebbles)
+    new SharpShooterLevel(Pebbles),
+    new DoubleWurmLevel(Snow)
 ];
 //# sourceMappingURL=levels.js.map
