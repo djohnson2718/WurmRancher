@@ -22,7 +22,7 @@ menu {
         'canvas side'
         'lmenu side';
     gap: 30px;
-    grid-template-columns: 839px 120px;
+    grid-template-columns: 839px 160px;
     grid-template-rows: 689px 200px;
 }
 
@@ -36,6 +36,19 @@ menu {
     display: flex;
     flex-direction: column;
     color :aquamarine;
+    gap: 15px;
+
+}
+
+.counter{
+    border-color: aquamarine;
+    border-width: 2px;
+    border-radius: 5px;
+    border-style: solid;
+    font-family: 'Courier New', monospace;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
 }
 
 .side-icon{
@@ -45,6 +58,9 @@ menu {
     align-items: center;
     justify-content: center;
     background-color: white;
+    border-color: gray;
+    border-width: 5px;
+    border-style: solid;
 }
 
 .lower-menu{

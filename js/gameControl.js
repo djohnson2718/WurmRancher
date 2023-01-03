@@ -28,9 +28,9 @@ var soundEffectsOn = true;
 export var shotsHit;
 export var shotsFired;
 var infoPar;
-var seedPar;
-var sprayPar;
-var laserPar;
+var seedIcon;
+var sprayIcon;
+var laserIcon;
 export var CurrentLevel;
 var weedRatio;
 export var game_running;
@@ -65,9 +65,9 @@ function startGame() {
     context = canvas.getContext("2d");
     context.font = "14px sans";
     infoPar = document.getElementById("Info");
-    seedPar = document.getElementById("seed");
-    sprayPar = document.getElementById("spray");
-    laserPar = document.getElementById("laser");
+    seedIcon = document.getElementById("seed_icon");
+    sprayIcon = document.getElementById("spray_icon");
+    laserIcon = document.getElementById("laser_icon");
     LevelSelectDiv = document.getElementById("levelSelectDiv");
     LevelSelectButton = document.getElementById("levelSelect");
     LevelSelectMenu = document.getElementById("levelSelectMenu");
@@ -282,25 +282,28 @@ function KeyPress(e) {
 }
 function SetToolLaser() {
     currentTool = ToolType.Laser;
-    laserPar.setAttribute("style", "background-color:powderblue;");
-    seedPar.setAttribute("style", "background-color:white;");
-    sprayPar.setAttribute("style", "background-color:white;");
+    laserIcon.setAttribute("style", "border-color:red;");
+    seedIcon.setAttribute("style", "border-color:gray;");
+    sprayIcon.setAttribute("style", "border-color:gray;");
+    console.log("set laser");
+    //seedPar.setAttribute("style", "background-color:white;");
+    //sprayPar.setAttribute("style", "background-color:white;");
 }
 function SetToolSeed() {
     //console.log("seeting seed");
     //console.log(seedPar);
     //console.log(currentTool);
     currentTool = ToolType.Seed;
-    seedPar.setAttribute("style", "background-color:powderblue;");
-    laserPar.setAttribute("style", "background-color:white;");
-    sprayPar.setAttribute("style", "background-color:white;");
+    laserIcon.setAttribute("style", "border-color:gray;");
+    seedIcon.setAttribute("style", "border-color:red;");
+    sprayIcon.setAttribute("style", "border-color:gray;");
 }
 function SetToolSpray() {
     //console.log("seeting spray");
     currentTool = ToolType.Spray;
-    sprayPar.setAttribute("style", "background-color:powderblue;");
-    seedPar.setAttribute("style", "background-color:white;");
-    laserPar.setAttribute("style", "background-color:white;");
+    laserIcon.setAttribute("style", "border-color:gray;");
+    seedIcon.setAttribute("style", "border-color:gray;");
+    sprayIcon.setAttribute("style", "border-color:red;");
 }
 function DistanceClickToPiece(e, p) {
     return Math.sqrt(Math.pow((e.offsetX - p.CenterX), 2) + Math.pow((e.offsetY - p.CenterY), 2));

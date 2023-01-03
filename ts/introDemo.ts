@@ -14,7 +14,7 @@ export class IntroDemo extends Level
 
     InitializeLevel(): void {
         super.InitializeLevel();
-        new Wurm(28, 100, 370);
+        new Wurm(46, 100, 370);
         console.log("made a wurm");
     }
 

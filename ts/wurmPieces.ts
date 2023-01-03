@@ -25,7 +25,7 @@ const sight_range = 500;
 export class WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
-    Layer =3;
+    Layer =4;
     Name= "Wurm Head";
     //WurmEats : Event;
 
@@ -130,7 +130,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
     {
-        Layer = 4;
+        Layer = 3;
         Name = "WurmBody";
         Leader :BackAttachable;
         head :WurmHead;

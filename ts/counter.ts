@@ -8,9 +8,10 @@ export class Counter implements GameElement{
         this.label = label;
         this.textbox = document.createElement("label");
         this.textbox.textContent = this.label;
+        this.textbox.setAttribute("class","counter");
     }
     set Value(v : number | string){
-        this.textbox.textContent = this.label + ": " + v;
+        this.textbox.innerHTML = this.label + ":<br>" + v;
     }
 
     Update(timeStep :number): void{}

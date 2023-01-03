@@ -11,7 +11,7 @@ export class WurmHead extends LaserHitable {
     //WurmEats : Event;
     constructor(wurmObject) {
         super(height, width, WurmSpeed, WurmHeadRotate);
-        this.Layer = 3;
+        this.Layer = 4;
         this.Name = "Wurm Head";
         this.feeder_target = null;
         this.PieceImage = headImage;
@@ -83,7 +83,7 @@ export class WurmHead extends LaserHitable {
 export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);
-        this.Layer = 4;
+        this.Layer = 3;
         this.Name = "WurmBody";
         this.radians_per_ms = WurmBodyRotate; //be careful here!!!!
         //public event EventHandler<EventArgs> EatenByParasite;
