@@ -1,5 +1,9 @@
-.levelSelectDiv {
-    background-color: bisque;
+body{
+    background-color: black;
+}
+
+.menuDiv {
+    background-color: rgb(225, 161, 250);
     padding: 1em;
     border: solid thin black;
 }
@@ -24,7 +28,6 @@ menu {
 
 .playingField {
     grid-area: canvas;
-    background-color: brown;
     display: -moz-stack;
 }
 
@@ -32,12 +35,20 @@ menu {
     grid-area: side;
     display: flex;
     flex-direction: column;
-    background-color: aquamarine;
+    color :aquamarine;
+}
+
+.side-icon{
+    height: 120px;
+    width: 120px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
 }
 
 .lower-menu{
     grid-area: lmenu;
-    background-color: blueviolet;
 }
 
 .button-area{
