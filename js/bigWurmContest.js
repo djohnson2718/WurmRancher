@@ -10,8 +10,8 @@ export class BigWurmContest extends TimedLevel {
     constructor(theme) {
         super(theme, 90000);
         this.Name = "Giant Wurm Contest";
-        this.Description = "See how big you can grow your wurm before the time runs out. You can have as many feeders as you want, just press TAB to get a new one!";
-        this.QuickObjectives = "Grow until the time runs out! Push TAB for feeders!";
+        this.Description = "See how big you can grow your wurm before the time runs out. You can have as many feeders as you want, just press Space to get a new one!";
+        this.QuickObjectives = "Grow until the time runs out! Push Space for feeders!";
         this.MakeFeedersAtWill = true;
     }
     InitializeLevel() {

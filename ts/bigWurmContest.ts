@@ -10,8 +10,8 @@ import { WurmCounter } from "./wurmCounter.js";
 
 export class BigWurmContest extends TimedLevel{
     Name = "Giant Wurm Contest";
-    Description = "See how big you can grow your wurm before the time runs out. You can have as many feeders as you want, just press TAB to get a new one!";
-    QuickObjectives = "Grow until the time runs out! Push TAB for feeders!"
+    Description = "See how big you can grow your wurm before the time runs out. You can have as many feeders as you want, just press Space to get a new one!";
+    QuickObjectives = "Grow until the time runs out! Push Space for feeders!"
     MakeFeedersAtWill = true;
 
     constructor(theme:Theme){
