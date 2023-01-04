@@ -82,7 +82,7 @@ var EffectsVolumeSlider : HTMLInputElement;
 var GameSpeedSlider : HTMLInputElement;
 var fpsCounter : HTMLParagraphElement;
 
-var menuDivs : Array<ButtonWithAssociateDiv>; 
+var menuButtons : Array<ButtonWithAssociateDiv>; 
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -153,12 +153,12 @@ function startGame(){
     OptionsButton.associatedDiv = OptionsDiv;
     InstructionsButton.associatedDiv = InstructionsDiv;
 
-    menuDivs= [LevelSelectButton, OptionsButton, InstructionsButton, CreditsButton];
+    menuButtons= [LevelSelectButton, OptionsButton, InstructionsButton, CreditsButton];
 
-    console.log(menuDivs);
+    console.log(menuButtons);
     
-    for (let div of menuDivs)
-        div.addEventListener("click", MenuButtonClicked);
+    for (let button of menuButtons)
+        button.addEventListener("click", MenuButtonClicked);
 
 
     CloseButton.style.visibility = "hidden";
@@ -291,7 +291,7 @@ function GameLoopMethod(timestamp: number):void{
             context.fillRect(0,0,playingFieldWidth,playingFieldHeight);
             context.globalAlpha = 1;
             context.textAlign = "center";
-            context.font= "30px sans";
+            context.font= "75px Courier New";
             context.fillStyle = "black";
             context.fillText(result_message, playingFieldWidth/2, playingFieldHeight -70);
         }
@@ -578,13 +578,13 @@ export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, pre
 var result_message : string;
 export function ReportVictory(message : String) : void{
     infoPar.textContent = "Victory: " + message;
-    result_message = "Victory! " + message;
+    result_message = "Victory!";
     game_running = false;
 }
 
 export function ReportDefeat(message :String) :void{
     infoPar.textContent = "Defeat: " + message;
-    result_message = "Defeat! " + message;
+    result_message = "Defeat!";
     game_running = false;
 }
 
@@ -720,11 +720,11 @@ function InitializeGameElements() : void{
 function CloseMenus(){
     //LevelSelectButton.style.display = "block";
     //OptionsButton.style.display = "block";
-    for (let div of menuDivs)
-        div.style.display = "none";
+    for (let button of menuButtons)
+        button.associatedDiv.style.display = "none";
     //LevelSelectDiv.style.display = "none";
     //OptionsDiv.style.display = "none";
-    //CloseButton.style.visibility = "hidden";
+    CloseButton.style.visibility = "hidden";
 }
 
 function CloseButtonClicked(this : HTMLButtonElement, ev:MouseEvent){

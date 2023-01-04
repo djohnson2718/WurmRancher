@@ -6,9 +6,9 @@ import * as exp from "constants";
 //These should be in pixels per milisecond
 export const RancherSpeed = 200/1000;
 export const GrassEaterSpeed = 140/1000;
-export const MonsterSpeed = 160/1000;
-export const FeederSpeed = 140/1000;
-export const WurmSpeed = 160/1000;
+export const MonsterSpeed = 165/1000;
+export const FeederSpeed = 135/1000;
+export const WurmSpeed = 155/1000;
 export const ParasiteSpeed = 190/1000;
 export const BigMonsterSpeed = 130/1000;
 export const BigMonsterAngrySpeed = 250/1000;

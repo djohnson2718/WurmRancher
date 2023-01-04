@@ -2,6 +2,7 @@ import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { FeederRotate, FeederSpeed } from "./timing.js";
 import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
+import { Console } from "console";
 
 const height =30;
 const width = 30;
@@ -26,47 +27,50 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         this.PieceImage = feederPic;
         this.target_plant = null;
     }
+
     Dibs() :void{
         this.dibs = 333;
     }
 
     Update(time_step:number):void{
         super.Update(time_step);
-        if (this.dibs > 0)
-                this.dibs = Math.min(0, this.dibs-time_step);
-            if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1)
+        if (this.dibs > 0){
+            this.dibs = Math.max(0, this.dibs-time_step);
+            console.log("dibbed avlue", this.dibs);
+        }
+        if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1)
+        {
+            let eats = this.target_plant.Eat(time_step);
+            if (eats != 0)
             {
-                let eats = this.target_plant.Eat(time_step);
-                if (eats != 0)
-                {
-                    this.fattened += eats;
-                    //if (EatsGrass != null)
-                    //    EatsGrass(this, new GameEventArgs(theControl));
-                    
-                }
-                if (this.fattened > max_fattened)
-                    this.fattened = max_fattened;
-                if (this.fattened < 0)
-                    this.fattened = 0;
-
-                if (this.target_plant.Eaten)
-                    this.target_plant = null;
+                this.fattened += eats;
+                //if (EatsGrass != null)
+                //    EatsGrass(this, new GameEventArgs(theControl));
+                
             }
+            if (this.fattened > max_fattened)
+                this.fattened = max_fattened;
+            if (this.fattened < 0)
+                this.fattened = 0;
 
-            if (this.target_plant == null && this.resting) // find a new destination!
+            if (this.target_plant.Eaten)
+                this.target_plant = null;
+        }
+
+        if (this.target_plant == null && this.resting) // find a new destination!
+        {
+            this.target_plant = GetClosestPlant(this, ["GoodGrass","PoisonWeed"]);
+            if (this.target_plant != null && DistanceObjects(this.target_plant, this) > max_vision)
+                this.target_plant = null;
+
+            if (this.target_plant != null)
             {
-                this.target_plant = GetClosestPlant(this, ["GoodGrass","PoisonWeed"]);
-                if (this.target_plant != null && DistanceObjects(this.target_plant, this) > max_vision)
-                    this.target_plant = null;
-
-                if (this.target_plant != null)
-                {
-                    this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                    this.target_plant.Dibs(777);
-                }
-                else
-                    this.SetDestination(RandomXonField(),RandomYonField());
+                this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
+                this.target_plant.Dibs(777);
             }
+            else
+                this.SetDestination(RandomXonField(),RandomYonField());
+        }
 
         
         context.fillText(String(this.fattened), this.CenterX -width/2, this.CenterY + width/3);

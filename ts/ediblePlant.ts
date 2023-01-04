@@ -34,7 +34,7 @@ export abstract class EdiblePlant extends Plant {
 
     Update(time_step:number) :void{
         if (this.dibs>0){
-            this.dibs = Math.min(0, this.dibs-time_step);
+            this.dibs = Math.max(0, this.dibs-time_step);
         }
         super.Update(time_step);
         

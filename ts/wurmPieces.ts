@@ -88,7 +88,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         }
         if (this.feeder_target != null)
         {
-            this.feeder_target.Dibs();
+            //this.feeder_target.Dibs();
             if (this.feeder_target.eaten)
             {
                 this.feeder_target = null;
@@ -112,7 +112,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         } 
         
         if (this.resting){
-            this.feeder_target = GetClosestPrey(this, true, "Feeder") as Feeder;
+            this.feeder_target = GetClosestPrey(this, false, "Feeder") as Feeder;
             if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
                 this.feeder_target = null;
             

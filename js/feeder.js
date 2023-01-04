@@ -24,8 +24,10 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     }
     Update(time_step) {
         super.Update(time_step);
-        if (this.dibs > 0)
-            this.dibs = Math.min(0, this.dibs - time_step);
+        if (this.dibs > 0) {
+            this.dibs = Math.max(0, this.dibs - time_step);
+            console.log("dibbed avlue", this.dibs);
+        }
         if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1) {
             let eats = this.target_plant.Eat(time_step);
             if (eats != 0) {

@@ -14,6 +14,7 @@ export class Monster extends LaserDestructablePiece {
     Update(time_step) {
         if (!this.hit) {
             if (this.target_feeder != null) {
+                this.target_feeder.Dibs();
                 if (this.target_feeder.eaten) {
                     this.target_feeder = null;
                     this.resting = true;
@@ -29,12 +30,17 @@ export class Monster extends LaserDestructablePiece {
             }
             if (this.target_feeder == null && this.resting) // find a new destination!
              {
-                this.target_feeder = GetClosestPrey(this, false, "Feeder");
+                this.target_feeder = GetClosestPrey(this, true, "Feeder");
                 if (this.target_feeder != null) {
+                    console.log("new prey aquired", this, this.target_feeder, this.target_feeder.dibs);
+                    this.target_feeder.Dibs();
+                    //console.log("tried to dibs it", this.target_feeder.dibs);
                     this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
                 }
-                else
+                else {
                     this.SetDestination(RandomXonField(), RandomYonField());
+                    console.log("no prey available", this);
+                }
             }
         }
         super.Update(time_step);
