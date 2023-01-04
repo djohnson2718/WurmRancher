@@ -28,7 +28,7 @@ export class TimedLevel extends Level {
     Victory(message = null) {
         let score = this.time_allowed - this.elapsed_time;
         if (message == null)
-            message = `You completed the objectives with ${score} seconds to spare and beat the level!`;
+            message = `You completed the objectives with ${(score / 1000).toFixed(1)} seconds to spare and beat the level!`;
         // create the high score control
         //_3XH.IHighScoreCtrl highScoreCtrl = _3XH.API.Instance.createHighScoreCtrl();
         // init the high score control with the application key and secret

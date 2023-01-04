@@ -43,7 +43,7 @@ export class Wurm {
             this.tail = w.Leader;
 
         RemovePiece(w);
-        length--;
+        this.length--;
     }
 
     head_Eats(head : WurmHead) :void

@@ -54,6 +54,12 @@ export class Feeder extends MovesToDestinationControl //implements Prey
             else
                 this.SetDestination(RandomXonField(), RandomYonField());
         }
+        context.textAlign = "center";
+        if (this.fattened < 10)
+            context.font = "25px sans";
+        else
+            context.font = "20px sans";
+        context.fillStyle = "black";
         context.fillText(String(this.fattened), this.CenterX - width / 2, this.CenterY + width / 3);
     }
     Available(care_about_dibs) {

@@ -30,7 +30,7 @@ export class Wurm {
         if (w == this.tail)
             this.tail = w.Leader;
         RemovePiece(w);
-        length--;
+        this.length--;
     }
     head_Eats(head) {
         if (!head.feeder_target.eaten) {

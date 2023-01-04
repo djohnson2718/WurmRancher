@@ -200,7 +200,7 @@ function GameLoopMethod(timestamp: number):void{
         frames_since_fps_update++;
         ms_since_fps_update += timeStep;
         if (ms_since_fps_update > 1500){
-            fpsCounter.textContent = (1000*frames_since_fps_update/ms_since_fps_update).toFixed(0) + " fps";
+            fpsCounter.textContent = (1000*frames_since_fps_update/ms_since_fps_update*game_speed).toFixed(0) + " fps";
             frames_since_fps_update = 0;
             ms_since_fps_update = 0;
         }

@@ -37,7 +37,7 @@ export class TimedLevel extends Level{
     Victory(message: string = null): void {
         let score = this.time_allowed - this.elapsed_time;
         if (message == null)
-            message = `You completed the objectives with ${score} seconds to spare and beat the level!`;
+            message = `You completed the objectives with ${(score/1000).toFixed(1)} seconds to spare and beat the level!`;
 
         // create the high score control
         
