@@ -19,7 +19,6 @@ canvas {
     </div>
     <div class="side-container" id="side">
         <div class="side-container">
-            <p><b>Wurm Rancher</b></p>
             <div class="side-icon" id="laser_icon">
             <img src="../Resources/gunZ.png" width=90%>
             </div>
@@ -36,9 +35,13 @@ canvas {
     </div>
     <div class="lower-menu">
         <div class="button-area">
-            <button id="levelSelect" height = 50 width = 200>Select Level</button>
-            <button id="optionButton" height = 50 width = 200>Options</button>
-            <button id="closeButton" height = 50 width = 200>Close and Resume</button>
+            <button class="menu-button" id="levelSelect">Select Level</button>
+            <button class="menu-button" id="optionButton">Options</button>
+            <button class="menu-button" id="instructionsButton">Instructions</button>
+            <button class="menu-button" id="creditsButton">Credits</button>
+            <button class="menu-button" id="closeButton">Close and Resume</button>
+            <p font-size="30px"><b>Wurm Rancher</b></p>
+            <p id ="fpsCounter" class="fps">0 fps</p>
         </div>
         <div class="menuDiv" id="levelSelectDiv">
             <b>Select a level</b>

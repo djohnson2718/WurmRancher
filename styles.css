@@ -1,9 +1,11 @@
 body{
     background-color: black;
+    color: aquamarine;
+    font-family: 'Courier New', monospace;
 }
 
 .menuDiv {
-    background-color: rgb(225, 161, 250);
+    background-color: rgb(46, 42, 47);
     padding: 1em;
     border: solid thin black;
 }
@@ -35,8 +37,8 @@ menu {
     grid-area: side;
     display: flex;
     flex-direction: column;
-    color :aquamarine;
     gap: 15px;
+    
 
 }
 
@@ -70,4 +72,20 @@ menu {
 .button-area{
     display: flex;
     gap:20px;
+}
+
+.fps{
+    font-size: smaller;
+}
+
+.menu-button{
+    background-color: aquamarine;
+    font-family: 'Courier New', Courier, monospace;
+    width : 300;
+    height: 75;
+    border-color: darkgrey;
+}
+
+.level-list-item{
+    
 }

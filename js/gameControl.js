@@ -53,6 +53,7 @@ var CloseButton;
 var MusicVolumerSlider;
 var EffectsVolumeSlider;
 var GameSpeedSlider;
+var fpsCounter;
 var canvas;
 export var context;
 document.addEventListener("DOMContentLoaded", startGame);
@@ -79,11 +80,14 @@ function startGame() {
     EffectsVolumeSlider = document.getElementById("effectsVolumeSlider");
     MusicVolumerSlider = document.getElementById("musicVolumeSlider");
     GameSpeedSlider = document.getElementById("speedSlider");
+    fpsCounter = document.getElementById("fpsCounter");
     for (const Level of Levels) {
         let li = document.createElement("li");
+        li.setAttribute("class", "level-list-item");
         let button = document.createElement("button");
         button.addEventListener("click", LevelButtonClicked(Level));
         button.textContent = Level.Name;
+        button.setAttribute("class", "menu-button");
         let text = document.createTextNode(Level.Description);
         li.appendChild(button);
         li.appendChild(text);
@@ -105,7 +109,7 @@ function startGame() {
     OptionsButton.closed_message = "Options";
     OptionsButton.open_message = "Close and Resume";
     OptionsButton.textContent = OptionsButton.closed_message;
-    CloseButton.style.display = "none";
+    CloseButton.style.visibility = "hidden";
     CloseButton.addEventListener("click", CloseButtonClicked);
     window.addEventListener('keydown', KeyPress);
     MusicVolumerSlider.oninput = function () { CurrentLevel.theme.music.volume = Number(MusicVolumerSlider.value) / 100; };
@@ -117,6 +121,8 @@ function startGame() {
 var previousTimeStamp;
 var game_cool_down = 0;
 var game_speed = 1;
+var frames_since_fps_update = 0;
+var ms_since_fps_update = 0;
 function GameLoopMethod(timestamp) {
     //console.log(timestamp, Date.now());
     if (game_running || game_cool_down < GameCoolDownTime) {
@@ -126,6 +132,13 @@ function GameLoopMethod(timestamp) {
         else
             timeStep = 0;
         //console.log("Frame time", timeStep);
+        frames_since_fps_update++;
+        ms_since_fps_update += timeStep;
+        if (ms_since_fps_update > 1500) {
+            fpsCounter.textContent = (1000 * frames_since_fps_update / ms_since_fps_update).toFixed(0) + " fps";
+            frames_since_fps_update = 0;
+            ms_since_fps_update = 0;
+        }
         previousTimeStamp = timestamp;
         context.drawImage(CurrentLevel.theme.background, 0, 0, playingFieldWidth, playingFieldHeight);
         //context.clearRect(0,0,playingFieldWidth,playingFieldHeight);
@@ -543,7 +556,7 @@ function CloseMenus() {
     //OptionsButton.style.display = "block";
     LevelSelectDiv.style.display = "none";
     OptionsDiv.style.display = "none";
-    CloseButton.style.display = "none";
+    CloseButton.style.visibility = "hidden";
 }
 function CloseButtonClicked(ev) {
     CloseMenus();
@@ -570,7 +583,7 @@ function MenuButtonClicked(ev) {
     sender.associatedDiv.style.display = "block";
     //LevelSelectButton.style.display = "none";
     //OptionsButton.style.display = "none";
-    CloseButton.style.display = "block";
+    CloseButton.style.visibility = "visible";
 }
 function LevelButtonClicked(Level) {
     return function (ev) {
