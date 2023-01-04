@@ -72,11 +72,17 @@ var SideContainer : HTMLDivElement;
 var CounterContainer : HTMLDivElement;
 var OptionsButton : ButtonWithAssociateDiv;
 var OptionsDiv : HTMLDivElement;
+var InstructionsButton : ButtonWithAssociateDiv;
+var InstructionsDiv : HTMLDivElement;
+var CreditsButton : ButtonWithAssociateDiv;
+var CreditsDiv : HTMLDivElement;
 var CloseButton :HTMLButtonElement;
 var MusicVolumerSlider : HTMLInputElement;
 var EffectsVolumeSlider : HTMLInputElement;
 var GameSpeedSlider : HTMLInputElement;
 var fpsCounter : HTMLParagraphElement;
+
+var menuDivs : Array<ButtonWithAssociateDiv>; 
 
 var canvas : HTMLCanvasElement;
 export var context : CanvasRenderingContext2D | null;
@@ -85,8 +91,8 @@ document.addEventListener("DOMContentLoaded", startGame);
 
 class ButtonWithAssociateDiv extends HTMLButtonElement{
     associatedDiv : HTMLDivElement;
-    closed_message : string;
-    open_message : string;
+    //closed_message : string;
+    //open_message : string;
 }
  
 function startGame(){
@@ -106,6 +112,10 @@ function startGame(){
     CounterContainer = document.getElementById("counter-area") as HTMLDivElement;
     OptionsButton = document.getElementById("optionButton") as ButtonWithAssociateDiv;
     OptionsDiv = document.getElementById("optionsDiv") as HTMLDivElement;
+    InstructionsButton = document.getElementById("instructionsButton") as ButtonWithAssociateDiv;
+    InstructionsDiv = document.getElementById("instructionsDiv") as HTMLDivElement;
+    CreditsButton = document.getElementById("creditsButton") as ButtonWithAssociateDiv;
+    CreditsDiv = document.getElementById("creditsDiv") as HTMLDivElement;
     CloseButton = document.getElementById("closeButton") as HTMLButtonElement;
     EffectsVolumeSlider = document.getElementById("effectsVolumeSlider") as HTMLInputElement;
     MusicVolumerSlider = document.getElementById("musicVolumeSlider") as HTMLInputElement;
@@ -119,7 +129,7 @@ function startGame(){
         button.addEventListener("click",LevelButtonClicked(Level));
         button.textContent = Level.Name;
         button.setAttribute("class","menu-button");
-        let text = document.createTextNode(Level.Description);
+        let text = document.createTextNode("  " +Level.Description);
         li.appendChild(button);
         li.appendChild(text);        
         LevelSelectMenu.appendChild(li);
@@ -139,16 +149,17 @@ function startGame(){
     canvas.addEventListener('contextmenu', function (e){e.preventDefault();})
     
     LevelSelectButton.associatedDiv = LevelSelectDiv;
-    LevelSelectButton.addEventListener("click", MenuButtonClicked);
-    LevelSelectButton.closed_message = "Select Level";
-    LevelSelectButton.open_message = "Close and Resume";
-    LevelSelectButton.textContent = LevelSelectButton.closed_message;
-
+    CreditsButton.associatedDiv = CreditsDiv;
     OptionsButton.associatedDiv = OptionsDiv;
-    OptionsButton.addEventListener("click", MenuButtonClicked);
-    OptionsButton.closed_message = "Options";
-    OptionsButton.open_message = "Close and Resume";
-    OptionsButton.textContent = OptionsButton.closed_message;
+    InstructionsButton.associatedDiv = InstructionsDiv;
+
+    menuDivs= [LevelSelectButton, OptionsButton, InstructionsButton, CreditsButton];
+
+    console.log(menuDivs);
+    
+    for (let div of menuDivs)
+        div.addEventListener("click", MenuButtonClicked);
+
 
     CloseButton.style.visibility = "hidden";
     CloseButton.addEventListener("click", CloseButtonClicked);
@@ -709,9 +720,11 @@ function InitializeGameElements() : void{
 function CloseMenus(){
     //LevelSelectButton.style.display = "block";
     //OptionsButton.style.display = "block";
-    LevelSelectDiv.style.display = "none";
-    OptionsDiv.style.display = "none";
-    CloseButton.style.visibility = "hidden";
+    for (let div of menuDivs)
+        div.style.display = "none";
+    //LevelSelectDiv.style.display = "none";
+    //OptionsDiv.style.display = "none";
+    //CloseButton.style.visibility = "hidden";
 }
 
 function CloseButtonClicked(this : HTMLButtonElement, ev:MouseEvent){
@@ -719,7 +732,6 @@ function CloseButtonClicked(this : HTMLButtonElement, ev:MouseEvent){
     game_running = !CurrentLevel.gameover;
     game_cool_down = save_game_cool_down;
     console.log("attempting resume", game_running, game_cool_down);
-    CloseMenus();
     if (game_running){            
         previousTimeStamp = null;
         window.requestAnimationFrame(GameLoopMethod);
