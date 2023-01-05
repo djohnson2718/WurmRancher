@@ -1,4 +1,6 @@
 import { ReportDefeat, ReportVictory } from "./gameControl.js";
+import { createCookie, readCookie } from "./cookies.js";
+const cookie_expire_length = 30;
 export var CompletionStatus;
 (function (CompletionStatus) {
     CompletionStatus[CompletionStatus["Unattempted"] = 0] = "Unattempted";
@@ -20,8 +22,13 @@ export class Level {
         this.QuickObjectives = "objectives unknown";
         this.SeedDisabled = false;
         this.MakeFeedersAtWill = false;
+        this.low_score_best = true;
+        this.high_score = null;
         this.theme = theme;
         // load saved data?
+        let hss = readCookie(this.highScoreName);
+        if (hss)
+            this.high_score = Number(readCookie(this.highScoreName));
     }
     Update(time_step) {
         if (this.gameover)
@@ -52,6 +59,8 @@ export class Level {
         this.gameover = true;
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
+        if ((this.low_score_best && this.score < this.high_score) || (!this.low_score_best && this.score > this.high_score))
+            createCookie(this.highScoreName, this.score, cookie_expire_length);
         ReportVictory(message);
     }
     Defeat(message = null) {
@@ -78,6 +87,9 @@ export class Level {
     }
     OneTimeTriggerIsUp(rel_time) {
         return ((this.elapsed_time >= rel_time) && this.elapsed_time - rel_time < this.last_time_step);
+    }
+    get highScoreName() {
+        return this.Name.replace(/\s+/g, '');
     }
 }
 //# sourceMappingURL=level.js.map

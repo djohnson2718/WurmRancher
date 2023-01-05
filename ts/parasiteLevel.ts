@@ -11,7 +11,7 @@ export class ParasiteLevel extends TimedLevel{
     Name = "Red Spider Wurm Parasites";
     length_to_win = 15;
     Description = `Watch out for the red spider wurm parasites!  They want to attach to your wurm and eat his segments!  Grow your wurm to length ${this.length_to_win} to win.`;
-    QuickObjectives = `Grow your wurm to length ${this.length_to_win}`;
+    QuickObjectives = `Grow your wurm to length ${this.length_to_win}.`;
 
     theWurm : Wurm;
 

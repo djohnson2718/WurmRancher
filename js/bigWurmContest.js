@@ -13,6 +13,7 @@ export class BigWurmContest extends TimedLevel {
         this.Description = "See how big you can grow your wurm before the time runs out. You can have as many feeders as you want, just press Space to get a new one!";
         this.QuickObjectives = "Grow until the time runs out! Push Space for feeders!";
         this.MakeFeedersAtWill = true;
+        this.low_score_best = false;
     }
     InitializeLevel() {
         super.InitializeLevel();
@@ -39,6 +40,7 @@ export class BigWurmContest extends TimedLevel {
         }
     }
     Defeat(message) {
+        this.score = this.theWurm.length;
         this.Victory(`Time is up! Your wurm grew to a length of ${this.theWurm.Length}!`);
     }
 }

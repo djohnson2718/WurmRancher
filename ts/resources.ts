@@ -8,13 +8,20 @@ export const laserSound = new Audio("../Resources/39459__the-bizniss__laser.wav"
 export const GrassEaterDeathSound = new Audio("../Resources/zapsplat_cartoon_wet_squelchy_pop_high_pitched_76642.mp3")
 
 export const dragonSound = new Audio("../Resources/4504__noisecollector__dragon1.wav");
+export const seedSound = new Audio("../Resources/99721__menegass__seedm2.wav");
 //export const gruntzSound = new Audio("../Resources/104697__grunz__grunz-ow.wav");
-export const painsSound = new Audio("../Resources/76972__michel88__pains.wav");
-export const pig_gruntSound = new Audio("../Resources/76973__michel88__piggrunt1.wav");
+export const monsterDieSound = new Audio("../Resources/76972__michel88__pains.wav");
+export const bigMonsterEyeHitSound = new Audio("../Resources/76965__michel88__painb.wav");
+export const monsterEatSound = new Audio("../Resources/76973__michel88__piggrunt1.wav");
 export const electic_buzz = new Audio("../Resources/55829__sergenious__electric.wav");
 export const apple_crunchSound = new Audio("../Resources/20279__koops__apple-crunch-16(1).wav");
 export const spraySound = new Audio("../Resources/13131__looppool__spraycan.wav");
 export const squishSound = new Audio("../Resources/72624__anechoix__squish3.wav");
+
+export const parasiteAttachSound = new Audio("../Resources/125647__tec-studios__insects-noise-010.wav");
+export const parasiteDieSound = new Audio("../Resources/125648__tec-studios__insects-noise-011.wav");
+export const parasiteEatSound = new Audio("../Resources/125646__tec-studios__insects-noise-009.wav");
+
 
 export const SoilBeachBackground = new Image();
 SoilBeachBackground.src = "../Resources/SoilBeach0088_1_S.jpg";

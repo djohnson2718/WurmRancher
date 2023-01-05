@@ -6,7 +6,7 @@ import { Levels } from "./levels.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
 import { Rancher } from "./rancher.js";
-import { laserSound, squishSound } from "./resources.js";
+import { laserSound, seedSound, spraySound, squishSound } from "./resources.js";
 import { GameCoolDownTime } from "./timing.js";
 import { Weed } from "./weed.js";
 var theRancher;
@@ -90,16 +90,18 @@ function startGame() {
     MusicVolumerSlider = document.getElementById("musicVolumeSlider");
     GameSpeedSlider = document.getElementById("speedSlider");
     fpsCounter = document.getElementById("fpsCounter");
-    for (const Level of Levels) {
+    for (const level of Levels) {
         let li = document.createElement("li");
         li.setAttribute("class", "level-list-item");
         let button = document.createElement("button");
-        button.addEventListener("click", LevelButtonClicked(Level));
-        button.textContent = Level.Name;
+        button.addEventListener("click", LevelButtonClicked(level));
+        button.textContent = level.Name;
         button.setAttribute("class", "menu-button");
-        let text = document.createTextNode("  " + Level.Description);
+        let text = document.createTextNode("  " + level.Description);
         li.appendChild(button);
         li.appendChild(text);
+        if (level.high_score)
+            li.appendChild(document.createTextNode(level.high_score.toFixed(1)));
         LevelSelectMenu.appendChild(li);
     }
     //document.body.insertBefore(canvas, document.body.childNodes[0]);    
@@ -236,6 +238,7 @@ function MouseDown(e) {
             case ToolType.Seed:
                 if (DistanceClickToPiece(e, theRancher) > seedRange)
                     return;
+                PlaySound(seedSound);
                 //if (SoundEffectsOn)
                 //    seeds_sown.Play();
                 for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, seedRadius)) {
@@ -268,7 +271,7 @@ function MouseDown(e) {
             case ToolType.Spray:
                 if (DistanceClickToPiece(e, theRancher) > sprayRange)
                     return;
-                //play sound
+                PlaySound(spraySound);
                 console.log("starting spray");
                 for (const I of PlantSpotsInRadius(e.offsetX, e.offsetY, sprayRadius)) {
                     if (Plants[I[0]][I[1]] != null) {

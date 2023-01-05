@@ -11,7 +11,7 @@ export class ParasiteLevel extends TimedLevel {
         this.Name = "Red Spider Wurm Parasites";
         this.length_to_win = 15;
         this.Description = `Watch out for the red spider wurm parasites!  They want to attach to your wurm and eat his segments!  Grow your wurm to length ${this.length_to_win} to win.`;
-        this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}`;
+        this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}.`;
     }
     InitializeLevel() {
         super.InitializeLevel();

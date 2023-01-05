@@ -26,21 +26,9 @@ export class TimedLevel extends Level {
         }
     }
     Victory(message = null) {
-        let score = this.time_allowed - this.elapsed_time;
+        let score = this.elapsed_time;
         if (message == null)
             message = `You completed the objectives with ${(score / 1000).toFixed(1)} seconds to spare and beat the level!`;
-        // create the high score control
-        //_3XH.IHighScoreCtrl highScoreCtrl = _3XH.API.Instance.createHighScoreCtrl();
-        // init the high score control with the application key and secret
-        //highScoreCtrl.init(ApplicationKey, ApplicationSecret);
-        // set the event handler that will be called when the user closes the high score control
-        //highScoreCtrl.setOnCloseHandler((sender, e) => { highScoreCtrl.hide(); });
-        //    if (!high_score_submitted)
-        //    {
-        //        high_score_submitted = true;
-        // call submit score
-        //            highScoreCtrl.submitScore(score, HighScoreName);
-        //        }
         super.Victory(message);
     }
     Defeat(message = null) {

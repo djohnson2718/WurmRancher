@@ -1,5 +1,8 @@
-import { ReportDefeat, ShowMessage, ReportVictory } from "./gameControl.js";
+import { ReportDefeat, ReportVictory } from "./gameControl.js";
 import { Theme } from "./theme.js";
+import { createCookie, readCookie } from "./cookies.js";
+
+const cookie_expire_length = 30;
 
 export enum CompletionStatus{
     Unattempted = 0,
@@ -24,6 +27,11 @@ export class Level{
     MakeFeedersAtWill = false;
     elapsed_time : number;
     last_time_step :number;
+
+    score : number;
+    low_score_best = true;
+
+    high_score : number = null;
     
     get ID():string{
         return this.Name + this.Version;
@@ -32,6 +40,9 @@ export class Level{
     constructor(theme : Theme){
         this.theme = theme;
         // load saved data?
+        let hss = readCookie(this.highScoreName);
+        if (hss)
+            this.high_score  = Number(readCookie(this.highScoreName));
     }
 
     Update(time_step: number) : void{
@@ -67,6 +78,8 @@ export class Level{
         this.gameover = true;
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
+        if ((this.low_score_best && this.score < this.high_score) || (!this.low_score_best && this.score > this.high_score))
+            createCookie(this.highScoreName,this.score, cookie_expire_length);
         ReportVictory(message);
     }
 
@@ -100,6 +113,10 @@ export class Level{
 
     OneTimeTriggerIsUp(rel_time:number){
         return ((this.elapsed_time >= rel_time) &&  this.elapsed_time - rel_time < this.last_time_step);
+    }
+
+    get highScoreName():string{
+        return this.Name.replace(/\s+/g, '');
     }
 
 }

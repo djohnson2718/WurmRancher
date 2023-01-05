@@ -14,6 +14,8 @@ export class BigWurmContest extends TimedLevel{
     QuickObjectives = "Grow until the time runs out! Push Space for feeders!"
     MakeFeedersAtWill = true;
 
+    low_score_best = false;
+
     constructor(theme:Theme){
         super(theme,90000);
     }
@@ -48,6 +50,7 @@ export class BigWurmContest extends TimedLevel{
     }
 
     Defeat(message?: string): void {
+        this.score = this.theWurm.length;
         this.Victory(`Time is up! Your wurm grew to a length of ${this.theWurm.Length}!`);
     }
 

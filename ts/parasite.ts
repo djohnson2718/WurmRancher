@@ -3,13 +3,14 @@ const width = 25;
 
 import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { parasiteImage } from "./resources.js";
+import { parasiteAttachSound, parasiteDieSound, parasiteEatSound, parasiteImage } from "./resources.js";
 import { ParasiteRotate, ParasiteSpeed } from "./timing.js";
 import { WurmBodyPiece } from "./wurmPieces.js";
 
 export class Parasite extends LaserDestructablePiece{
     Layer = 2;
     Name = "Parasite";
+    LaserHitSound = parasiteDieSound;
 
     constructor(){
         super(height,width, ParasiteSpeed, ParasiteRotate);
@@ -35,7 +36,7 @@ export class Parasite extends LaserDestructablePiece{
                     this.target_wurm_piece.ParasiteBite(time_step);
                     if (this.target_wurm_piece.IsEatenByParasite)
                     {
-                        //PlaySound(parasiteEatSound);
+                        PlaySound(parasiteEatSound);
                         this.target_wurm_piece = null;
                         this.is_attached = false;
                         this.resting = false;                 
@@ -51,7 +52,7 @@ export class Parasite extends LaserDestructablePiece{
                         {
                             this.is_attached = true;
                             this.resting = true;
-                            //PlaySound(parasiteAttachSound);
+                            PlaySound(parasiteAttachSound);
                         }
                         else
                         {

@@ -1,6 +1,6 @@
-import { DistanceObjects, GetClosestPrey, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { monsterImage } from "./resources.js";
+import { monsterDieSound, monsterEatSound, monsterImage } from "./resources.js";
 import { MonsterRotate, MonsterSpeed } from "./timing.js";
 var height = 50;
 var width = 50;
@@ -9,6 +9,7 @@ export class Monster extends LaserDestructablePiece {
         super(height, width, MonsterSpeed, MonsterRotate);
         this.Name = "Monster";
         this.Layer = 5;
+        this.LaserHitSound = monsterDieSound;
         this.PieceImage = monsterImage;
     }
     Update(time_step) {
@@ -23,8 +24,7 @@ export class Monster extends LaserDestructablePiece {
                     this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
                     if (DistanceObjects(this, this.target_feeder) <= this.Width / 2) {
                         this.target_feeder.Eat();
-                        //if (theControl.SoundEffectsOn)
-                        //    EatSound.Play();
+                        PlaySound(monsterEatSound);
                     }
                 }
             }
