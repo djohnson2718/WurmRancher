@@ -95,6 +95,10 @@ menu {
     
 }
 
+.hslabel{
+    color:yellow;
+}
+
 a:link{
     color: aquamarine;
 }

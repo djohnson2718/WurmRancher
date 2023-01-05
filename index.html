@@ -49,19 +49,23 @@ canvas {
             </menu>
         </div>
         <div class="menuDiv" id="optionsDiv">
-            <b>Options</b>
+            <p><b>Options</b></p>
             <div class="slidecontainer">
-                <p>Effects</p>
-                <input type="range" min="1" max="100" value="100" class="slider" id="effectsVolumeSlider">
-              </div>
+                <label for="effectsCB">Sound Effects</label> <input type="checkbox" id="effectsCB" checked="true"> <br>
+                <label for="effectVolumeSlider">Volume  </label><input type="range" min="1" max="100" value="100" class="slider" id="effectsVolumeSlider">
+            </div>
+            <br>
             <div class="slidecontainer">
-            <p>Music</p>
-            <input type="range" min="1" max="100" value="100" class="slider" id="musicVolumeSlider">
+                <label for="musicCB">Music</label> <input type="checkbox" id="musicCB" checked="true"> <br>
+                <label for="musicVolumeSlider">Volume </label><input type="range" min="1" max="100" value="30" class="slider" id="musicVolumeSlider">
             </div>
             <div class="slidecontainer">
+            <br>
             <p>Speed</p>
-                <input type="range" min="25" max="300" value="100" class="slider" id="speedSlider">
+                <input type="range" min="25" max="300" value="100" class="slider" id="speedSlider"> <label id="speedLabel">100</label>
             </div>
+            <br>
+            <button id="resetSpeedButton" class="menu-button">Reset Speed</button>
         </div>
         <div class="info-div" id="instructionsDiv">
             <h4>Backstory:</h4>

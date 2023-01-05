@@ -28,7 +28,7 @@ export class ProtectTheGrassLevel extends Level {
             g.Shot = this.g_Shot.bind(this);
             AddCreatureOnEdge(g);
         }
-        if (this.IntervalTimeIsUp(1000)) {
+        if (this.IntervalTimeIsUp(500)) {
             if (!HasGoodGrass())
                 this.Defeat();
         }
@@ -36,8 +36,10 @@ export class ProtectTheGrassLevel extends Level {
     g_Shot() {
         this.eaters_shot++;
         this.eaters_counter.Value = this.num_eaters - this.eaters_shot;
-        if (this.eaters_shot == this.num_eaters)
+        if (this.eaters_shot == this.num_eaters) {
+            this.score = this.elapsed_time;
             this.Victory();
+        }
     }
 }
 //# sourceMappingURL=protectTheGrassLevel.js.map

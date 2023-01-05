@@ -1,4 +1,4 @@
-import { ReportDefeat, ReportVictory } from "./gameControl.js";
+import { PopulateLevelMenu, ReportDefeat, ReportVictory } from "./gameControl.js";
 import { createCookie, readCookie } from "./cookies.js";
 const cookie_expire_length = 30;
 export var CompletionStatus;
@@ -26,9 +26,6 @@ export class Level {
         this.high_score = null;
         this.theme = theme;
         // load saved data?
-        let hss = readCookie(this.highScoreName);
-        if (hss)
-            this.high_score = Number(readCookie(this.highScoreName));
     }
     Update(time_step) {
         if (this.gameover)
@@ -59,8 +56,10 @@ export class Level {
         this.gameover = true;
         //if (StatusChanged != null)
         //    StatusChanged(this, new EventArgs());
-        if ((this.low_score_best && this.score < this.high_score) || (!this.low_score_best && this.score > this.high_score))
+        if ((this.high_score === null) || (this.low_score_best && this.score < this.high_score) || (!this.low_score_best && this.score > this.high_score)) {
             createCookie(this.highScoreName, this.score, cookie_expire_length);
+            PopulateLevelMenu();
+        }
         ReportVictory(message);
     }
     Defeat(message = null) {
@@ -89,7 +88,17 @@ export class Level {
         return ((this.elapsed_time >= rel_time) && this.elapsed_time - rel_time < this.last_time_step);
     }
     get highScoreName() {
-        return this.Name.replace(/\s+/g, '');
+        return this.Name.replace(/[\s!']+/g, '');
+    }
+    get HighScore() {
+        let hss = readCookie(this.highScoreName);
+        if (hss) {
+            this.high_score = Number(readCookie(this.highScoreName));
+            console.log("loaded high score", hss, this.high_score, this.highScoreName);
+        }
+        else
+            console.log("failed to load high score", hss, this.high_score, this.highScoreName);
+        return this.high_score;
     }
 }
 //# sourceMappingURL=level.js.map

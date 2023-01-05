@@ -81,6 +81,10 @@ var MusicVolumerSlider : HTMLInputElement;
 var EffectsVolumeSlider : HTMLInputElement;
 var GameSpeedSlider : HTMLInputElement;
 var fpsCounter : HTMLParagraphElement;
+var effectsCB : HTMLInputElement;
+var musicCB : HTMLInputElement;
+var SpeedLabel : HTMLLabelElement;
+var ResetSpeedButtton :HTMLButtonElement;
 
 var menuButtons : Array<ButtonWithAssociateDiv>; 
 
@@ -121,21 +125,12 @@ function startGame(){
     MusicVolumerSlider = document.getElementById("musicVolumeSlider") as HTMLInputElement;
     GameSpeedSlider = document.getElementById("speedSlider") as HTMLInputElement;
     fpsCounter = document.getElementById("fpsCounter") as HTMLParagraphElement;
+    effectsCB = document.getElementById("effectsCB") as HTMLInputElement;
+    musicCB = document.getElementById("musicCB") as HTMLInputElement;
+    SpeedLabel = document.getElementById("speedLabel") as HTMLLabelElement;
+    ResetSpeedButtton = document.getElementById("resetSpeedButton") as HTMLButtonElement;
 
-    for (const level of Levels){
-        let li = document.createElement("li");
-        li.setAttribute("class","level-list-item")
-        let button = document.createElement("button");
-        button.addEventListener("click",LevelButtonClicked(level));
-        button.textContent = level.Name;
-        button.setAttribute("class","menu-button");
-        let text = document.createTextNode("  " +level.Description);
-        li.appendChild(button);
-        li.appendChild(text);
-        if (level.high_score)
-            li.appendChild(document.createTextNode(level.high_score.toFixed(1)));
-        LevelSelectMenu.appendChild(li);
-    }
+    PopulateLevelMenu();
     
 
     //document.body.insertBefore(canvas, document.body.childNodes[0]);    
@@ -169,7 +164,12 @@ function startGame(){
     window.addEventListener('keydown', KeyPress);
 
     MusicVolumerSlider.oninput =  function(){CurrentLevel.theme.music.volume = Number(MusicVolumerSlider.value)/100;};
-    GameSpeedSlider.oninput = function(){game_speed = Number(GameSpeedSlider.value)/100;};
+    GameSpeedSlider.oninput = function(){game_speed = Number(GameSpeedSlider.value)/100; SpeedLabel.textContent = GameSpeedSlider.value + "%";};
+
+    effectsCB.oninput = function(){soundEffectsOn = effectsCB.checked;};
+    musicCB.oninput = function(){if (musicCB.checked) CurrentLevel.theme.music.play(); else CurrentLevel.theme.music.pause();};
+
+    ResetSpeedButtton.addEventListener("click", function(){GameSpeedSlider.value = "100"; SpeedLabel.textContent="100%"; game_speed=1;});
     
 
     //setInterval(GameLoopMethod, 1000/timing.frames_per_sec);
@@ -180,12 +180,37 @@ function startGame(){
     
 }
 
+
 var previousTimeStamp : number;
 var game_cool_down =0;
 var game_speed = 1;
 
 var frames_since_fps_update=0;
 var ms_since_fps_update=0;
+
+export function PopulateLevelMenu() {
+    LevelSelectMenu.replaceChildren();
+    for (const level of Levels) {
+        let li = document.createElement("li");
+        li.setAttribute("class", "level-list-item");
+        let button = document.createElement("button");
+        button.addEventListener("click", LevelButtonClicked(level));
+        button.textContent = level.Name;
+        button.setAttribute("class", "menu-button");
+        let text = document.createTextNode("  " + level.Description + "  ");
+        li.appendChild(button);
+        li.appendChild(text);
+        let hs = level.HighScore;
+        if (hs) {
+            let highScoreText = document.createElement("label");
+            highScoreText.textContent = `Best\xa0score:\xa0${hs.toFixed(2)}`;
+            highScoreText.setAttribute("class", "hslabel");
+            li.appendChild(highScoreText);
+        }
+
+        LevelSelectMenu.appendChild(li);
+    }
+}
 
 function GameLoopMethod(timestamp: number):void{
     //console.log(timestamp, Date.now());
@@ -646,9 +671,10 @@ function LoadLevel(level : Level){
     level.InitializeLevel();
     console.log("fininish level.init ", GameElements.length);
 
-
-    level.theme.music.volume = Number(MusicVolumerSlider.value)/100;
-    level.theme.music.play();
+    if (musicCB.checked){
+        level.theme.music.volume = Number(MusicVolumerSlider.value)/100;
+        level.theme.music.play();
+    }
     //canvas.setAttribute("backgroundImsage", level.theme.background);
 
     //MainBackGroundMusicME.Stop();
