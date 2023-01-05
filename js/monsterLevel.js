@@ -9,7 +9,7 @@ export class MonsterLevel extends TimedLevel {
     constructor(theme) {
         super(theme, 80000);
         this.length_to_win = 12;
-        this.Name = "The monster is coming";
+        this.Name = "Predators";
         this.Description = `Your tasty feeders have attracted the attention of some of the native fauna.  Protect them at all costs!  Grow your wurm to length ${this.length_to_win} to win.`;
         this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}.`;
     }

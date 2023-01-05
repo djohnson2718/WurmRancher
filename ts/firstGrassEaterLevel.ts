@@ -16,7 +16,7 @@ export class FirstGrassEaterLevel extends TimedLevel {
         super(theme,80000);
         this.Name = "We've got company!";
         this.Description = `The blue creatures want to steal your grass!  Blast them with your gun!  Grow your wurm to length ${this.length_to_win} before the timer runs out to win!`;
-        this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}`;
+        this.QuickObjectives = `Grow your wurm to length ${this.length_to_win}.`;
     }
 
     InitializeLevel() :void{

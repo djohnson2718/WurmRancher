@@ -194,6 +194,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
                     this.head.wurmObject.pieceEatenByParasite(this);
                 }
                     //EatenByParasite(this, new EventArgs());
+                
 
                 this.Opacity = (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime;               
             }

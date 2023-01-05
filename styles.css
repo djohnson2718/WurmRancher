@@ -65,6 +65,11 @@ menu {
     border-style: solid;
 }
 
+.logo{
+    font-size: large;
+    font-weight: bolder;
+}
+
 .lower-menu{
     grid-area: lmenu;
 }
@@ -89,3 +94,20 @@ menu {
 .level-list-item{
     
 }
+
+a:link{
+    color: aquamarine;
+}
+
+a:visited {
+    color: aquamarine;
+}
+
+a:hover{
+    color:azure;
+}
+
+a:active{
+    color: red;
+}
+

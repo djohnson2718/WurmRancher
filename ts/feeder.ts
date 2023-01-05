@@ -78,7 +78,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         else
             context.font= "20px sans";
         context.fillStyle = "black";
-        context.fillText(String(this.fattened), this.CenterX -width/2, this.CenterY + width/3);
+        context.fillText(String(this.fattened), this.CenterX -width/1.5, this.CenterY + width/2);
 
     }
 
