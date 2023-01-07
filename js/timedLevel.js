@@ -26,7 +26,8 @@ export class TimedLevel extends Level {
         }
     }
     Victory(message = null) {
-        this.score = this.elapsed_time / 1000;
+        if (this.score === null)
+            this.score = this.elapsed_time / 1000;
         if (message == null)
             message = `You completed the objectives in ${(this.score).toFixed(2)} seconds and beat the level!`;
         super.Victory(message);

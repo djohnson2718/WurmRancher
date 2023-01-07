@@ -28,7 +28,7 @@ export class Level{
     elapsed_time : number;
     last_time_step :number;
 
-    score : number;
+    score : number = null;
     low_score_best = true;
 
     high_score : number = null;

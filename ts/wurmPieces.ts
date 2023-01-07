@@ -180,7 +180,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
             
             if (this.total_bites_suffered > 0  && this.total_bites_suffered < ParasiteKillTime)
-                this.total_bites_suffered-= time_step;
+                this.total_bites_suffered = Math.max(this.total_bites_suffered - time_step,0);
 
             
             this.CenterX = this.Leader.backAttachX + radius * Math.cos(this.angle);

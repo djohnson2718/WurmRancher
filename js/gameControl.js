@@ -655,6 +655,14 @@ export function HasGoodGrass() {
                 return true;
     return false;
 }
+export function CountGoodGrass() {
+    let count = 0;
+    for (var col = 0; col < plant_cols; col++)
+        for (var row = 0; row < plant_rows; row++)
+            if (!(Plants[col][row] === null) && Plants[col][row].Name == "GoodGrass")
+                count++;
+    return count;
+}
 export function GrowWeedAtPoint(x, y) {
     GrowWeed(ClosestPlantIndexX(x, y), ClosestPlantIndexY(x, y));
 }
@@ -667,9 +675,11 @@ export function DestroyGoodThings(x, y, radius) {
     for (const e of GameElements) {
         if (e.Name == "Feeder") {
             let eF = e;
-            if (Distance([eF.CenterX, eF.CenterY], [x, y]) <= radius)
+            if (Distance([eF.CenterX, eF.CenterY], [x, y]) <= radius) {
+                eF.eaten = true;
                 RemovePiece(eF);
-            squished_one = true;
+                squished_one = true;
+            }
         }
     }
     if (squished_one)

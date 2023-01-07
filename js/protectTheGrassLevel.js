@@ -1,5 +1,5 @@
 import { Counter } from "./counter.js";
-import { AddCounter, AddCreatureOnEdge, FillWithGrass, HasGoodGrass } from "./gameControl.js";
+import { AddCounter, AddCreatureOnEdge, CountGoodGrass, FillWithGrass, HasGoodGrass } from "./gameControl.js";
 import { GrassEater } from "./grassEater.js";
 import { Level } from "./level.js";
 export class ProtectTheGrassLevel extends Level {
@@ -10,6 +10,7 @@ export class ProtectTheGrassLevel extends Level {
         this.Description = `We have a nice field of grass all ready, but there is a massive herd of grass eaters coming in.  Blast all ${this.num_eaters} of them before the grass is all gone!`;
         this.QuickObjectives = `Shoot all ${this.num_eaters} grasss eaters before the grass is gone.`;
         this.SeedDisabled = true;
+        this.low_score_best = false;
     }
     InitializeLevel() {
         super.InitializeLevel();
@@ -37,8 +38,8 @@ export class ProtectTheGrassLevel extends Level {
         this.eaters_shot++;
         this.eaters_counter.Value = this.num_eaters - this.eaters_shot;
         if (this.eaters_shot == this.num_eaters) {
-            this.score = this.elapsed_time;
-            this.Victory();
+            this.score = CountGoodGrass();
+            this.Victory(`You saved ${this.score} pieces of grass!`);
         }
     }
 }

@@ -109,7 +109,7 @@ export class WurmBodyPiece extends ImagePiece {
         }
         this.angle += this.radians_per_ms * time_step * Math.cos(this.Leader.angle - this.angle - Math.PI / 2);
         if (this.total_bites_suffered > 0 && this.total_bites_suffered < ParasiteKillTime)
-            this.total_bites_suffered -= time_step;
+            this.total_bites_suffered = Math.max(this.total_bites_suffered - time_step, 0);
         this.CenterX = this.Leader.backAttachX + radius * Math.cos(this.angle);
         this.CenterY = this.Leader.backAttachY + radius * Math.sin(this.angle);
         if (this.IsEatenByParasite) {

@@ -13,6 +13,9 @@ export class Timer extends Counter implements GameElement{
         this.level = level;
     }
     Update(timeStep : number) : void{
-        this.Value = ((this.level.time_allowed - this.level.elapsed_time)/1000).toFixed(1);
+        if (this.level.time_allowed < this.level.elapsed_time)
+            this.Value = "0.0";
+        else
+            this.Value = ((this.level.time_allowed - this.level.elapsed_time)/1000).toFixed(1);
     }
 }

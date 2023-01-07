@@ -11,7 +11,7 @@ export class FeederLevel extends TimedLevel{
     maxed_feeders_to_win = 8;
     Name = "Feeder Raiser";
     Description = `It looks like the wurms aren't ready yet... but you might as well get the feeders ready.  Get ${this.maxed_feeders_to_win} feeders up to ${max_fattened} to win!`;
-    QuickObjectives = `Get ${this.maxed_feeders_to_win} to size ${max_fattened}.`;
+    QuickObjectives = `Get ${this.maxed_feeders_to_win} feeders to size ${max_fattened}.`;
 
     FeederCounter : Counter;
 

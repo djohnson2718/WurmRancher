@@ -22,6 +22,7 @@ export class Level {
         this.QuickObjectives = "objectives unknown";
         this.SeedDisabled = false;
         this.MakeFeedersAtWill = false;
+        this.score = null;
         this.low_score_best = true;
         this.high_score = null;
         this.theme = theme;
