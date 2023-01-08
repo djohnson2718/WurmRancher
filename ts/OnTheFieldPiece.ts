@@ -1,12 +1,20 @@
+import { GameElement } from "./gameElement";
 
-export abstract class OnTheFieldPiece {
+export interface HasCenter extends GameElement{
+   get CenterX() : number;
+   get CenterY() : number;
+}
+
+export abstract class OnTheFieldPiece implements HasCenter{
 
   //CenterPoint: Point;
   Height : number;
   Width : number;
   x : number;
   y : number;
-
+  abstract Layer: number;
+  abstract Name: string;
+  abstract Update(time_step: number): void;
 
 
   constructor(height: number, width :number ){

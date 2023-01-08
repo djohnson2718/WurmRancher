@@ -3,6 +3,7 @@ import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { FeederRotate, FeederSpeed } from "./timing.js";
 import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
 import { Console } from "console";
+import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 
 const height =30;
 const width = 30;
@@ -96,5 +97,9 @@ export class Feeder extends MovesToDestinationControl //implements Prey
     }
 
     get Name(){return "Feeder";}
+
+    WantsToEat(pred : OnTheFieldPiece){
+
+    }
 
 }

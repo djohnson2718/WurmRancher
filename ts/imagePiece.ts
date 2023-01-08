@@ -3,10 +3,9 @@ import { GameElement } from "./gameElement.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 
 
-export abstract class ImagePiece extends OnTheFieldPiece implements GameElement {
+export abstract class ImagePiece extends OnTheFieldPiece {
     PieceImage : HTMLImageElement;
     angle : number;
-    abstract Layer:number;
     Opacity = 1;
 
     constructor(height : number, width : number, angle :number){
@@ -25,5 +24,5 @@ export abstract class ImagePiece extends OnTheFieldPiece implements GameElement 
         //console.log("drew at", this.CenterX, this.CenterY);
     }
 
-    abstract  Name : string;
+    
 }

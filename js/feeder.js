@@ -73,5 +73,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         return this.fattened;
     }
     get Name() { return "Feeder"; }
+    WantsToEat(pred) {
+    }
 }
 //# sourceMappingURL=feeder.js.map
