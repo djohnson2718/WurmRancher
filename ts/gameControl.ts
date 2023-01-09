@@ -574,35 +574,7 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
 }
 
 
-export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, preyName : String) : Prey{
-    let best_dist_so_far = 9999999;
-    let closest : Prey = null;
-    let f : Prey  = null;
-    let cur_dist : number;
-    //console.log("looking for prey");
-    for (const e of GameElements)
-    {
-        //console.log(e, e.Name,e.Name==preyName);
-        if (e.Name == preyName)
-        {
-            f = (e as unknown) as Prey;
-            //console.log("available", f.Available(care_about_dibs));
-            if (f.Available(care_about_dibs))
-            {
-                //console.log("available!")
-                cur_dist = DistanceObjects(f, to);
-                if (cur_dist < best_dist_so_far)
-                {
-                    //console.log("new best");
-                    closest = f;
-                    best_dist_so_far = cur_dist;
-                }
-            }
-        }
-    }
-    //console.log("found",closest);
-    return closest;
-}
+
 
 var result_message : string;
 export function ReportVictory(message : String) : void{
