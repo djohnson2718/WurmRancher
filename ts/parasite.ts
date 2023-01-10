@@ -3,12 +3,12 @@ const width = 25;
 
 import { DistanceObjects, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { Predator, PreyI } from "./prey.js";
+import { Predator, PredatorImp, Prey, PreyImp } from "./prey.js";
 import { parasiteAttachSound, parasiteDieSound, parasiteEatSound, parasiteImage } from "./resources.js";
 import { ParasiteRotate, ParasiteSpeed } from "./timing.js";
 import { WurmBodyPiece } from "./wurmPieces.js";
 
-class _Parasite extends LaserDestructablePiece{
+export class Parasite extends LaserDestructablePiece{
     Layer = 2;
     Name = "Parasite";
     LaserHitSound = parasiteDieSound;
@@ -16,7 +16,7 @@ class _Parasite extends LaserDestructablePiece{
     preyList = ["WurmBody"];
     foodEaten = 0;//not used
 
-    target : PreyI;
+    target : Prey;
 
     constructor(){
         super(height,width, ParasiteSpeed, ParasiteRotate);
@@ -47,4 +47,6 @@ class _Parasite extends LaserDestructablePiece{
     }
 }
 
-export var Parasite = Predator(_Parasite);
+export interface Parasite extends Prey, Predator{}
+Object.assign(Parasite.prototype, PreyImp);
+Object.assign(Parasite.prototype, PredatorImp);

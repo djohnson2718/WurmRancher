@@ -33,7 +33,7 @@ export class PoisonWeed extends EdiblePlant{
         super.Update(time_step);
     }
 
-    get Available(): boolean {
-        return (!this.sprayed);
-    }
+    //get Available(): boolean {
+    //    return (!this.sprayed);
+    //}
 }

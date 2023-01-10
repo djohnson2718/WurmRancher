@@ -2,10 +2,10 @@ const height = 25;
 const width = 25;
 import { DistanceObjects } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { Predator } from "./prey.js";
+import { PredatorImp, PreyImp } from "./prey.js";
 import { parasiteDieSound, parasiteImage } from "./resources.js";
 import { ParasiteRotate, ParasiteSpeed } from "./timing.js";
-class _Parasite extends LaserDestructablePiece {
+export class Parasite extends LaserDestructablePiece {
     constructor() {
         super(height, width, ParasiteSpeed, ParasiteRotate);
         this.Layer = 2;
@@ -33,5 +33,6 @@ class _Parasite extends LaserDestructablePiece {
         }
     }
 }
-export var Parasite = Predator(_Parasite);
+Object.assign(Parasite.prototype, PreyImp);
+Object.assign(Parasite.prototype, PredatorImp);
 //# sourceMappingURL=parasite.js.map

@@ -6,7 +6,7 @@ import { DistanceObjects, PlaySound, RandomXonField, RandomYonField } from "./ga
 import { food_per_segment, Wurm } from "./wurm.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
-import { Predator } from "./prey.js";
+import { Predator, PredatorImp, Prey, PreyImp } from "./prey.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -21,7 +21,7 @@ const height = 30;
 const width = 30;
 const radius = 15;
 
-class _WurmHead extends LaserHitable implements BackAttachable {
+export class _WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
     Layer =4;
@@ -101,8 +101,10 @@ class _WurmHead extends LaserHitable implements BackAttachable {
     }
 }
 
-export const WurmHead = Predator(_WurmHead);
-
+export class WurmHead extends _WurmHead{}
+export interface WurmHead extends Predator{}
+Object.assign(WurmHead.prototype, PredatorImp);
+Object.setPrototypeOf(WurmHead,_WurmHead);
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
     {
@@ -113,11 +115,11 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
         radians_per_ms = WurmBodyRotate; //be careful here!!!!
 
-        constructor(leader_ :BackAttachable , head_:WurmHead)
+        constructor(leader_ :BackAttachable , head: WurmHead)
         {
             super(height,width,leader_.angle);
             this.Leader = leader_;
-            this.head = head_;
+            this.head = head;
             this.Leader.Follower = this;            
             this.Height = 30;
             this.Width = 30;
@@ -147,7 +149,7 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
 
         Update(time_step:number) :void
         {
-            if (this.head.isStunned){
+            if (this.head.hit){
                 ImagePiece.prototype.Update.call(this);
                 return;
             }

@@ -1,5 +1,6 @@
 import { PlaySound, RemovePlant } from "./gameControl.js";
 import { Plant } from "./plant.js";
+import { PreyImp } from "./prey.js";
 import { apple_crunchSound } from "./resources.js";
 import { EatGrassTime } from "./timing.js";
 export class EdiblePlant extends Plant {
@@ -8,6 +9,7 @@ export class EdiblePlant extends Plant {
         this.bites_taken = 0;
         this.dibs = 0;
         this.eaten = false;
+        //abstract get Available() : boolean;
     }
     Eat(time_step) {
         this.dibs = 166;
@@ -35,4 +37,5 @@ export class EdiblePlant extends Plant {
         this.dibs = d;
     }
 }
+Object.assign(EdiblePlant.prototype, PreyImp);
 //# sourceMappingURL=ediblePlant.js.map

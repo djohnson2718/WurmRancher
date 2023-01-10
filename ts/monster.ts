@@ -1,7 +1,7 @@
 import { Feeder } from "./feeder.js";
 import { DistanceObjects, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { Predator } from "./prey.js";
+import { Predator, PredatorImp } from "./prey.js";
 import { monsterDieSound, monsterEatSound, monsterImage } from "./resources.js";
 import { MonsterRotate, MonsterSpeed } from "./timing.js";
 
@@ -10,7 +10,7 @@ var height = 50;
 var width = 50;
 
 
-class _Monster extends LaserDestructablePiece{
+export class Monster extends LaserDestructablePiece{
     Name = "Monster";
     Layer = 5;
     LaserHitSound = monsterDieSound;
@@ -23,8 +23,8 @@ class _Monster extends LaserDestructablePiece{
         this.PieceImage = monsterImage;
         
     }
-
-    
 }
 
-export var Monster = Predator(_Monster);
+export interface Monster extends Predator{}
+
+Object.assign(Monster.prototype, PredatorImp);

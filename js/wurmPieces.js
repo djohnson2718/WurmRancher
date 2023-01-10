@@ -3,11 +3,11 @@ import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate
 import { food_per_segment } from "./wurm.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz } from "./resources.js";
-import { Predator } from "./prey.js";
+import { PredatorImp } from "./prey.js";
 const height = 30;
 const width = 30;
 const radius = 15;
-class _WurmHead extends LaserHitable {
+export class _WurmHead extends LaserHitable {
     //WurmEats : Event;
     constructor(wurmObject) {
         super(height, width, WurmSpeed, WurmHeadRotate);
@@ -58,9 +58,12 @@ class _WurmHead extends LaserHitable {
         }
     }
 }
-export const WurmHead = Predator(_WurmHead);
+export class WurmHead extends _WurmHead {
+}
+Object.assign(WurmHead.prototype, PredatorImp);
+Object.setPrototypeOf(WurmHead, _WurmHead);
 export class WurmBodyPiece extends ImagePiece {
-    constructor(leader_, head_) {
+    constructor(leader_, head) {
         super(height, width, leader_.angle);
         this.Layer = 3;
         this.Name = "WurmBody";
@@ -69,7 +72,7 @@ export class WurmBodyPiece extends ImagePiece {
         this.fade_time_elapsed = 0;
         this.total_bites_suffered = 0;
         this.Leader = leader_;
-        this.head = head_;
+        this.head = head;
         this.Leader.Follower = this;
         this.Height = 30;
         this.Width = 30;
@@ -82,7 +85,7 @@ export class WurmBodyPiece extends ImagePiece {
         return this.CenterY + radius * Math.sin(this.angle);
     }
     Update(time_step) {
-        if (this.head.isStunned) {
+        if (this.head.hit) {
             ImagePiece.prototype.Update.call(this);
             return;
         }
