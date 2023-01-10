@@ -8,11 +8,9 @@ export interface PreyI extends OnTheFieldPiece{
     Available(care_about_dibs:boolean) : boolean;
 }
 
-type MovesToDestinationControlClass = new (...args: any[]) => MovesToDestinationControl & {Name :string, Layer:number};
+type HasCenterClass = new (...args: any[]) => HasCenter;
 
-//type HasCenterClass = new (...args: any[]) => HasCenter;
-
-interface PredatorI extends MovesToDestinationControl{
+interface PredatorI extends HasCenter{
     PreyStolen():void;
 }
 
@@ -21,7 +19,7 @@ class PredDist{
     dist : number;
 }
 
-export function Prey(base : MovesToDestinationControlClass){
+export function Prey(base : HasCenterClass){
     return class Prey_ extends base{
         Available(care_about_dibs: boolean): boolean {
             return true;
@@ -46,6 +44,11 @@ export function Prey(base : MovesToDestinationControlClass){
         };
     }
 }
+
+
+
+
+type MovesToDestinationControlClass = new (...args: any[]) => MovesToDestinationControl & {Name :string, Layer:number};
 
 export function Predator(base : MovesToDestinationControlClass){
     return class Predator_ extends base implements PredatorI{
