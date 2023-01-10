@@ -573,6 +573,9 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
     return closest_plant;
 }
 
+
+
+
 var result_message : string;
 export function ReportVictory(message : String) : void{
     infoPar.textContent = "Victory: " + message;

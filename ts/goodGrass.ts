@@ -1,6 +1,5 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { ReportGrassGrow } from "./gameControl.js";
-import { PreyImp } from "./prey.js";
 import { sprayedPic, fullGrownPic, seedPic } from "./resources.js";
 import { GrassGrowTime } from "./timing.js";
 
@@ -23,10 +22,10 @@ export class GoodGrass extends EdiblePlant {
             this.mature = starts_mature;
     }
 
-    //get Available() : boolean {
+    get Available() : boolean {
         //console.log(this.mature, this.dibs);
-    //    return this.mature && this.dibs == 0;
-    //}
+        return this.mature && this.dibs == 0;
+    }
 
     Update(time_step:number):void{
         //console.log("update grass");
@@ -53,6 +52,3 @@ export class GoodGrass extends EdiblePlant {
             super.Spray();
     }
 }
-
-
-

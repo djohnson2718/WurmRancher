@@ -14,10 +14,10 @@ export class GoodGrass extends EdiblePlant {
         this.eat_value = 1;
         this.mature = starts_mature;
     }
-    //get Available() : boolean {
-    //console.log(this.mature, this.dibs);
-    //    return this.mature && this.dibs == 0;
-    //}
+    get Available() {
+        //console.log(this.mature, this.dibs);
+        return this.mature && this.dibs == 0;
+    }
     Update(time_step) {
         //console.log("update grass");
         if (!this.mature) {

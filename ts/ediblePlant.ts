@@ -1,6 +1,5 @@
 import { PlaySound, RemovePlant } from "./gameControl.js";
 import { Plant } from "./plant.js";
-import { Prey, PreyImp } from "./prey.js";
 import { apple_crunchSound } from "./resources.js";
 import { EatGrassTime } from "./timing.js";
 
@@ -45,8 +44,5 @@ export abstract class EdiblePlant extends Plant {
         this.dibs = d;
     }
 
-    //abstract get Available() : boolean;
+    abstract get Available() : boolean;
 }
-
-export interface EdiblePlant extends Prey{}
-Object.assign(EdiblePlant.prototype, PreyImp);

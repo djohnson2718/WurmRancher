@@ -1,7 +1,6 @@
 import { DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField } from "./gameControl.js";
 import { GoodGrass } from "./goodGrass.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { Predator, PredatorImp, Prey } from "./prey.js";
 import { GrassEaterDeathSound, grassEaterImage } from "./resources.js";
 import { GrassEaterRotate, GrassEaterSpeed } from "./timing.js";
 
@@ -9,16 +8,10 @@ const height = 30;
 const width =30;
 
 
-
-
 export class GrassEater extends LaserDestructablePiece{
     Layer = 6;
     Name = "GrassEater";
     hit = false;
-    sightRange = Number.MAX_VALUE;
-    preyList = ["GoodGrass"];
-    foodEaten = 0; // not used
-    
 
     constructor(){
         super(height,width, GrassEaterSpeed, GrassEaterRotate);
@@ -56,6 +49,3 @@ export class GrassEater extends LaserDestructablePiece{
     }
     
 }
-
-export interface GrassEater extends Predator{}
-Object.assign(GrassEater.prototype, PredatorImp);

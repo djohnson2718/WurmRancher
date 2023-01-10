@@ -1,10 +1,10 @@
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
-import { PredatorImp } from "./prey.js";
+import { Predator } from "./prey.js";
 import { monsterDieSound, monsterImage } from "./resources.js";
 import { MonsterRotate, MonsterSpeed } from "./timing.js";
 var height = 50;
 var width = 50;
-export class Monster extends LaserDestructablePiece {
+class _Monster extends LaserDestructablePiece {
     constructor() {
         super(height, width, MonsterSpeed, MonsterRotate);
         this.Name = "Monster";
@@ -16,5 +16,5 @@ export class Monster extends LaserDestructablePiece {
         this.PieceImage = monsterImage;
     }
 }
-Object.assign(Monster.prototype, PredatorImp);
+export var Monster = Predator(_Monster);
 //# sourceMappingURL=monster.js.map
