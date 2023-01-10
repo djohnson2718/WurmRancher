@@ -2,11 +2,10 @@ import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
 import { Feeder } from "./feeder.js";
-import { DistanceObjects, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
-import { food_per_segment, Wurm } from "./wurm.js";
+import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
+import { Wurm } from "./wurm.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
-import { Predator } from "./prey.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -21,15 +20,13 @@ const height = 30;
 const width = 30;
 const radius = 15;
 
-class _WurmHead extends LaserHitable implements BackAttachable {
+const sight_range = 500;
+
+export class WurmHead extends LaserHitable implements BackAttachable {
     
     wurmObject : Wurm;
     Layer =4;
     Name= "Wurm Head";
-    
-    sightRange = 500;
-    preyList = ["Feeder"];
-    foodEaten = 0;
     //WurmEats : Event;
 
     constructor(wurmObject :Wurm){
@@ -48,21 +45,27 @@ class _WurmHead extends LaserHitable implements BackAttachable {
     get backAttachY(): number{
         return this.CenterY + radius*0.8*Math.sin(this.angle);
     }
+    
+    CheckLaserHit(x: number, y: number): boolean {
+        let result = super.CheckLaserHit(x,y);
+        if (this.hit){
+            this.stun_counter = WurmStunTime;
+            this.feeder_target = null;
+        }
+        this.hit = false;
 
-    Shot(): void {
-        super.Shot();
-        this.stun_counter = WurmStunTime;
+        return result;
     }
 
     Follower: WurmBodyPiece;
     
-    //get isStunned(): boolean{
-    //    return this.stun_counter > 0;
-    //}
+    get isStunned(): boolean{
+        return this.stun_counter > 0;
+    }
 
     target_angle :number;
 
-    //feeder_target : Feeder = null;
+    feeder_target : Feeder = null;
 
     SetTargetAngle() :void{
         this.target_angle = Math.atan((this.CenterY - this.destination_y) / (this.CenterX - this.destination_x));
@@ -77,39 +80,60 @@ class _WurmHead extends LaserHitable implements BackAttachable {
 
     Update(time_step:number) :void
     {
-        super.Update(time_step);
-        if (this.hit)
+        if (this.isStunned)
         {
             this.stun_counter-=time_step;
-            if (this.stun_counter <= 0){
-                this.hit = false;
-                this.stun_counter = 0;
-            }
             ImagePiece.prototype.Update.call(this);
             return;
         }
-
-
-        this.SetTargetAngle();
-
-        while (this.foodEaten >= food_per_segment)
+        if (this.feeder_target != null)
         {
-            this.foodEaten -= food_per_segment;
-            this.wurmObject.Grow();
+            //this.feeder_target.Dibs();
+            if (this.feeder_target.eaten)
+            {
+                this.feeder_target = null;
+                this.resting = true;
+            }
+            else
+            {
+                this.SetDestination(this.feeder_target.CenterX, this.feeder_target.CenterY);
+                this.SetTargetAngle();
+                if (DistanceObjects(this,this.feeder_target) <= radius)
+                {
+                    this.wurmObject.head_Eats(this);
+                    //Eats(this, new EatEventData(this.feeder_target));
+                    //if (theControl.SoundEffectsOn)
+                    //    EatSound.Play();
+                    PlaySound(dragonSound);
+                }
+                    
+                
+            }
+        } 
+        
+        if (this.resting){
+            this.feeder_target = GetClosestPrey(this, false, "Feeder") as Feeder;
+            if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
+                this.feeder_target = null;
+            
+            if (this.feeder_target == null)
+            {
+                this.SetDestination(RandomXonField(), RandomYonField());
+            }
         }
-
+            
+        super.Update(time_step);
     }
+
+    
 }
-
-export const WurmHead = Predator(_WurmHead);
-
 
 export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
     {
         Layer = 3;
         Name = "WurmBody";
         Leader :BackAttachable;
-        head : WurmHead;
+        head :WurmHead;
 
         radians_per_ms = WurmBodyRotate; //be careful here!!!!
 

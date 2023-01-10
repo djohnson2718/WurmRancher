@@ -1,21 +1,19 @@
 import { ImagePiece } from "./imagePiece.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
-import { food_per_segment } from "./wurm.js";
+import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
 import { LaserHitable } from "./laserHitable.js";
-import { headImage, bodyImage, electic_buzz } from "./resources.js";
-import { Predator } from "./prey.js";
+import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
 const height = 30;
 const width = 30;
 const radius = 15;
-class _WurmHead extends LaserHitable {
+const sight_range = 500;
+export class WurmHead extends LaserHitable {
     //WurmEats : Event;
     constructor(wurmObject) {
         super(height, width, WurmSpeed, WurmHeadRotate);
         this.Layer = 4;
         this.Name = "Wurm Head";
-        this.sightRange = 500;
-        this.preyList = ["Feeder"];
-        this.foodEaten = 0;
+        this.feeder_target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
         this.LaserHitSound = electic_buzz;
@@ -26,11 +24,18 @@ class _WurmHead extends LaserHitable {
     get backAttachY() {
         return this.CenterY + radius * 0.8 * Math.sin(this.angle);
     }
-    Shot() {
-        super.Shot();
-        this.stun_counter = WurmStunTime;
+    CheckLaserHit(x, y) {
+        let result = super.CheckLaserHit(x, y);
+        if (this.hit) {
+            this.stun_counter = WurmStunTime;
+            this.feeder_target = null;
+        }
+        this.hit = false;
+        return result;
     }
-    //feeder_target : Feeder = null;
+    get isStunned() {
+        return this.stun_counter > 0;
+    }
     SetTargetAngle() {
         this.target_angle = Math.atan((this.CenterY - this.destination_y) / (this.CenterX - this.destination_x));
         if (this.target_angle < 0)
@@ -41,24 +46,40 @@ class _WurmHead extends LaserHitable {
             this.target_angle -= Math.PI * 2;
     }
     Update(time_step) {
-        super.Update(time_step);
-        if (this.hit) {
+        if (this.isStunned) {
             this.stun_counter -= time_step;
-            if (this.stun_counter <= 0) {
-                this.hit = false;
-                this.stun_counter = 0;
-            }
             ImagePiece.prototype.Update.call(this);
             return;
         }
-        this.SetTargetAngle();
-        while (this.foodEaten >= food_per_segment) {
-            this.foodEaten -= food_per_segment;
-            this.wurmObject.Grow();
+        if (this.feeder_target != null) {
+            //this.feeder_target.Dibs();
+            if (this.feeder_target.eaten) {
+                this.feeder_target = null;
+                this.resting = true;
+            }
+            else {
+                this.SetDestination(this.feeder_target.CenterX, this.feeder_target.CenterY);
+                this.SetTargetAngle();
+                if (DistanceObjects(this, this.feeder_target) <= radius) {
+                    this.wurmObject.head_Eats(this);
+                    //Eats(this, new EatEventData(this.feeder_target));
+                    //if (theControl.SoundEffectsOn)
+                    //    EatSound.Play();
+                    PlaySound(dragonSound);
+                }
+            }
         }
+        if (this.resting) {
+            this.feeder_target = GetClosestPrey(this, false, "Feeder");
+            if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
+                this.feeder_target = null;
+            if (this.feeder_target == null) {
+                this.SetDestination(RandomXonField(), RandomYonField());
+            }
+        }
+        super.Update(time_step);
     }
 }
-export const WurmHead = Predator(_WurmHead);
 export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);

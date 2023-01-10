@@ -1,7 +1,7 @@
 //import { relWurmHeadRotate } from "./timing.js";
 import { AddCreature, RemovePiece } from "./gameControl.js";
 import { WurmBodyPiece, WurmHead } from "./wurmPieces.js";
-export const food_per_segment = 4;
+const food_per_segment = 4;
 export class Wurm {
     constructor(length, startX, startY) {
         this.food_eaten_since_growth = 0;
@@ -32,11 +32,22 @@ export class Wurm {
         RemovePiece(w);
         this.length--;
     }
-    Grow() {
-        let wp = new WurmBodyPiece(this.tail, this.head);
-        AddCreature(wp, this.tail.backAttachX, this.tail.backAttachY);
-        this.tail = wp;
-        this.length++;
+    head_Eats(head) {
+        if (!head.feeder_target.eaten) {
+            this.food_eaten_since_growth += head.feeder_target.Eat();
+            //if (Eats != null)
+            //    Eats(this, new GameEventArgs(theControl));
+        }
+        while (this.food_eaten_since_growth >= food_per_segment) {
+            this.food_eaten_since_growth -= food_per_segment;
+            let wp = new WurmBodyPiece(this.tail, head);
+            //wp.EatenByParasite +=new EventHandler<EventArgs>(PieceEatenByParasite);
+            AddCreature(wp, this.tail.backAttachX, this.tail.backAttachY);
+            this.tail = wp;
+            this.length++;
+            //if (LengthChange != null)
+            //    LengthChange(this, new GameEventArgs(theControl));
+        }
     }
 }
 //# sourceMappingURL=wurm.js.map

@@ -18,5 +18,4 @@ export abstract class LaserDestructablePiece extends LaserHitable {
         }
         super.Update(time_step);
     }
-
 }
