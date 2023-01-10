@@ -9,7 +9,7 @@ import { LaserHitable } from "./laserHitable.js";
 import { Level } from "./level.js";
 import { Levels } from "./levels.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
-import { HasCenter, OnTheFieldPiece } from "./OnTheFieldPiece.js";
+import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
 import { Prey } from "./prey.js";
@@ -459,7 +459,7 @@ export function Distance(p1: Array<number>, p2:Array<number>):number{
     return Math.sqrt( (p1[0]-p2[0])**2 + (p1[1] - p2[1])**2);
 }
 
-export function DistanceObjects(o1 : HasCenter, o2 : HasCenter){
+export function DistanceObjects(o1 : OnTheFieldPiece, o2 : OnTheFieldPiece){
     return Math.sqrt( (o1.CenterX-o2.CenterX)**2 + (o1.CenterY - o2.CenterY)**2);
 }
 
