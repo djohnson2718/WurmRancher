@@ -33,8 +33,8 @@ export class Wurm {
         this.length--;
     }
     head_Eats(head) {
-        if (!head.feeder_target.eaten) {
-            this.food_eaten_since_growth += head.feeder_target.Eat();
+        if (!head.target.eaten) {
+            this.food_eaten_since_growth += head.target.Eat();
             //if (Eats != null)
             //    Eats(this, new GameEventArgs(theControl));
         }

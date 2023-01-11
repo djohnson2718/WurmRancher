@@ -1,19 +1,19 @@
 import { ImagePiece } from "./imagePiece.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
-import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, PlaySound, SetPreyTarget } from "./gameControl.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
 const height = 30;
 const width = 30;
 const radius = 15;
-const sight_range = 500;
 export class WurmHead extends LaserHitable {
     //WurmEats : Event;
     constructor(wurmObject) {
         super(height, width, WurmSpeed, WurmHeadRotate);
         this.Layer = 4;
         this.Name = "Wurm Head";
-        this.feeder_target = null;
+        this.sightRange = 500;
+        this.target = null;
         this.PieceImage = headImage;
         this.wurmObject = wurmObject;
         this.LaserHitSound = electic_buzz;
@@ -28,7 +28,7 @@ export class WurmHead extends LaserHitable {
         let result = super.CheckLaserHit(x, y);
         if (this.hit) {
             this.stun_counter = WurmStunTime;
-            this.feeder_target = null;
+            this.target = null;
         }
         this.hit = false;
         return result;
@@ -51,16 +51,16 @@ export class WurmHead extends LaserHitable {
             ImagePiece.prototype.Update.call(this);
             return;
         }
-        if (this.feeder_target != null) {
+        if (this.target != null) {
             //this.feeder_target.Dibs();
-            if (this.feeder_target.eaten) {
-                this.feeder_target = null;
+            if (this.target.eaten) {
+                this.target = null;
                 this.resting = true;
             }
             else {
-                this.SetDestination(this.feeder_target.CenterX, this.feeder_target.CenterY);
+                this.SetDestination(this.target.CenterX, this.target.CenterY);
                 this.SetTargetAngle();
-                if (DistanceObjects(this, this.feeder_target) <= radius) {
+                if (DistanceObjects(this, this.target) <= radius) {
                     this.wurmObject.head_Eats(this);
                     //Eats(this, new EatEventData(this.feeder_target));
                     //if (theControl.SoundEffectsOn)
@@ -69,17 +69,17 @@ export class WurmHead extends LaserHitable {
                 }
             }
         }
-        if (this.resting) {
-            this.feeder_target = GetClosestPrey(this, false, "Feeder");
-            if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
-                this.feeder_target = null;
-            if (this.feeder_target == null) {
-                this.SetDestination(RandomXonField(), RandomYonField());
-            }
+        if (this.resting && this.target == null) {
+            SetPreyTarget(this, "Feeder");
         }
         super.Update(time_step);
     }
+    PreyLost() {
+        this.target = null;
+        this.resting = true;
+    }
 }
+const stealRatio = 0.9;
 export class WurmBodyPiece extends ImagePiece {
     constructor(leader_, head_) {
         super(height, width, leader_.angle);
@@ -89,6 +89,7 @@ export class WurmBodyPiece extends ImagePiece {
         //public event EventHandler<EventArgs> EatenByParasite;
         this.fade_time_elapsed = 0;
         this.total_bites_suffered = 0;
+        this.chaser = null;
         this.Leader = leader_;
         this.head = head_;
         this.Leader.Follower = this;
@@ -125,13 +126,21 @@ export class WurmBodyPiece extends ImagePiece {
     get IsEatenByParasite() {
         return (this.total_bites_suffered >= ParasiteKillTime);
     }
-    Available(care_about_dibs) {
-        if (!care_about_dibs)
-            throw new DOMException("something is wrong... everything that hunts wurm pieces cares about dibs");
-        return (this.total_bites_suffered == 0);
-    }
     ParasiteBite(timeStep) {
         this.total_bites_suffered += 2 * timeStep; //we will decrement them on update as well.            
+    }
+    Available(eater) {
+        if (this.chaser)
+            return (DistanceObjects(this, eater) < stealRatio * DistanceObjects(this, this.chaser));
+        else
+            return true;
+    }
+    DeclareChase(eater) {
+        if (this.chaser) {
+            this.chaser.PreyLost();
+            this.chaser = null;
+        }
+        this.chaser = eater;
     }
 }
 //export interface EatEventData extends EventArgs {

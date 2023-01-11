@@ -45,9 +45,7 @@ export abstract class EdiblePlant extends Plant {
         
     }
 
-    Dibs(d:number) :void{
-        this.dibs = d;
-    }
+
 
    // abstract get Available() : boolean;
 

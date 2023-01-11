@@ -48,9 +48,9 @@ export class Wurm {
 
     head_Eats(head : WurmHead) :void
         {
-            if (!head.feeder_target.eaten)
+            if (!head.target.eaten)
             {
-                this.food_eaten_since_growth += head.feeder_target.Eat();
+                this.food_eaten_since_growth += head.target.Eat();
                 //if (Eats != null)
                 //    Eats(this, new GameEventArgs(theControl));
             }

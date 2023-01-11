@@ -7,27 +7,20 @@ const max_vision = 200;
 export const max_fattened = 10;
 const feederPic = new Image(height, width);
 feederPic.src = "../Resources/feeder.png";
+const stealRatio = 0.9;
 export class Feeder extends MovesToDestinationControl {
     constructor() {
         super(height, width, FeederSpeed, FeederRotate);
         this.eaten = false;
         this.fattened = 0;
         //feederSize: number;
-        this.dibs = 0;
         this.Layer = 6;
         this.Name = "Feeder";
         this.targetPlant = null;
         this.PieceImage = feederPic;
     }
-    Dibs() {
-        this.dibs = 333;
-    }
     Update(time_step) {
         super.Update(time_step);
-        if (this.dibs > 0) {
-            this.dibs = Math.max(0, this.dibs - time_step);
-            console.log("dibbed avlue", this.dibs);
-        }
         if (this.targetPlant && DistanceObjects(this, this.targetPlant) < 1) {
             let eats = this.targetPlant.Eat(time_step);
             if (eats != 0)
@@ -49,9 +42,6 @@ export class Feeder extends MovesToDestinationControl {
         context.fillStyle = "black";
         context.fillText(String(this.fattened), this.CenterX - width / 1.5, this.CenterY + width / 2);
     }
-    Available(care_about_dibs) {
-        return (!care_about_dibs || this.dibs == 0);
-    }
     Eat() {
         if (this.eaten)
             return 0;
@@ -64,6 +54,19 @@ export class Feeder extends MovesToDestinationControl {
     PreyLost() {
         this.targetPlant = null;
         this.resting = true;
+    }
+    Available(eater) {
+        if (this.chaser)
+            return (DistanceObjects(this, eater) < stealRatio * DistanceObjects(this, this.chaser));
+        else
+            return true;
+    }
+    DeclareChase(chaser) {
+        if (this.chaser) {
+            this.chaser.PreyLost();
+            this.chaser = null;
+        }
+        this.chaser = chaser;
     }
 }
 //# sourceMappingURL=feeder.js.map

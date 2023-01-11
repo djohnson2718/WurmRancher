@@ -12,7 +12,7 @@ import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
-import { GrassChaser } from "./predPrey.js";
+import { GrassChaser, Predator, Prey } from "./predPrey.js";
 import { Rancher } from "./rancher.js";
 import { laserSound, seedSound, spraySound, squishSound } from "./resources.js";
 import { GameCoolDownTime } from "./timing.js";
@@ -580,10 +580,10 @@ export function SetTargetPlant(to : GrassChaser, plantTypes : Array<String>, max
 }
 
 
-export function GetClosestPrey<T, P extends Prey<T>>(to: OnTheFieldPiece, preyName : String) : P{
-    let best_dist_so_far = 9999999;
-    let closest : P = null;
-    let f : P  = null;
+export function SetPreyTarget<PredType extends Predator, PreyType extends Prey<PredType>>(to: PredType, preyName : String) : PreyType{
+    let best_dist_so_far = Number.MAX_VALUE;
+    let closest : PreyType = null;
+    let f : PreyType  = null;
     let cur_dist : number;
     //console.log("looking for prey");
     for (const e of GameElements)
@@ -591,7 +591,7 @@ export function GetClosestPrey<T, P extends Prey<T>>(to: OnTheFieldPiece, preyNa
         //console.log(e, e.Name,e.Name==preyName);
         if (e.Name == preyName)
         {
-            f = (e as unknown) as P;
+            f = (e as unknown) as PreyType;
             //console.log("available", f.Available(care_about_dibs));
             if (f.Available(to))
             {
@@ -606,6 +606,15 @@ export function GetClosestPrey<T, P extends Prey<T>>(to: OnTheFieldPiece, preyNa
             }
         }
     }
+
+    if (closest){
+        closest.DeclareChase(to);
+        to.target = closest;
+        to.SetDestination(closest.CenterX, closest.CenterY);
+    }
+    else
+        to.SetDestination(RandomXonField(),RandomYonField());
+
     //console.log("found",closest);
     return closest;
 }

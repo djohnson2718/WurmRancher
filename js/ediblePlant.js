@@ -32,9 +32,6 @@ export class EdiblePlant extends Plant {
         }
         super.Update(time_step);
     }
-    Dibs(d) {
-        this.dibs = d;
-    }
     Available(eater) {
         if (this.chaser)
             return (DistanceObjects(this, eater) < stealRatio * DistanceObjects(this, this.chaser));

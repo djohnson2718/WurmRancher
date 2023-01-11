@@ -1,6 +1,7 @@
 import { Feeder } from "./feeder.js";
-import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, PlaySound, RandomXonField, RandomYonField, SetPreyTarget } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
+import { Predator } from "./predPrey.js";
 import { monsterDieSound, monsterEatSound, monsterImage } from "./resources.js";
 import { MonsterRotate, MonsterSpeed } from "./timing.js";
 
@@ -9,7 +10,7 @@ var height = 50;
 var width = 50;
 
 
-export class Monster extends LaserDestructablePiece{
+export class Monster extends LaserDestructablePiece implements Predator{
     Name = "Monster";
     Layer = 5;
     LaserHitSound = monsterDieSound;
@@ -20,49 +21,43 @@ export class Monster extends LaserDestructablePiece{
     }
 
 
-    target_feeder : Feeder;
+    target : Feeder;
+    sightRange = Number.MAX_VALUE;
+
     Update(time_step:number) :void
     {
         if (!this.hit)
         {
-            if (this.target_feeder != null)
+            if (this.target != null)
             {
-                this.target_feeder.Dibs();
-                if (this.target_feeder.eaten)
+                if (this.target.eaten)
                 {
-                    this.target_feeder = null;
+                    this.target = null;
                     this.resting = true;
                 }
                 else
                 {
-                    this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
+                    this.SetDestination(this.target.CenterX, this.target.CenterY);
                     
-                    if (DistanceObjects(this, this.target_feeder) <= this.Width / 2)
+                    if (DistanceObjects(this, this.target) <= this.Width / 2)
                     {
-                        this.target_feeder.Eat();
+                        this.target.Eat();
                         PlaySound(monsterEatSound);
                     }
                 }
             }
 
-            if (this.target_feeder == null && this.resting) // find a new destination!
+            if (this.target == null && this.resting) // find a new destination!
             {
-                this.target_feeder = GetClosestPrey(this, true, "Feeder") as Feeder;
-                
-                if (this.target_feeder != null)
-                {   
-                    console.log("new prey aquired", this, this.target_feeder, this.target_feeder.dibs);
-                    this.target_feeder.Dibs();
-                    //console.log("tried to dibs it", this.target_feeder.dibs);
-                    this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
-                }
-                else{
-                    this.SetDestination(RandomXonField(),RandomYonField());
-                    console.log("no prey available", this);
-                }
+                SetPreyTarget(this,"Feeder");
                     
             }
         }
         super.Update(time_step);
+    }
+
+    PreyLost():void{
+        this.target = null;
+        this.resting = true;
     }
 }

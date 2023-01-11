@@ -1,4 +1,4 @@
-import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, PlaySound, SetPreyTarget } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
 import { monsterDieSound, monsterEatSound, monsterImage } from "./resources.js";
 import { MonsterRotate, MonsterSpeed } from "./timing.js";
@@ -10,40 +10,34 @@ export class Monster extends LaserDestructablePiece {
         this.Name = "Monster";
         this.Layer = 5;
         this.LaserHitSound = monsterDieSound;
+        this.sightRange = Number.MAX_VALUE;
         this.PieceImage = monsterImage;
     }
     Update(time_step) {
         if (!this.hit) {
-            if (this.target_feeder != null) {
-                this.target_feeder.Dibs();
-                if (this.target_feeder.eaten) {
-                    this.target_feeder = null;
+            if (this.target != null) {
+                if (this.target.eaten) {
+                    this.target = null;
                     this.resting = true;
                 }
                 else {
-                    this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
-                    if (DistanceObjects(this, this.target_feeder) <= this.Width / 2) {
-                        this.target_feeder.Eat();
+                    this.SetDestination(this.target.CenterX, this.target.CenterY);
+                    if (DistanceObjects(this, this.target) <= this.Width / 2) {
+                        this.target.Eat();
                         PlaySound(monsterEatSound);
                     }
                 }
             }
-            if (this.target_feeder == null && this.resting) // find a new destination!
+            if (this.target == null && this.resting) // find a new destination!
              {
-                this.target_feeder = GetClosestPrey(this, true, "Feeder");
-                if (this.target_feeder != null) {
-                    console.log("new prey aquired", this, this.target_feeder, this.target_feeder.dibs);
-                    this.target_feeder.Dibs();
-                    //console.log("tried to dibs it", this.target_feeder.dibs);
-                    this.SetDestination(this.target_feeder.CenterX, this.target_feeder.CenterY);
-                }
-                else {
-                    this.SetDestination(RandomXonField(), RandomYonField());
-                    console.log("no prey available", this);
-                }
+                SetPreyTarget(this, "Feeder");
             }
         }
         super.Update(time_step);
+    }
+    PreyLost() {
+        this.target = null;
+        this.resting = true;
     }
 }
 //# sourceMappingURL=monster.js.map

@@ -2,10 +2,12 @@ import { ImagePiece } from "./imagePiece.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { CreatureDeathFadeTime, ParasiteKillTime, WurmBodyRotate, WurmHeadRotate, WurmSpeed, WurmStunTime } from "./timing.js";
 import { Feeder } from "./feeder.js";
-import { DistanceObjects, GetClosestPrey, PlaySound, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, PlaySound, RandomXonField, RandomYonField, SetPreyTarget } from "./gameControl.js";
 import { Wurm } from "./wurm.js";
 import { LaserHitable } from "./laserHitable.js";
 import { headImage, bodyImage, electic_buzz, dragonSound } from "./resources.js";
+import { Parasite } from "./parasite.js";
+import { Predator, Prey } from "./predPrey.js";
 
 export interface BackAttachable {
     backAttachX: number;
@@ -20,13 +22,14 @@ const height = 30;
 const width = 30;
 const radius = 15;
 
-const sight_range = 500;
 
-export class WurmHead extends LaserHitable implements BackAttachable {
+
+export class WurmHead extends LaserHitable implements BackAttachable, Predator {
     
     wurmObject : Wurm;
     Layer =4;
     Name= "Wurm Head";
+    sightRange = 500;
     //WurmEats : Event;
 
     constructor(wurmObject :Wurm){
@@ -50,7 +53,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
         let result = super.CheckLaserHit(x,y);
         if (this.hit){
             this.stun_counter = WurmStunTime;
-            this.feeder_target = null;
+            this.target = null;
         }
         this.hit = false;
 
@@ -65,7 +68,7 @@ export class WurmHead extends LaserHitable implements BackAttachable {
 
     target_angle :number;
 
-    feeder_target : Feeder = null;
+    target : Feeder = null;
 
     SetTargetAngle() :void{
         this.target_angle = Math.atan((this.CenterY - this.destination_y) / (this.CenterX - this.destination_x));
@@ -86,19 +89,19 @@ export class WurmHead extends LaserHitable implements BackAttachable {
             ImagePiece.prototype.Update.call(this);
             return;
         }
-        if (this.feeder_target != null)
+        if (this.target != null)
         {
             //this.feeder_target.Dibs();
-            if (this.feeder_target.eaten)
+            if (this.target.eaten)
             {
-                this.feeder_target = null;
+                this.target = null;
                 this.resting = true;
             }
             else
             {
-                this.SetDestination(this.feeder_target.CenterX, this.feeder_target.CenterY);
+                this.SetDestination(this.target.CenterX, this.target.CenterY);
                 this.SetTargetAngle();
-                if (DistanceObjects(this,this.feeder_target) <= radius)
+                if (DistanceObjects(this,this.target) <= radius)
                 {
                     this.wurmObject.head_Eats(this);
                     //Eats(this, new EatEventData(this.feeder_target));
@@ -111,24 +114,23 @@ export class WurmHead extends LaserHitable implements BackAttachable {
             }
         } 
         
-        if (this.resting){
-            this.feeder_target = GetClosestPrey(this, false, "Feeder") as Feeder;
-            if (this.feeder_target != null && DistanceObjects(this, this.feeder_target) > sight_range)
-                this.feeder_target = null;
-            
-            if (this.feeder_target == null)
-            {
-                this.SetDestination(RandomXonField(), RandomYonField());
-            }
+        if (this.resting && this.target == null){
+            SetPreyTarget(this,"Feeder");
         }
             
         super.Update(time_step);
     }
 
+    PreyLost():void{
+        this.target = null;
+        this.resting = true;
+    }
+
     
 }
 
-export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
+const stealRatio = 0.9;
+export class WurmBodyPiece extends ImagePiece implements BackAttachable , Prey<Parasite>
     {
         Layer = 3;
         Name = "WurmBody";
@@ -206,16 +208,25 @@ export class WurmBodyPiece extends ImagePiece implements BackAttachable //, Prey
             return (this.total_bites_suffered >= ParasiteKillTime);
         }
 
-        Available(care_about_dibs:boolean) : boolean 
-        {
-            if (!care_about_dibs)
-                throw new DOMException("something is wrong... everything that hunts wurm pieces cares about dibs");
-            return (this.total_bites_suffered == 0);            
-        }
-
         ParasiteBite(timeStep : number) :void
         {
             this.total_bites_suffered+=2*timeStep;    //we will decrement them on update as well.            
+        }
+
+        chaser : Parasite = null;
+        Available(eater : Parasite) :boolean{
+            if (this.chaser)
+                return (DistanceObjects(this,eater) < stealRatio * DistanceObjects(this, this.chaser))
+            else
+                return true;
+        }
+    
+        DeclareChase(eater:Parasite):void{
+            if (this.chaser){
+                this.chaser.PreyLost();
+                this.chaser=null;
+            }
+            this.chaser = eater;
         }
 
         
