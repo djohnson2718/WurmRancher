@@ -13,6 +13,7 @@ export class LaserDestructablePiece extends LaserHitable {
                 RemovePiece(this);
             this.Opacity = Math.max(0, (CreatureDeathFadeTime - this.fade_time_elapsed) / CreatureDeathFadeTime);
         }
+        //console.log("in LaserDestructible, about to call super");
         super.Update(time_step);
     }
 }

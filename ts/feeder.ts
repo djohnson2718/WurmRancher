@@ -1,8 +1,8 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { FeederRotate, FeederSpeed } from "./timing.js";
-import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
-import { Console } from "console";
+import { context, DistanceObjects,  RemovePiece, SetTargetPlant } from "./gameControl.js";
+import { GrassChaser } from "./predPrey.js";
 
 const height =30;
 const width = 30;
@@ -12,13 +12,15 @@ export const max_fattened = 10;
 const feederPic = new Image(height,width);
 feederPic.src = "../Resources/feeder.png";
 
-export class Feeder extends MovesToDestinationControl //implements Prey
+export class Feeder extends MovesToDestinationControl implements GrassChaser
 {
     eaten: boolean = false;
     fattened: number = 0;
     //feederSize: number;
     dibs: number=0;
     Layer = 6;
+    Name = "Feeder";
+    targetPlant :EdiblePlant;
 
     target_plant : EdiblePlant;
 
@@ -58,19 +60,8 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         }
 
         if (this.target_plant == null && this.resting) // find a new destination!
-        {
-            this.target_plant = GetClosestPlant(this, ["GoodGrass","PoisonWeed"]);
-            if (this.target_plant != null && DistanceObjects(this.target_plant, this) > max_vision)
-                this.target_plant = null;
-
-            if (this.target_plant != null)
-            {
-                this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(777);
-            }
-            else
-                this.SetDestination(RandomXonField(),RandomYonField());
-        }
+            SetTargetPlant(this, ["GoodGrass","PoisonWeed"], max_vision);
+            
 
         context.textAlign = "center";
         if (this.fattened < 10)
@@ -95,6 +86,11 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         return this.fattened;
     }
 
-    get Name(){return "Feeder";}
+
+
+    PreyLost(): void {
+        this.target_plant = null;
+        this.resting = true;
+    }
 
 }

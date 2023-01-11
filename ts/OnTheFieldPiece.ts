@@ -7,6 +7,7 @@ export abstract class OnTheFieldPiece {
   x : number;
   y : number;
 
+  
 
 
   constructor(height: number, width :number ){

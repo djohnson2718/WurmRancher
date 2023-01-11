@@ -1,7 +1,12 @@
-import { PlaySound, RemovePlant } from "./gameControl.js";
+import { DistanceObjects, PlaySound, RemovePlant } from "./gameControl.js";
+import { ImagePiece } from "./imagePiece.js";
+import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { Plant } from "./plant.js";
 import { apple_crunchSound } from "./resources.js";
 import { EatGrassTime } from "./timing.js";
+import { GrassChaser } from "./predPrey.js";
+
+const stealRatio = 0.9;
 
 export abstract class EdiblePlant extends Plant {
 
@@ -12,11 +17,11 @@ export abstract class EdiblePlant extends Plant {
 
     dibs : number=0;
 
-    eaten = false;
+    //eaten = false;
 
     Eat(time_step:number):number{
         this.dibs = 166;
-        if (this.eaten)
+        if (this.Eaten)
             return 0;
         this.bites_taken+=time_step;
         //console.log("eating", this.bites_taken);
@@ -44,5 +49,21 @@ export abstract class EdiblePlant extends Plant {
         this.dibs = d;
     }
 
-    abstract get Available() : boolean;
+   // abstract get Available() : boolean;
+
+    chasers : {[n:string] : GrassChaser} = {};
+
+    Available(eater : GrassChaser) :boolean{
+        if (this.chasers[eater.Name])
+            return (DistanceObjects(this,eater) < stealRatio * DistanceObjects(this, this.chasers[eater.Name]))
+        else
+            return true;
+    }
+
+    DeclareChase(eater:GrassChaser):void{
+        if (this.chasers[eater.Name]){
+            this.chasers[eater.Name].PreyLost();
+            delete this.chasers[eater.Name];
+        }
+    }
 }

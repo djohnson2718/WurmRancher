@@ -1,14 +1,13 @@
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { FeederRotate, FeederSpeed } from "./timing.js";
-import { context, DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField, RemovePiece } from "./gameControl.js";
+import { context, DistanceObjects, RemovePiece, SetTargetPlant } from "./gameControl.js";
 const height = 30;
 const width = 30;
 const max_vision = 200;
 export const max_fattened = 10;
 const feederPic = new Image(height, width);
 feederPic.src = "../Resources/feeder.png";
-export class Feeder extends MovesToDestinationControl //implements Prey
- {
+export class Feeder extends MovesToDestinationControl {
     constructor() {
         super(height, width, FeederSpeed, FeederRotate);
         this.eaten = false;
@@ -16,6 +15,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         //feederSize: number;
         this.dibs = 0;
         this.Layer = 6;
+        this.Name = "Feeder";
         this.PieceImage = feederPic;
         this.target_plant = null;
     }
@@ -43,17 +43,7 @@ export class Feeder extends MovesToDestinationControl //implements Prey
                 this.target_plant = null;
         }
         if (this.target_plant == null && this.resting) // find a new destination!
-         {
-            this.target_plant = GetClosestPlant(this, ["GoodGrass", "PoisonWeed"]);
-            if (this.target_plant != null && DistanceObjects(this.target_plant, this) > max_vision)
-                this.target_plant = null;
-            if (this.target_plant != null) {
-                this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(777);
-            }
-            else
-                this.SetDestination(RandomXonField(), RandomYonField());
-        }
+            SetTargetPlant(this, ["GoodGrass", "PoisonWeed"], max_vision);
         context.textAlign = "center";
         if (this.fattened < 10)
             context.font = "25px sans";
@@ -72,6 +62,9 @@ export class Feeder extends MovesToDestinationControl //implements Prey
         RemovePiece(this);
         return this.fattened;
     }
-    get Name() { return "Feeder"; }
+    PreyLost() {
+        this.target_plant = null;
+        this.resting = true;
+    }
 }
 //# sourceMappingURL=feeder.js.map

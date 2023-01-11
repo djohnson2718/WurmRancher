@@ -26,8 +26,8 @@ export class PoisonWeed extends EdiblePlant {
         }
         super.Update(time_step);
     }
-    get Available() {
-        return (!this.sprayed);
+    Available(eater) {
+        return (!this.sprayed) && super.Available(eater);
     }
 }
 //# sourceMappingURL=poisonWeed.js.map

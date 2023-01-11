@@ -1,4 +1,4 @@
-import { DistanceObjects, GetClosestPlant, RandomXonField, RandomYonField } from "./gameControl.js";
+import { DistanceObjects, SetTargetPlant } from "./gameControl.js";
 import { LaserDestructablePiece } from "./laserDestructablePiece.js";
 import { GrassEaterDeathSound, grassEaterImage } from "./resources.js";
 import { GrassEaterRotate, GrassEaterSpeed } from "./timing.js";
@@ -19,22 +19,22 @@ export class GrassEater extends LaserDestructablePiece {
             super.Update(time_step);
             return;
         }
-        if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit)) {
+        if (this.targetPlant !== null)
+            console.log(this.targetPlant, DistanceObjects(this, this.target_plant), this.hit);
+        if (this.target_plant !== null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit)) {
             this.target_plant.Eat(time_step);
+            console.log("took a bite", this.targetPlant.bites_taken);
             if (this.target_plant.Eaten)
                 this.target_plant = null;
         }
         if (this.target_plant == null && this.resting) // find a new destination!
-         {
-            this.target_plant = GetClosestPlant(this, ["GoodGrass"]);
-            if (this.target_plant != null) {
-                this.SetDestination(this.target_plant.CenterX, this.target_plant.CenterY);
-                this.target_plant.Dibs(777);
-            }
-            else
-                this.SetDestination(RandomXonField(), RandomYonField());
-        }
+            SetTargetPlant(this, ["GoodGrass"]);
+        //console.log("about to call super",this);
         super.Update(time_step);
+    }
+    PreyLost() {
+        this.target_plant = null;
+        this.resting = true;
     }
 }
 //# sourceMappingURL=grassEater.js.map

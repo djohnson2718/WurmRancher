@@ -12,6 +12,7 @@ import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
+import { GrassChaser } from "./predPrey.js";
 import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
 import { laserSound, seedSound, spraySound, squishSound } from "./resources.js";
@@ -548,9 +549,9 @@ function MouseMove(e){
     mouseY = e.offsetY;
 }
 
-export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>): EdiblePlant{
+export function SetTargetPlant(to : GrassChaser, plantTypes : Array<String>, max_vision = Number.MAX_VALUE): void{
     let closest_plant : EdiblePlant = null;
-    let best_dist_so_far = 999999999;
+    let best_dist_so_far = Number.MAX_VALUE;
 
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
@@ -558,7 +559,7 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
             if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name))
             {
                 let g = (Plants[i][j] as EdiblePlant);
-                if (g.Available)
+                if (g.Available(to))
                 {
                     let dist = DistanceObjects(to, g);
                     if (dist < best_dist_so_far)
@@ -569,8 +570,14 @@ export function GetClosestPlant(to : OnTheFieldPiece, plantTypes : Array<String>
                 }
             }
         }
-    //console.log(closest_plant, best_dist_so_far);
-    return closest_plant;
+
+    if (closest_plant){
+        closest_plant.DeclareChase(to);
+        to.targetPlant = closest_plant;
+        to.SetDestination(closest_plant.CenterX, closest_plant.CenterY);
+    }
+    else
+        to.SetDestination(RandomXonField(),RandomYonField());
 }
 
 

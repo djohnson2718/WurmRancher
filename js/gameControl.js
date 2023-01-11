@@ -431,15 +431,15 @@ function MouseMove(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
 }
-export function GetClosestPlant(to, plantTypes) {
+export function SetTargetPlant(to, plantTypes, max_vision = Number.MAX_VALUE) {
     let closest_plant = null;
-    let best_dist_so_far = 999999999;
+    let best_dist_so_far = Number.MAX_VALUE;
     //may have optimization potential here
     for (let i = 0; i < plant_cols; i++)
         for (let j = 0; j < plant_rows; j++) {
             if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name)) {
                 let g = Plants[i][j];
-                if (g.Available) {
+                if (g.Available(to)) {
                     let dist = DistanceObjects(to, g);
                     if (dist < best_dist_so_far) {
                         best_dist_so_far = dist;
@@ -448,8 +448,13 @@ export function GetClosestPlant(to, plantTypes) {
                 }
             }
         }
-    //console.log(closest_plant, best_dist_so_far);
-    return closest_plant;
+    if (closest_plant) {
+        closest_plant.DeclareChase(to);
+        to.targetPlant = closest_plant;
+        to.SetDestination(closest_plant.CenterX, closest_plant.CenterY);
+    }
+    else
+        to.SetDestination(RandomXonField(), RandomYonField());
 }
 export function GetClosestPrey(to, care_about_dibs, preyName) {
     let best_dist_so_far = 9999999;

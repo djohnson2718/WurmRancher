@@ -1,5 +1,6 @@
 import { EdiblePlant } from "./ediblePlant.js";
 import { CurrentLevel, GrowPoisonWeed } from "./gameControl.js";
+import { GrassChaser } from "./predPrey.js";
 import { poisonWeedImage, poisonWeedSprayedImage } from "./resources.js";
 
 export class PoisonWeed extends EdiblePlant{
@@ -33,7 +34,7 @@ export class PoisonWeed extends EdiblePlant{
         super.Update(time_step);
     }
 
-    get Available(): boolean {
-        return (!this.sprayed);
+    Available(eater : GrassChaser): boolean {
+        return (!this.sprayed) && super.Available(eater);
     }
 }

@@ -33,7 +33,8 @@ export abstract class MovesToDestinationControl extends ImagePiece {
     }
 
     Update(time_step:number):void{
-        //console.log( "dest", this.destination_x, this.destination_y, "cent", this.CenterX,this.CenterY);
+        //console.log(this, "dest", this.destination_x, this.destination_y, "cent", this.CenterX,this.CenterY);
+
         if (!this.resting) {
 
             let distance = Math.sqrt(Math.pow(this.CenterY - this.destination_y, 2) + Math.pow(this.CenterX - this.destination_x, 2));
@@ -43,6 +44,7 @@ export abstract class MovesToDestinationControl extends ImagePiece {
                 this.resting = true;
                 this.CenterX = this.destination_x;
                 this.CenterY = this.destination_y;
+                super.Update(time_step);
                 return;
             }
 
@@ -84,6 +86,7 @@ export abstract class MovesToDestinationControl extends ImagePiece {
         }
 
         //this.rotate.Angle = this.angle * 180/Math.PI;
+        //console.log("in moves to dest, about to call super");
         super.Update(time_step);
     }
 
