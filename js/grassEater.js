@@ -10,7 +10,6 @@ export class GrassEater extends LaserDestructablePiece {
         this.Layer = 6;
         this.Name = "GrassEater";
         this.hit = false;
-        this.target_plant = null;
         this.PieceImage = grassEaterImage;
         this.LaserHitSound = GrassEaterDeathSound;
     }
@@ -19,22 +18,24 @@ export class GrassEater extends LaserDestructablePiece {
             super.Update(time_step);
             return;
         }
-        if (this.targetPlant !== null)
-            console.log(this.targetPlant, DistanceObjects(this, this.target_plant), this.hit);
-        if (this.target_plant !== null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit)) {
-            this.target_plant.Eat(time_step);
-            console.log("took a bite", this.targetPlant.bites_taken);
-            if (this.target_plant.Eaten)
-                this.target_plant = null;
+        if (this.targetPlant && DistanceObjects(this, this.targetPlant) < 1 && !(this.hit)) {
+            this.targetPlant.Eat(time_step);
+            if (this.targetPlant.Eaten)
+                this.targetPlant = null;
         }
-        if (this.target_plant == null && this.resting) // find a new destination!
+        if (this.targetPlant == null && this.resting) // find a new destination!
             SetTargetPlant(this, ["GoodGrass"]);
         //console.log("about to call super",this);
         super.Update(time_step);
     }
     PreyLost() {
-        this.target_plant = null;
+        console.log("prey lost");
+        this.targetPlant = null;
         this.resting = true;
+    }
+    Hit() {
+        if (this.targetPlant)
+            delete this.targetPlant.chasers[this.Name];
     }
 }
 //# sourceMappingURL=grassEater.js.map

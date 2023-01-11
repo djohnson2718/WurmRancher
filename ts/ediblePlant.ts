@@ -65,5 +65,6 @@ export abstract class EdiblePlant extends Plant {
             this.chasers[eater.Name].PreyLost();
             delete this.chasers[eater.Name];
         }
+        this.chasers[eater.Name] = eater;
     }
 }

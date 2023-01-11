@@ -21,25 +21,20 @@ export class GrassEater extends LaserDestructablePiece implements GrassChaser{
         this.LaserHitSound = GrassEaterDeathSound;
     }
 
-    target_plant : EdiblePlant = null;
-
     Update(time_step:number) : void{
         if (this.hit){
             super.Update(time_step);
             return;
         }
         
-        if (this.targetPlant !== null)
-            console.log(this.targetPlant,DistanceObjects(this, this.target_plant), this.hit );
-        if (this.target_plant !== null && DistanceObjects(this, this.target_plant) < 1 && !(this.hit))
+        if (this.targetPlant && DistanceObjects(this, this.targetPlant) < 1 && !(this.hit))
         {
-            this.target_plant.Eat(time_step);
-            console.log("took a bite", this.targetPlant.bites_taken);
-            if (this.target_plant.Eaten)
-                this.target_plant = null;
+            this.targetPlant.Eat(time_step);
+            if (this.targetPlant.Eaten)
+                this.targetPlant = null;
         }
 
-        if (this.target_plant == null && this.resting) // find a new destination!
+        if (this.targetPlant == null && this.resting) // find a new destination!
             SetTargetPlant(this, ["GoodGrass"]);
 
         //console.log("about to call super",this);
@@ -47,7 +42,14 @@ export class GrassEater extends LaserDestructablePiece implements GrassChaser{
     }
     
     PreyLost(): void {
-        this.target_plant = null;
+        console.log("prey lost");
+        this.targetPlant = null;
         this.resting = true;
     }
+
+    Hit():void{
+        if (this.targetPlant)
+            delete this.targetPlant.chasers[this.Name];
+    }
+
 }

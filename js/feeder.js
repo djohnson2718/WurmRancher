@@ -16,8 +16,8 @@ export class Feeder extends MovesToDestinationControl {
         this.dibs = 0;
         this.Layer = 6;
         this.Name = "Feeder";
+        this.targetPlant = null;
         this.PieceImage = feederPic;
-        this.target_plant = null;
     }
     Dibs() {
         this.dibs = 333;
@@ -28,21 +28,18 @@ export class Feeder extends MovesToDestinationControl {
             this.dibs = Math.max(0, this.dibs - time_step);
             console.log("dibbed avlue", this.dibs);
         }
-        if (this.target_plant != null && DistanceObjects(this, this.target_plant) < 1) {
-            let eats = this.target_plant.Eat(time_step);
-            if (eats != 0) {
+        if (this.targetPlant && DistanceObjects(this, this.targetPlant) < 1) {
+            let eats = this.targetPlant.Eat(time_step);
+            if (eats != 0)
                 this.fattened += eats;
-                //if (EatsGrass != null)
-                //    EatsGrass(this, new GameEventArgs(theControl));
-            }
             if (this.fattened > max_fattened)
                 this.fattened = max_fattened;
             if (this.fattened < 0)
                 this.fattened = 0;
-            if (this.target_plant.Eaten)
-                this.target_plant = null;
+            if (this.targetPlant.Eaten)
+                this.targetPlant = null;
         }
-        if (this.target_plant == null && this.resting) // find a new destination!
+        if (this.targetPlant == null && this.resting) // find a new destination!
             SetTargetPlant(this, ["GoodGrass", "PoisonWeed"], max_vision);
         context.textAlign = "center";
         if (this.fattened < 10)
@@ -60,10 +57,12 @@ export class Feeder extends MovesToDestinationControl {
             return 0;
         this.eaten = true;
         RemovePiece(this);
+        if (this.targetPlant)
+            delete this.targetPlant.chasers[this.Name];
         return this.fattened;
     }
     PreyLost() {
-        this.target_plant = null;
+        this.targetPlant = null;
         this.resting = true;
     }
 }

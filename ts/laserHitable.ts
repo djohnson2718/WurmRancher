@@ -20,11 +20,13 @@ export abstract class LaserHitable extends MovesToDestinationControl{
             //report shot event
             if (this.Shot)
                 this.Shot();
+            this.Hit();
             return true;
         }
         else return false;
-
     }
+
+    Hit():void{};
 
     
 }
