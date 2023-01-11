@@ -13,7 +13,6 @@ import { OnTheFieldPiece } from "./OnTheFieldPiece.js";
 import { ClosestPlantIndexX, ClosestPlantIndexY, Plant, PlantCenterPointFromIndex, plant_size } from "./plant.js";
 import { PoisonWeed } from "./poisonWeed.js";
 import { GrassChaser } from "./predPrey.js";
-import { Prey } from "./prey.js";
 import { Rancher } from "./rancher.js";
 import { laserSound, seedSound, spraySound, squishSound } from "./resources.js";
 import { GameCoolDownTime } from "./timing.js";
@@ -581,10 +580,10 @@ export function SetTargetPlant(to : GrassChaser, plantTypes : Array<String>, max
 }
 
 
-export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, preyName : String) : Prey{
+export function GetClosestPrey<T, P extends Prey<T>>(to: OnTheFieldPiece, preyName : String) : P{
     let best_dist_so_far = 9999999;
-    let closest : Prey = null;
-    let f : Prey  = null;
+    let closest : P = null;
+    let f : P  = null;
     let cur_dist : number;
     //console.log("looking for prey");
     for (const e of GameElements)
@@ -592,9 +591,9 @@ export function GetClosestPrey(to: OnTheFieldPiece, care_about_dibs:boolean, pre
         //console.log(e, e.Name,e.Name==preyName);
         if (e.Name == preyName)
         {
-            f = (e as unknown) as Prey;
+            f = (e as unknown) as P;
             //console.log("available", f.Available(care_about_dibs));
-            if (f.Available(care_about_dibs))
+            if (f.Available(to))
             {
                 //console.log("available!")
                 cur_dist = DistanceObjects(f, to);

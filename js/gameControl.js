@@ -456,7 +456,7 @@ export function SetTargetPlant(to, plantTypes, max_vision = Number.MAX_VALUE) {
     else
         to.SetDestination(RandomXonField(), RandomYonField());
 }
-export function GetClosestPrey(to, care_about_dibs, preyName) {
+export function GetClosestPrey(to, preyName) {
     let best_dist_so_far = 9999999;
     let closest = null;
     let f = null;
@@ -467,7 +467,7 @@ export function GetClosestPrey(to, care_about_dibs, preyName) {
         if (e.Name == preyName) {
             f = e;
             //console.log("available", f.Available(care_about_dibs));
-            if (f.Available(care_about_dibs)) {
+            if (f.Available(to)) {
                 //console.log("available!")
                 cur_dist = DistanceObjects(f, to);
                 if (cur_dist < best_dist_so_far) {
