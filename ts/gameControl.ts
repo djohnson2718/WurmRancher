@@ -561,7 +561,7 @@ export function SetTargetPlant(to : GrassChaser, plantTypes : Array<String>, max
                 let g = (Plants[i][j] as EdiblePlant);
                 if (g.Available(to))
                 {
-                    let dist = DistanceObjects(to, g);
+                    let dist = DistanceObjects(to, g) + Math.random() - 0.5; //the randomness breaks ties 
                     if (dist < best_dist_so_far)
                     {
                         best_dist_so_far = dist;

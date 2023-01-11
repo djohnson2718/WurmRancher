@@ -8,8 +8,6 @@ export class EdiblePlant extends Plant {
         super(...arguments);
         this.bites_taken = 0;
         this.dibs = 0;
-        // abstract get Available() : boolean;
-        this.chasers = {};
     }
     //eaten = false;
     Eat(time_step) {
@@ -38,17 +36,17 @@ export class EdiblePlant extends Plant {
         this.dibs = d;
     }
     Available(eater) {
-        if (this.chasers[eater.Name])
-            return (DistanceObjects(this, eater) < stealRatio * DistanceObjects(this, this.chasers[eater.Name]));
+        if (this.chaser)
+            return (DistanceObjects(this, eater) < stealRatio * DistanceObjects(this, this.chaser));
         else
             return true;
     }
     DeclareChase(eater) {
-        if (this.chasers[eater.Name]) {
-            this.chasers[eater.Name].PreyLost();
-            delete this.chasers[eater.Name];
+        if (this.chaser) {
+            this.chaser.PreyLost();
+            this.chaser = null;
         }
-        this.chasers[eater.Name] = eater;
+        this.chaser = eater;
     }
 }
 //# sourceMappingURL=ediblePlant.js.map

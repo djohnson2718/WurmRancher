@@ -58,7 +58,7 @@ export class Feeder extends MovesToDestinationControl {
         this.eaten = true;
         RemovePiece(this);
         if (this.targetPlant)
-            delete this.targetPlant.chasers[this.Name];
+            this.targetPlant.chaser = null;
         return this.fattened;
     }
     PreyLost() {

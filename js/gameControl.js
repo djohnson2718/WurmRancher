@@ -440,7 +440,7 @@ export function SetTargetPlant(to, plantTypes, max_vision = Number.MAX_VALUE) {
             if (!(Plants[i][j] === null) && plantTypes.includes(Plants[i][j].Name)) {
                 let g = Plants[i][j];
                 if (g.Available(to)) {
-                    let dist = DistanceObjects(to, g);
+                    let dist = DistanceObjects(to, g) + Math.random() - 0.5; //the randomness breaks ties 
                     if (dist < best_dist_so_far) {
                         best_dist_so_far = dist;
                         closest_plant = g;

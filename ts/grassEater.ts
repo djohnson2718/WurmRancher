@@ -49,7 +49,7 @@ export class GrassEater extends LaserDestructablePiece implements GrassChaser{
 
     Hit():void{
         if (this.targetPlant)
-            delete this.targetPlant.chasers[this.Name];
+            this.targetPlant.chaser = null;
     }
 
 }

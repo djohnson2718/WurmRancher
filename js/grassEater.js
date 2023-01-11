@@ -35,7 +35,7 @@ export class GrassEater extends LaserDestructablePiece {
     }
     Hit() {
         if (this.targetPlant)
-            delete this.targetPlant.chasers[this.Name];
+            this.targetPlant.chaser = null;
     }
 }
 //# sourceMappingURL=grassEater.js.map

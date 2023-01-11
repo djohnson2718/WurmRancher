@@ -51,20 +51,22 @@ export abstract class EdiblePlant extends Plant {
 
    // abstract get Available() : boolean;
 
-    chasers : {[n:string] : GrassChaser} = {};
+    //chasers : {[n:string] : GrassChaser} = {};
+
+    chaser : GrassChaser;
 
     Available(eater : GrassChaser) :boolean{
-        if (this.chasers[eater.Name])
-            return (DistanceObjects(this,eater) < stealRatio * DistanceObjects(this, this.chasers[eater.Name]))
+        if (this.chaser)
+            return (DistanceObjects(this,eater) < stealRatio * DistanceObjects(this, this.chaser))
         else
             return true;
     }
 
     DeclareChase(eater:GrassChaser):void{
-        if (this.chasers[eater.Name]){
-            this.chasers[eater.Name].PreyLost();
-            delete this.chasers[eater.Name];
+        if (this.chaser){
+            this.chaser.PreyLost();
+            this.chaser=null;
         }
-        this.chasers[eater.Name] = eater;
+        this.chaser = eater;
     }
 }
