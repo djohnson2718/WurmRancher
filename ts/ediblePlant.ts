@@ -45,12 +45,6 @@ export abstract class EdiblePlant extends Plant {
         
     }
 
-
-
-   // abstract get Available() : boolean;
-
-    //chasers : {[n:string] : GrassChaser} = {};
-
     chaser : GrassChaser;
 
     Available(eater : GrassChaser) :boolean{
