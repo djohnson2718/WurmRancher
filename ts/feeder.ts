@@ -5,14 +5,12 @@ import { context, DistanceObjects,  RemovePiece, SetTargetPlant } from "./gameCo
 import { GrassChaser, Predator, Prey } from "./predPrey.js";
 import { WurmHead } from "./wurmPieces.js";
 import { Monster } from "./monster.js";
+import { feederImage } from "./resources.js";
 
 const height =30;
 const width = 30;
 const max_vision = 200;
 export const max_fattened = 10;
-
-const feederPic = new Image(height,width);
-feederPic.src = "../Resources/feeder.png";
 const stealRatio = 0.9;
 
 export class Feeder extends MovesToDestinationControl implements GrassChaser, Prey<WurmHead>, Prey<Monster>
@@ -29,7 +27,7 @@ export class Feeder extends MovesToDestinationControl implements GrassChaser, Pr
 
     constructor (){
         super(height,width, FeederSpeed, FeederRotate);
-        this.PieceImage = feederPic;
+        this.PieceImage = feederImage;
     }
 
 

@@ -1,12 +1,11 @@
 import { MovesToDestinationControl } from "./movesToDestinationControl.js";
 import { FeederRotate, FeederSpeed } from "./timing.js";
 import { context, DistanceObjects, RemovePiece, SetTargetPlant } from "./gameControl.js";
+import { feederImage } from "./resources.js";
 const height = 30;
 const width = 30;
 const max_vision = 200;
 export const max_fattened = 10;
-const feederPic = new Image(height, width);
-feederPic.src = "../Resources/feeder.png";
 const stealRatio = 0.9;
 export class Feeder extends MovesToDestinationControl {
     constructor() {
@@ -17,7 +16,7 @@ export class Feeder extends MovesToDestinationControl {
         this.Layer = 6;
         this.Name = "Feeder";
         this.targetPlant = null;
-        this.PieceImage = feederPic;
+        this.PieceImage = feederImage;
     }
     Update(time_step) {
         super.Update(time_step);
