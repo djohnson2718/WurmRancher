@@ -12,9 +12,8 @@ export class LaserHitable extends MovesToDestinationControl {
                 PlaySound(this.LaserHitSound);
             console.log("it was a hit!");
             this.hit = true;
-            //report shot event
-            if (this.Shot)
-                this.Shot();
+            if (this.ShotHandler)
+                this.ShotHandler();
             this.Hit();
             return true;
         }

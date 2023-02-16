@@ -42,14 +42,15 @@ export class GrassEater extends LaserDestructablePiece implements GrassChaser{
     }
     
     PreyLost(): void {
-        console.log("prey lost");
-        this.targetPlant = null;
+        if (this.targetPlant){
+            this.targetPlant.chaser = null;
+            this.targetPlant = null;
+        }
         this.resting = true;
     }
 
     Hit():void{
-        if (this.targetPlant)
-            this.targetPlant.chaser = null;
+        this.PreyLost();
     }
 
 }

@@ -24,14 +24,9 @@ export class WurmHead extends LaserHitable {
     get backAttachY() {
         return this.CenterY + radius * 0.8 * Math.sin(this.angle);
     }
-    CheckLaserHit(x, y) {
-        let result = super.CheckLaserHit(x, y);
-        if (this.hit) {
-            this.stun_counter = WurmStunTime;
-            this.target = null;
-        }
-        this.hit = false;
-        return result;
+    Hit() {
+        this.stun_counter = WurmStunTime;
+        this.PreyLost();
     }
     get isStunned() {
         return this.stun_counter > 0;
@@ -48,6 +43,10 @@ export class WurmHead extends LaserHitable {
     Update(time_step) {
         if (this.isStunned) {
             this.stun_counter -= time_step;
+            if (this.stun_counter <= 0) {
+                this.stun_counter = 0;
+                this.hit = false;
+            }
             ImagePiece.prototype.Update.call(this);
             return;
         }
@@ -75,7 +74,10 @@ export class WurmHead extends LaserHitable {
         super.Update(time_step);
     }
     PreyLost() {
-        this.target = null;
+        if (this.target) {
+            this.target.chaser = null;
+            this.target = null;
+        }
         this.resting = true;
     }
 }

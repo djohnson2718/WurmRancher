@@ -65,7 +65,14 @@ export class Parasite extends LaserDestructablePiece implements Predator{
     }
 
     PreyLost():void{
-        this.target = null;
+        if (this.target){
+            this.target.chaser = null;
+            this.target = null;
+        }
         this.resting = true;
+    }
+
+    Hit(): void {
+        this.PreyLost();
     }
 }

@@ -26,7 +26,7 @@ export class ProtectTheGrassLevel extends Level {
         if (this.eaters_arrived < this.num_eaters && this.IntervalTimeIsUp(200)) {
             this.eaters_arrived++;
             let g = new GrassEater();
-            g.Shot = this.g_Shot.bind(this);
+            g.ShotHandler = this.g_Shot.bind(this);
             AddCreatureOnEdge(g);
         }
         if (this.IntervalTimeIsUp(500)) {

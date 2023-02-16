@@ -47,8 +47,14 @@ export class Parasite extends LaserDestructablePiece {
         }
     }
     PreyLost() {
-        this.target = null;
+        if (this.target) {
+            this.target.chaser = null;
+            this.target = null;
+        }
         this.resting = true;
+    }
+    Hit() {
+        this.PreyLost();
     }
 }
 //# sourceMappingURL=parasite.js.map

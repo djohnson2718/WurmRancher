@@ -17,7 +17,6 @@ export class Monster extends LaserDestructablePiece implements Predator{
     constructor(){
         super(height,width,MonsterSpeed, MonsterRotate);
         this.PieceImage = monsterImage;
-        
     }
 
 
@@ -57,7 +56,14 @@ export class Monster extends LaserDestructablePiece implements Predator{
     }
 
     PreyLost():void{
-        this.target = null;
+        if (this.target){
+            this.target.chaser = null;
+            this.target = null;
+        }
         this.resting = true;
+    }
+
+    Hit(): void {
+        this.PreyLost();
     }
 }

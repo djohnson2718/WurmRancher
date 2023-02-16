@@ -29,13 +29,14 @@ export class GrassEater extends LaserDestructablePiece {
         super.Update(time_step);
     }
     PreyLost() {
-        console.log("prey lost");
-        this.targetPlant = null;
+        if (this.targetPlant) {
+            this.targetPlant.chaser = null;
+            this.targetPlant = null;
+        }
         this.resting = true;
     }
     Hit() {
-        if (this.targetPlant)
-            this.targetPlant.chaser = null;
+        this.PreyLost();
     }
 }
 //# sourceMappingURL=grassEater.js.map

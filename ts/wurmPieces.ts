@@ -49,15 +49,9 @@ export class WurmHead extends LaserHitable implements BackAttachable, Predator {
         return this.CenterY + radius*0.8*Math.sin(this.angle);
     }
     
-    CheckLaserHit(x: number, y: number): boolean {
-        let result = super.CheckLaserHit(x,y);
-        if (this.hit){
-            this.stun_counter = WurmStunTime;
-            this.target = null;
-        }
-        this.hit = false;
-
-        return result;
+    Hit(): void {
+        this.stun_counter = WurmStunTime;
+        this.PreyLost();
     }
 
     Follower: WurmBodyPiece;
@@ -86,7 +80,12 @@ export class WurmHead extends LaserHitable implements BackAttachable, Predator {
         if (this.isStunned)
         {
             this.stun_counter-=time_step;
+            if (this.stun_counter <= 0){
+                this.stun_counter = 0;
+                this.hit = false;
+            }
             ImagePiece.prototype.Update.call(this);
+            
             return;
         }
         if (this.target != null)
@@ -122,7 +121,10 @@ export class WurmHead extends LaserHitable implements BackAttachable, Predator {
     }
 
     PreyLost():void{
-        this.target = null;
+        if (this.target){
+            this.target.chaser = null;
+            this.target = null;
+        }
         this.resting = true;
     }
 
